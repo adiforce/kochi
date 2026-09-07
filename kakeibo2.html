@@ -786,7 +786,6 @@ async function submitRecord() {
     jpyParts = [];
     renderChips();
     showToast('✓ 記帳成功！');
-    switchTab('list');
   } catch (e) {
     showToast('❌ 送出失敗（可能是網路問題），請確認紀錄頁是否已有這筆，避免重複送出');
   }
