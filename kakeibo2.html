@@ -594,7 +594,7 @@ function switchTab(tab) {
   document.getElementById('page-list').classList.toggle('active', tab === 'list');
   if (tab === 'list') loadRecords();
 }
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzaiFZMPJJwkZuFsaJT6sM9KGyKSH9KhuSKUl_AtrS7RLjg8G1mH03fijiQHFgXsNMn5w/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzbjdJt_jPKdN7fOm3g7lZ05KY5aMFWplsc4I1NdhdatKK7GtzKmvhR5H9DpQ3GojpDTQ/exec';
 const CATEGORIES = [
   { key: '餐', icon: '🍜' },
   { key: '玩', icon: '🎡' },
@@ -835,7 +835,7 @@ function renderRecords(data) {
     let extraStr = '';
     const extraBits = [];
     if (kid) extraBits.push(`屁孩¥${kid.toLocaleString()}`);
-    if (en) extraBits.push(`EN¥${en.toLocaleString()}`);
+    if (en) extraBits.push(`它人¥${en.toLocaleString()}`);
     if (extraBits.length) extraStr = `<div class="rec-extra">${extraBits.join(' · ')}</div>`;
     const item = document.createElement('div');
     item.className = 'record-item';
