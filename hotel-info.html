@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>仙台訂房記錄</title>
+<title>高知訂房記錄</title>
 <style>
   body {
     font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
@@ -37,6 +37,17 @@
   .flight-info div { margin: 2px 0; }
   .all-done-banner {
     background: linear-gradient(135deg, #1a8a4a, #22a355);
+    color: #fff;
+    text-align: center;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 0.95em;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .progress-banner {
+    background: linear-gradient(135deg, #cf8830, #e8a04d);
     color: #fff;
     text-align: center;
     padding: 12px;
@@ -82,25 +93,20 @@
   .room-filled {
     color: #1a1a1a;
   }
+  .room-empty {
+    color: #b3541e;
+    font-style: normal;
+  }
   .status {
     font-weight: 600;
     white-space: nowrap;
   }
   .status-done { color: #1a8a4a; }
+  .status-pending { color: #cf8830; }
   .subtotal {
     font-weight: 400;
     font-size: 0.85em;
     color: #666;
-  }
-  .room-type-diff {
-    display: inline-block;
-    background: #fff3cd;
-    color: #8a6d00;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 1em;
-    margin-bottom: 3px;
   }
   .member-badge {
     display: inline-block;
@@ -134,69 +140,58 @@
 </head>
 <body>
 <div class="container">
-  <h1>🏨 仙台訂房記錄</h1>
-  <div class="subtitle">東橫INN仙台西口広瀬通 ｜ 4人同行，每晚2間房</div>
+  <h1>🏨 高知訂房記錄</h1>
+  <div class="subtitle">東橫INN高知｜YEN CHIHRUNG 1人，需訂4晚</div>
 
   <div class="flight-info">
-    <div><strong>去程</strong> IT254　TPE 08/25 13:45 → SDJ 08/25 18:10</div>
-    <div><strong>回程</strong> IT255　SDJ 08/30 19:00 → TPE 08/30 21:55</div>
+    <div><strong>去程</strong> IT250　TPE 11/28 08:40 → KCZ 11/28 12:00</div>
+    <div><strong>回程</strong> IT251　KCZ 12/02 14:00 → TPE 12/02 15:50</div>
   </div>
 
-  <div class="all-done-banner">🎉 全部5晚、10間房已訂完成！</div>
+  <div class="progress-banner">⏳ 已訂2/4晚，還差11/28、12/01兩晚</div>
 
   <div class="checkin-note">
-    <strong>Check-in 對應：</strong>實際入住由兩位會員本人刷卡——<strong>YEN CHIHRUNG</strong>（I0018-021777）負責CHIHRUNG訂的5間；<strong>ほん じゃいん</strong>（I0042-018482）負責YUHAO訂的5間（訂房時用YUHAO姓名，宿泊者代表已改為ほんじゃいん本人，套用其會員價）。
+    <strong>Check-in 對應：</strong>本人 <strong>YEN CHIHRUNG</strong>（東橫INNクラブカード會員號 I0018-021777）持卡辦理入住，禁煙シングル。
   </div>
 
   <table>
     <thead>
       <tr>
         <th>日期</th>
-        <th>房1</th>
-        <th>房2</th>
+        <th>房況</th>
         <th>狀態</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td class="date-cell">08/25–08/26</td>
-        <td class="room-filled">訂房人 YEN YUHAO<br>6368545<br>禁煙ツイン（雙床）（夏のリフレッシュステイプラン）<br>2人<br>12,093円<br><span class="member-badge">宿泊者：ほん じゃいん（I0042-018482）</span></td>
-        <td class="room-filled">訂房人 YEN CHIHRUNG<br>6369300<br>禁煙ツイン（雙床）（會員限定11:00退房方案）<br>2人<br>12,540円<br><span class="member-badge">宿泊者：YEN CHIHRUNG（I0018-021777）</span></td>
-        <td class="status status-done">✅ 完成<br><span class="subtotal">合計 24,633円</span></td>
+        <td class="date-cell">11/28–11/29</td>
+        <td class="room-empty">尚未訂房</td>
+        <td class="status status-pending">⚠️ 待訂</td>
       </tr>
       <tr>
-        <td class="date-cell">08/26–08/27</td>
-        <td class="room-filled">訂房人 YEN CHIHRUNG<br>6368515<br>禁煙ツイン（雙床）（會員限定11:00退房方案）<br>2人<br>12,540円<br><span class="member-badge">宿泊者：ほん じゃいん（I0042-018482）</span></td>
-        <td class="room-filled">訂房人 YEN CHIHRUNG<br>6368514<br>禁煙ツイン（雙床）（會員限定11:00退房方案）<br>2人<br>12,540円<br><span class="member-badge">宿泊者：YEN CHIHRUNG（I0018-021777）</span></td>
-        <td class="status status-done">✅ 完成<br><span class="subtotal">合計 25,080円</span></td>
+        <td class="date-cell">11/29–11/30</td>
+        <td class="room-filled">東橫INN高知<br>預約號 5066012<br>禁煙シングル（標準方案）<br>1人<br>7,315円<br><span class="member-badge">宿泊者：YEN CHIHRUNG（I0018-021777）</span></td>
+        <td class="status status-done">✅ 完成</td>
       </tr>
       <tr>
-        <td class="date-cell">08/27–08/28</td>
-        <td class="room-filled">訂房人 YEN YUHAO<br>6371393<br>禁煙ツイン（雙床）（標準方案）<br>2人<br>12,540円<br><span class="member-badge">宿泊者：ほん じゃいん（I0042-018482）</span></td>
-        <td class="room-filled">訂房人 YEN CHIHRUNG<br>6369301<br>禁煙ツイン（雙床）（會員限定11:00退房方案）<br>2人<br>12,540円<br><span class="member-badge">宿泊者：YEN CHIHRUNG（I0018-021777）</span></td>
-        <td class="status status-done">✅ 完成<br><span class="subtotal">合計 25,080円</span></td>
+        <td class="date-cell">11/30–12/01</td>
+        <td class="room-filled">東橫INN高知<br>預約號 5066012（同筆2泊）<br>禁煙シングル（標準方案）<br>1人<br>7,315円<br><span class="member-badge">宿泊者：YEN CHIHRUNG（I0018-021777）</span></td>
+        <td class="status status-done">✅ 完成<br><span class="subtotal">上兩晚合計 14,630円</span></td>
       </tr>
       <tr>
-        <td class="date-cell">08/28–08/29</td>
-        <td class="room-filled">訂房人 YEN YUHAO<br>6368934<br>禁煙ツイン（雙床）（標準方案）<br>2人<br>12,540円<br><span class="member-badge">宿泊者：ほん じゃいん（I0042-018482）</span></td>
-        <td class="room-filled">訂房人 YEN CHIHRUNG<br>6369302<br>禁煙ツイン（雙床）（會員限定11:00退房方案）<br>2人<br>12,540円<br><span class="member-badge">宿泊者：YEN CHIHRUNG（I0018-021777）</span></td>
-        <td class="status status-done">✅ 完成<br><span class="subtotal">合計 25,080円</span></td>
-      </tr>
-      <tr>
-        <td class="date-cell">08/29–08/30</td>
-        <td class="room-filled">訂房人 YEN YUHAO<br>6368946<br>禁煙ツイン（雙床）（夏のリフレッシュステイプラン）<br>2人<br>17,206円（含宿泊税600円）<br><span class="member-badge">宿泊者：ほん じゃいん（I0042-018482）</span></td>
-        <td class="room-filled">訂房人 YEN CHIHRUNG<br>6368437<br>禁煙ツイン（雙床）<br>2人<br>17,890円（現地払い）<br><span class="member-badge">宿泊者：YEN CHIHRUNG（I0018-021777）</span></td>
-        <td class="status status-done">✅ 完成<br><span class="subtotal">合計 35,096円</span></td>
+        <td class="date-cell">12/01–12/02</td>
+        <td class="room-empty">尚未訂房</td>
+        <td class="status status-pending">⚠️ 待訂</td>
       </tr>
     </tbody>
   </table>
 
   <div class="grand-total">
-    <span>5晚總計</span>
-    <span>134,969円</span>
+    <span>已訂2晚小計</span>
+    <span>14,630円</span>
   </div>
 
-  <div class="footer-note">最後更新：2026/08/02　※飯店統一為東橫INN仙台西口広瀬通　※所有房型皆為ツイン（雙床）</div>
+  <div class="footer-note">最後更新：2026/09/18　※東橫INN高知11/29-12/01（預約號5066012，現地払い）　※11/28、12/01尚待補訂</div>
 </div>
 </body>
 </html>
