@@ -128,8 +128,8 @@
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWn5hKfMMTettBpn_4vGASf9oGlM1w0Ag1dRgjAizjD__z3eED2vb22yhqzXXl9NgDl1lYqSL5L7P3k2UHEJd76i9uZAF4DcHzm4Q2uIo4-hQ6xJ9abgrcpKMUMpuky6qjJQdP3eCAw71VeO=w408-h310-k-no",
     "gRating": 4.4,
     "gReviews": 1524,
-    "tRating": null,
-    "tReviews": null,
+    "tRating": 3.56,
+    "tReviews": 1593,
     "lat": 33.5599,
     "lng": 133.5326,
     "price": "依菜色而異",
@@ -618,6 +618,56 @@
       "ぜんざい"
     ],
     "notes": "就在ひろめ市場裡，吃完鰹魚飯後順便來一碗剉冰或霜淇淋",
+    "wasFilled": true
+  },
+  {
+    "name": "Myojinmaru Obiyamachi",
+    "jp": "藁焼き鰹たたき明神丸 帯屋町店",
+    "type": "food",
+    "cat": "鰹魚半敲燒專門店",
+    "img": "",
+    "gRating": 4.1,
+    "gReviews": 1562,
+    "tRating": 3.42,
+    "tReviews": 552,
+    "lat": 33.5601193,
+    "lng": 133.5368158,
+    "price": "依菜色而異（コース5,500円〜／午餐這やき定食等較平價）",
+    "hours": "11:30-14:00(LO13:30)、17:00-23:00(LO22:30)；週二公休",
+    "addr": "高知県高知市帯屋町2-1-27",
+    "mapAddr": "高知県高知市帯屋町2-1-27",
+    "access": "とさでん「大橋通」電停徒歩3分，從ひろめ市場沿帯屋町アーケード往東走約2分",
+    "rec": [
+      "藁焼き鰹たたき（塩／タレ食べ比べ）",
+      "これやき定食",
+      "土佐和牛握り"
+    ],
+    "notes": "與ひろめ市場店同系列但不同分店，週二公休；行程Day4午餐指的就是這間",
+    "wasFilled": true
+  },
+  {
+    "name": "Restaurant Cock d'Or",
+    "jp": "レストラン コックドール",
+    "type": "food",
+    "cat": "洋食（オムライス／ハンバーグ）",
+    "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnNL3ua6tZM9c2TDo6YGWyZCK7_UoHQ_A3A4uDh_NbYz5NPnMpsKF0r4-Qnb0yWBAo-vbL2x1Hp96c4I3fWE40kQfbG-2owanLKfNukbhar-8pcpoN1IBP62JpFiknNGzi_bP5FD9fMtjN8=w408-h306-k-no",
+    "gRating": 4.1,
+    "gReviews": 222,
+    "tRating": 3.73,
+    "tReviews": 247,
+    "lat": 33.5600866,
+    "lng": 133.538167,
+    "price": "依菜色而異（1,000〜1,999円帶）",
+    "hours": "11:30-14:00、17:30-20:00；週三公休",
+    "addr": "高知県高知市帯屋町1丁目13-13",
+    "mapAddr": "高知県高知市帯屋町1丁目13-13",
+    "access": "帯屋町アーケード內，近やいろ亭",
+    "rec": [
+      "オムライス",
+      "ハンバーグ（デミグラスソース）",
+      "メキシカンライス"
+    ],
+    "notes": "創業約50年的老字號洋食店，食べログ百名店（洋食WEST 2025）選出店；沙發座位舒適，適合想換口味不吃海鮮的時候",
     "wasFilled": true
   }
 ]
