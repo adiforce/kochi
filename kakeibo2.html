@@ -831,7 +831,7 @@ function renderRecords(data) {
       const d = new Date(r.date);
       if (!isNaN(d)) dateStr = `${d.getMonth()+1}/${d.getDate()}`;
     } catch {}
-    // 屁孩/EN 分攤小字（都是0就不顯示）
+    // 屁孩/它人 分攤小字（都是0就不顯示）
     let extraStr = '';
     const extraBits = [];
     if (kid) extraBits.push(`屁孩¥${kid.toLocaleString()}`);
