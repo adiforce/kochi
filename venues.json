@@ -2,7 +2,7 @@
   {
     "name": "Hirome Market",
     "jp": "ひろめ市場",
-    "type": "food_market",
+    "type": "food",
     "cat": "屋台市場／美食街",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmcyVbCQLLLxxag-Ll2j4vJnMqBuwTCUP7Eba9jrd_R-DYcJz00KiXFTacID84BYIDu_AMgWiTM99KtVKC2IiJtFCjECOKZZduPCaboBK6xPIEgsgGNkPWIEyj3tA5sxyQDSTi9NvXBRLw=w408-h544-k-no",
     "gRating": null,
@@ -27,7 +27,7 @@
   {
     "name": "Warayaki Katsuo Tataki Myojinmaru (Hirome Market)",
     "jp": "藁焼き鰹たたき明神丸 ひろめ市場店",
-    "type": "restaurant",
+    "type": "food",
     "cat": "鰹魚半敲燒專門店",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmBx_LSB0xQ3PKCm1H71381bapuHoM4tnF5Dawf1EuKopcALn0XVv-4TGVBmTbKVWJit-0ZLsgVdgJQ3u2wux2Ay1TWtTrJK7qleJs03xKAucmkFjGW4DGYfmJPwCWmtYCL7LyY9J4clEWj=w408-h271-k-no",
     "gRating": null,
@@ -52,7 +52,7 @@
   {
     "name": "Yairotei (Hirome Market)",
     "jp": "やいろ亭",
-    "type": "restaurant",
+    "type": "food",
     "cat": "海鮮／鰹魚料理",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWn5hKfMMTettBpn_4vGASf9oGlM1w0Ag1dRgjAizjD__z3eED2vb22yhqzXXl9NgDl1lYqSL5L7P3k2UHEJd76i9uZAF4DcHzm4Q2uIo4-hQ6xJ9abgrcpKMUMpuky6qjJQdP3eCAw71VeO=w408-h310-k-no",
     "gRating": null,
@@ -140,7 +140,7 @@
   {
     "name": "Sunday Market (Nichiyoichi)",
     "jp": "日曜市",
-    "type": "market",
+    "type": "food",
     "cat": "街路市集／早市",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnVkRGcycU6UjezC-q5gGnz9nyGr1WSlAisQKvDNfxismxsJeHyMh0fK1SAXJXXTmmTpP7H7Qv342DWocEkA7MbG0jT5U4O27-R8kmPut-okpSPqqz4ZjZe7Eouev6-dthwmzRfBTuhzzm-=w408-h544-k-no",
     "gRating": null,
@@ -164,7 +164,7 @@
   {
     "name": "Katsurahama Beach",
     "jp": "桂浜",
-    "type": "attraction",
+    "type": "sight",
     "cat": "海灘／坂本龍馬像景勝地",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkDEIjeqUXBb9hl28WOQFUVnS-jDi0vK0o__j5zW6SkJyIxNmQ2o3LKn7XpeDMb0YN7-ONUFrI7UMDmNTgq-ShS01eYLpKeQOe_xbTXAHc_yqtJzDf1JV_lXgnxNEHuH_Xob8ts=w408-h306-k-no",
     "gRating": null,
@@ -214,7 +214,7 @@
   {
     "name": "Kochi Prefectural Sakamoto Ryoma Memorial Museum",
     "jp": "高知県立坂本龍馬記念館",
-    "type": "museum",
+    "type": "sight",
     "cat": "坂本龍馬紀念館",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWn0GV8LGZoMYfi6U8GdSpcwE7NEsALejnl8kwwZy0-wbQvueoyZbyI1czZpggpP0pAaHkcUbYhlQVYewzX4Dv2Y3Hrd7wgYmVxuMgkPePyqhd8NGtKQvCNItXvvESAODcB_5GoY=w408-h305-k-no",
     "gRating": null,
@@ -235,7 +235,7 @@
   {
     "name": "Seimendokoro Kuraki",
     "jp": "製麺処 蔵木",
-    "type": "restaurant",
+    "type": "food",
     "cat": "魚介とんこつラーメン",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkwkJ96wwa0O12OLPjxAePpgY58r5Oss7PknpFKQz2yAmWE1ZSPjjB4-8J90_GE-tF4Yz7rvwkq3Ebp7NAU8eEpHQFBh3pDc_VK9MdxegnpH1hrgtVlCHOs4sJWY_4lmKqVOuZrNek7_Hai=w408-h543-k-no",
     "gRating": null,
@@ -258,7 +258,7 @@
   {
     "name": "Nagoya-jinkabashi (Submersible Bridge)",
     "jp": "名越屋沈下橋",
-    "type": "attraction",
+    "type": "sight",
     "cat": "仁淀川沈下橋景點",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnforGkllUPhSG1waaLxJPzXglirs_en2Y1dP2YGoU2Y1zDOSU1sGRQG-lLHJJGeR79HHEf5KExrMRY7WUdjarWVk4Opo5d3alqVYC6DbPkZNTgJlpG3HbXSsxVPG8gBqriBM8S=w408-h408-k-no",
     "gRating": null,
@@ -279,7 +279,7 @@
   {
     "name": "Nikobuchi Pool",
     "jp": "にこ淵",
-    "type": "attraction",
+    "type": "sight",
     "cat": "仁淀藍秘境瀑潭",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWn2bERS0Hjz-hC9war7hVMpUxW-g1P56a53huSHR6qSCYjUAy-Yo7IA1zST83pnFEppqfi5kPzZDNKn0Sput6VhPd7aqo2Y8ynvYtJnM-T2Yh91xw0QX3eMBxkgmasx3sbNqoWd7v21SQlr=w408-h306-k-no",
     "gRating": null,
@@ -300,7 +300,7 @@
   {
     "name": "Soba-dokoro Horaiso",
     "jp": "そば処 宝来荘",
-    "type": "restaurant",
+    "type": "food",
     "cat": "蕎麥麵／鮎魚料理（安居渓谷入口民宿食堂）",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWk-QrpFh6nrefIRXciqOUbWOWsA7d7CEJxvK7Dfd-SEngKwEkHZm1AG1r6itJuMm1Pht851S6aoANwagQeDI4kuFFdGCxORwhlyUhnQwnPTphYgXOnEaDHodoImhTXwmE0Eu2T45A=w408-h272-k-no",
     "gRating": null,
@@ -323,7 +323,7 @@
   {
     "name": "Agi Gorge / Suishofuchi",
     "jp": "安居渓谷・水晶淵",
-    "type": "attraction",
+    "type": "sight",
     "cat": "仁淀藍溪谷／瀑布群",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWllJc34reJ4exdawrrZDgazwQ8ILSz-JNL0JzwLfrUPx7V8FwZrgIYTRdYqrPk9_SBBfavMSGVGhgaZlq2uTQPkBv1zYbr4G5g2Uk0FBrRMobzKkr8NjcNRct5-ubkE3DlgESZQ=w408-h306-k-no",
     "gRating": null,
@@ -369,7 +369,7 @@
   {
     "name": "Kochi Castle Tenshukaku",
     "jp": "高知城天守閣",
-    "type": "attraction",
+    "type": "sight",
     "cat": "現存12天守之一／史跡",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkCW7YeyHthJFS__-niX2FUn3CAHdWMMQIoK9-bIfasjUCA5sIqVMYjF8dN_CI3QM_06qcYV5u_t3bx09EF12wOMDJ3oeqG1UtNogWtWayY1Cexo-FS30MK8p89-J_hYW99l9IC=w408-h544-k-no",
     "gRating": null,
@@ -432,7 +432,7 @@
   {
     "name": "Sakoku Chosokabe",
     "jp": "酒國 長宗我部",
-    "type": "restaurant",
+    "type": "food",
     "cat": "全室個室居酒屋／土佐郷土料理",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmQ_1Qo1ZrA3k4Er-3tdXu7JSW9sU5F4TGQTXi1zcDEV9DINSc5Q2Bh-B209q_oLAM9gQ6_obz3gDFIQNS425hdDSE7cLkzN8EGCY4As7lA2zfuy1rzhafrdhuyCwHQ7l0Bnbp4jSCSmvsQ=w408-h427-k-no",
     "gRating": null,
