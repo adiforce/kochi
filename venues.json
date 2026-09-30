@@ -1,4 +1,25 @@
-[{
+[
+  {
+  "name": "JR Kochi Station",
+  "jp": "高知駅",
+  "type": "spot",
+  "cat": "車站・交通樞紐",
+  "img": "https://lh3.googleusercontent.com/gps-cs-s/ANWiy9SwMFJvC_JXXb5HEveVFzgOs7t90L_RUd771XouagHVOQBMO8Hc8Nbt5KI5KNVONwp_l0gXEnOQJ2s38ooTnJsiO_dZNI61hm-Ac3qfxk-5-uZ1vfS49DDwqduBR9i134xP_5o=s680-w680-h510-rw",
+  "gRating": null,
+  "gReviews": null,
+  "tRating": null,
+  "tReviews": null,
+  "lat": 33.5672,
+  "lng": 133.5437,
+  "price": "免費（搭車另計）",
+  "hours": "依列車時刻；站內店舖各自營業",
+  "addr": "高知県高知市栄田町2丁目1-10 JR高知駅",
+  "mapAddr": "高知県高知市栄田町2丁目1-10",
+  "access": "南口即路面電車「高知駅前」停留場；土讃線特急南風・しまんと發著",
+  "rec": [],
+  "notes": "2008年高架化，大屋根暱稱「くじらドーム」；站內有伴手禮店、麵包咖啡店、麵包超人商店、7-11。南口有觀光廣場。北口停車場首30分免費。案內所TEL 088-822-8229",
+  "wasFilled": false
+},{
   "name": "Nabeyaki Ramen Chiaki",
   "jp": "鍋焼きラーメン千秋",
   "type": "food",
