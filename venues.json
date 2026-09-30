@@ -1,4 +1,24 @@
-[
+[{
+  "name": "Nabeyaki Ramen Chiaki",
+  "jp": "鍋焼きラーメン千秋",
+  "type": "food",
+  "cat": "鍋燒拉麵",
+  "img": "https://lh3.googleusercontent.com/gps-cs-s/ANWiy9Q8_WM_duq_R_Qp3La8lM-w1ME1hKF8lRC_GD1lhRXcZyV4ab5m2Dfwz5LEPiFJJYmnceIhmZ09sHQeb_U7qqfIx6hDyV478jzsZvikq8NxBjkGqoF13n_2Yp8tAgXq2KpcYLbV7qNxhk2t=w408-h544-k-no",
+  "gRating": 4.0,
+  "gReviews": 749,
+  "tRating": 3.55,
+  "tReviews": 493,
+  "lat": 33.5687982,
+  "lng": 133.5449971,
+  "price": "～¥999（拉麵＋白飯約¥1,000上下）",
+  "hours": "11:00-15:00、18:00-21:00／週一公休（遇假日改週二休）",
+  "addr": "高知県高知市新本町2-15-11",
+  "mapAddr": "高知県高知市新本町2-15-11",
+  "access": "JR高知駅北口步行約3分",
+  "rec": ["鍋焼きラーメン（小／並／大）", "ライス（吃完加進湯裡做雜炊）"],
+  "notes": "須崎名物鍋燒拉麵在高知市區的代表店，菜單只有鍋燒拉麵和白飯，選份量即可。雞骨醬油湯、細直麵，土鍋上桌全程熱燙。僅收現金，不可預約，約14席，午餐尖峰常排隊約30分。無停車場。",
+  "wasFilled": true
+},
   {
   "name": "Komi Bakery",
   "jp": "コミベーカリー 知寄町本店",
