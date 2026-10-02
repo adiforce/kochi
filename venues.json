@@ -1,5 +1,26 @@
 [
   {
+  "name": "Chikurin-ji Temple",
+  "jp": "五台山 竹林寺",
+  "type": "spot",
+  "cat": "寺院／四國八十八所第31番札所",
+  "img": "https://lh3.googleusercontent.com/gps-cs-s/ANWiy9QQzWnCJubvgjr1qcc_57kdPVyNt5upYphD_cVG8hE85-XumRFB1eu-bAMBexSx1n36pLLMLBVrvqcNMbDXZB9YsFqr3Ivbakm1CGWjJkRp4IeCGFcmxb-dRZaTPHx-0AbX4Q_tXw=w408-h544-k-no",
+  "gRating": null,
+  "gReviews": null,
+  "tRating": 4.3,
+  "tReviews": 214,
+  "lat": 33.546425,
+  "lng": 133.57695,
+  "price": "境內參拜免費；名勝庭園＋寶物館共通券 大人800円（MY遊巴士優惠640円）",
+  "hours": "境內參拜 8:00-17:00／名勝庭園・寶物館 8:30-17:00，全年無休",
+  "addr": "高知県高知市五台山3577",
+  "mapAddr": "高知県高知市五台山3577",
+  "access": "JR高知駅搭MY遊巴士約26分，「竹林寺前」下車步行約2分；隔壁就是牧野植物園",
+  "rec": [],
+  "notes": "本堂（文殊堂）為國家重要文化財，名勝庭園為國指定名勝，另有朱紅五重塔。11月下旬正值紅葉季。從停車場到本堂有一段較長石階，無扶手。Google評分查不到可靠數據，留空",
+  "wasFilled": false
+},
+  {
   "name": "JR Kochi Station",
   "jp": "高知駅",
   "type": "spot",
