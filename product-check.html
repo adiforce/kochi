@@ -7,17 +7,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&family=Noto+Sans+TC:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #fdf6ee;
-    --pink: #f5b8c8;
-    --pink-dark: #e8849a;
+    --cream: #f3f5f8;
+    --pink: #c9dcf0;
+    --pink-dark: #2f6fb3;
     --mint: #b8e8d8;
     --mint-dark: #5abf9a;
     --yellow: #fce97a;
     --lavender: #d4c8f0;
-    --brown: #7a4f3a;
-    --text: #3d2b1f;
-    --muted: #a07060;
-    --border: #ead8c8;
+    --brown: #1f3350;
+    --text: #14233a;
+    --muted: #5c708a;
+    --border: #d6dee8;
     --surface: #ffffff;
   }
 
@@ -33,7 +33,7 @@
   body::before {
     content: '';
     position: fixed; inset: 0;
-    background-image: radial-gradient(circle, #e8d5c4 1px, transparent 1px);
+    background-image: radial-gradient(circle, #d3dbe6 1px, transparent 1px);
     background-size: 24px 24px;
     opacity: 0.45;
     pointer-events: none;
@@ -59,7 +59,7 @@
     border-radius: 18px;
     padding: 16px 18px;
     margin-bottom: 14px;
-    box-shadow: 0 3px 12px rgba(100,60,40,0.08);
+    box-shadow: 0 3px 12px rgba(20,35,58,0.08);
     border: 2px solid var(--border);
   }
 
@@ -111,7 +111,7 @@
   .preview-area {
     width: 100%; aspect-ratio: 4/3;
     border-radius: 12px; overflow: hidden;
-    background: #f5ede4;
+    background: #e9eef4;
     display: flex; align-items: center; justify-content: center;
     margin-bottom: 12px; position: relative;
     border: 2px dashed var(--border);
@@ -153,7 +153,7 @@
   .loading-card {
     background: var(--surface); border-radius: 18px;
     padding: 32px; margin-bottom: 14px;
-    box-shadow: 0 3px 12px rgba(100,60,40,0.08);
+    box-shadow: 0 3px 12px rgba(20,35,58,0.08);
     border: 2px solid var(--border);
     text-align: center; display: none;
   }
@@ -174,7 +174,7 @@
     border-radius: 18px;
     padding: 16px;
     margin-bottom: 14px;
-    box-shadow: 0 3px 12px rgba(100,60,40,0.08);
+    box-shadow: 0 3px 12px rgba(20,35,58,0.08);
     border: 2px solid var(--mint);
     animation: slideIn 0.3s ease;
   }
@@ -228,7 +228,7 @@
     flex: 1; border-radius: 12px; padding: 12px 14px;
     text-align: center; position: relative;
   }
-  .price-box.jp { background: #fff0f8; border: 1.5px solid var(--pink); }
+  .price-box.jp { background: #eef4fa; border: 1.5px solid var(--pink); }
   .price-box.tw { background: #f0fff8; border: 1.5px solid var(--mint); }
 
   .price-box .flag { font-size: 20px; margin-bottom: 4px; }

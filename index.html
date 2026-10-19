@@ -7,10 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --pink-dark: #e8849a;
-    --pink: #f5b8c8;
-    --cream: #fdf6ee;
-    --brown: #7a4f3a;
+    --pink-dark: #2f6fb3;
+    --pink: #c9dcf0;
+    --cream: #f3f5f8;
+    --brown: #1f3350;
     --tab-h: 62px;
     --header-h: 52px;
   }
@@ -18,7 +18,7 @@
   html, body {
     height: 100%;
     font-family: 'Noto Sans TC', sans-serif;
-    background: #f0e8e0;
+    background: #e6ebf1;
     overflow: hidden;
   }
   /* ── Header ── */
@@ -31,7 +31,7 @@
     align-items: center;
     justify-content: center;
     z-index: 200;
-    box-shadow: 0 2px 12px rgba(100,40,40,0.2);
+    box-shadow: 0 2px 12px rgba(20,35,58,0.2);
   }
   .app-title {
     font-family: 'Zen Maru Gothic', sans-serif;
@@ -68,7 +68,7 @@
     border-top: 2px solid var(--pink);
     display: flex;
     z-index: 200;
-    box-shadow: 0 -3px 14px rgba(100,40,40,0.10);
+    box-shadow: 0 -3px 14px rgba(20,35,58,0.10);
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
   .tab-btn {
@@ -81,7 +81,7 @@
     cursor: pointer;
     border: none;
     background: none;
-    color: #c0a090;
+    color: #93a4b8;
     transition: color 0.15s;
     position: relative;
     -webkit-tap-highlight-color: transparent;
@@ -103,7 +103,7 @@
     position: fixed;
     inset: 0;
     z-index: 300;
-    background: rgba(60,30,20,0.3);
+    background: rgba(20,35,58,0.3);
   }
   .more-overlay.show { display: block; }
   .more-sheet {
@@ -113,7 +113,7 @@
     background: white;
     border-radius: 20px 20px 0 0;
     padding: 16px 16px 8px;
-    box-shadow: 0 -4px 24px rgba(100,40,40,0.15);
+    box-shadow: 0 -4px 24px rgba(20,35,58,0.15);
     animation: sheetUp 0.22s ease;
   }
   @keyframes sheetUp {
@@ -122,7 +122,7 @@
   }
   .more-sheet-title {
     font-family: 'Zen Maru Gothic', sans-serif;
-    font-size: 12px; font-weight: 700; color: #c0a090;
+    font-size: 12px; font-weight: 700; color: #93a4b8;
     text-align: center; margin-bottom: 14px;
     letter-spacing: 2px;
   }
@@ -140,7 +140,7 @@
     padding: 14px 8px;
     border-radius: 14px;
     background: var(--cream);
-    border: 1.5px solid #ead8c8;
+    border: 1.5px solid #d6dee8;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     transition: all 0.15s;
@@ -154,7 +154,7 @@
     text-align: center;
   }
   .more-item.active-page {
-    background: #fde8f0;
+    background: #eaf1f9;
     border-color: var(--pink-dark);
   }
   .more-item.active-page .more-label { color: var(--pink-dark); }
@@ -166,7 +166,7 @@
     background: white;
     border: 1.5px solid var(--pink);
     border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(100,40,40,0.18);
+    box-shadow: 0 6px 20px rgba(20,35,58,0.18);
     padding: 12px 14px;
     display: none;
     align-items: center;

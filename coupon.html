@@ -7,19 +7,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #fdf6ee;
-    --pink: #f5b8c8;
-    --pink-dark: #e8849a;
+    --cream: #f3f5f8;
+    --pink: #c9dcf0;
+    --pink-dark: #2f6fb3;
     --mint: #b8e8d8;
     --mint-dark: #5abf9a;
     --yellow: #fce97a;
     --lavender: #d4c8f0;
     --orange: #ffd4a8;
     --orange-dark: #f5a040;
-    --brown: #7a4f3a;
-    --text: #3d2b1f;
-    --muted: #a07060;
-    --border: #ead8c8;
+    --brown: #1f3350;
+    --text: #14233a;
+    --muted: #5c708a;
+    --border: #d6dee8;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,7 +34,7 @@
   body::before {
     content: '';
     position: fixed; inset: 0;
-    background-image: radial-gradient(circle, #e8d5c4 1px, transparent 1px);
+    background-image: radial-gradient(circle, #d3dbe6 1px, transparent 1px);
     background-size: 24px 24px;
     opacity: 0.4;
     pointer-events: none;
@@ -113,7 +113,7 @@
     padding: 0;
     margin-bottom: 10px;
     border: 2px solid var(--border);
-    box-shadow: 0 3px 10px rgba(100,60,40,0.07);
+    box-shadow: 0 3px 10px rgba(20,35,58,0.07);
     overflow: hidden;
     transition: transform 0.15s, box-shadow 0.15s;
     text-decoration: none;
@@ -122,7 +122,7 @@
   }
   .coupon-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(100,60,40,0.13);
+    box-shadow: 0 6px 18px rgba(20,35,58,0.13);
     border-color: var(--pink);
   }
   .coupon-card:active { transform: scale(0.98); }
@@ -179,12 +179,12 @@
     font-size: 10px; font-weight: 700;
     padding: 2px 8px; border-radius: 99px;
   }
-  .tag-pink   { background: var(--pink);    color: #6b1a30; }
+  .tag-pink   { background: var(--pink);    color: #173a63; }
   .tag-mint   { background: var(--mint);    color: #1a5e48; }
   .tag-yellow { background: var(--yellow);  color: #6b5000; }
   .tag-purple { background: var(--lavender);color: #3d2080; }
   .tag-orange { background: var(--orange);  color: #7a3000; }
-  .tag-gray   { background: #e8ddd5;        color: #5a4a40; }
+  .tag-gray   { background: #dde4ec;        color: #5a4a40; }
 
   .expiry {
     font-size: 10px; color: #b09080;
@@ -199,7 +199,7 @@
   .count-badge {
     display: inline-block;
     background: var(--pink);
-    color: #6b1a30;
+    color: #173a63;
     font-size: 10px; font-weight: 700;
     padding: 1px 7px; border-radius: 99px;
     margin-left: 6px;

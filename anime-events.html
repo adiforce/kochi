@@ -7,9 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #fdf6ee;
-    --pink: #f5b8c8;
-    --pink-dark: #e8849a;
+    --cream: #f3f5f8;
+    --pink: #c9dcf0;
+    --pink-dark: #2f6fb3;
     --mint: #b8e8d8;
     --mint-dark: #5abf9a;
     --yellow: #fce97a;
@@ -18,10 +18,10 @@
     --orange-dark: #f5a040;
     --sky: #c8e8f8;
     --sky-dark: #4090c0;
-    --brown: #7a4f3a;
-    --text: #3d2b1f;
-    --muted: #a07060;
-    --border: #ead8c8;
+    --brown: #1f3350;
+    --text: #14233a;
+    --muted: #5c708a;
+    --border: #d6dee8;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -38,7 +38,7 @@
   body::before {
     content: '';
     position: fixed; inset: 0;
-    background-image: radial-gradient(circle, #e8d5c4 1px, transparent 1px);
+    background-image: radial-gradient(circle, #d3dbe6 1px, transparent 1px);
     background-size: 24px 24px;
     opacity: 0.4;
     pointer-events: none;
@@ -119,7 +119,7 @@
     border-radius: 18px;
     margin-bottom: 10px;
     border: 2px solid var(--border);
-    box-shadow: 0 3px 10px rgba(100,60,40,0.07);
+    box-shadow: 0 3px 10px rgba(20,35,58,0.07);
     overflow: hidden;
     transition: transform 0.15s, box-shadow 0.15s;
     text-decoration: none;
@@ -128,7 +128,7 @@
   }
   .event-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(100,60,40,0.13);
+    box-shadow: 0 6px 18px rgba(20,35,58,0.13);
     border-color: var(--pink);
   }
   .event-card:active { transform: scale(0.98); }
@@ -138,7 +138,7 @@
   .card-accent { width: 6px; flex-shrink: 0; }
   .a-haikyu    { background: #e8600a; }
   .a-oshinoko  { background: #e06090; }
-  .a-chiikawa  { background: #f0a0b0; }
+  .a-chiikawa  { background: #7fa7d6; }
   .a-kusuriya  { background: #7a9060; }
   .a-other     { background: var(--mint-dark); }
   .a-warn      { background: var(--orange-dark); }
@@ -182,7 +182,7 @@
     padding: 2px 8px; border-radius: 99px;
   }
   .tag-trip    { background: #ffe0e0; color: #cc3030; }
-  .tag-sendai  { background: var(--pink); color: #6b1a30; }
+  .tag-sendai  { background: var(--pink); color: #173a63; }
   .tag-station { background: var(--sky); color: #1a5080; }
   .tag-permanent{ background: #d4f0d4; color: #1a6030; }
   .tag-cafe    { background: var(--orange); color: #7a3000; }
@@ -201,7 +201,7 @@
   }
 
   .ended-label {
-    font-size: 10px; background: #e8ddd5; color: #8a7060;
+    font-size: 10px; background: #dde4ec; color: #8a7060;
     padding: 2px 8px; border-radius: 99px; font-weight: 700;
   }
 </style>
