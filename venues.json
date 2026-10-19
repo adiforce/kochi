@@ -1,4 +1,25 @@
-[
+[{
+  "name": "HMV AEON MALL Kochi",
+  "jp": "HMVイオンモール高知",
+  "type": "shop",
+  "cat": "CD/影音・動漫周邊",
+  "img": "",
+  "gRating": null,
+  "gReviews": null,
+  "tRating": null,
+  "tReviews": null,
+  "lat": 33.5745,
+  "lng": 133.5357,
+  "price": "依商品而異",
+  "hours": "10:00-21:00（年中無休，依イオンモール高知）",
+  "addr": "〒780-0026 高知県高知市秦南町1-4-8 イオンモール高知2F",
+  "mapAddr": "高知県高知市秦南町1-4-8",
+  "access": "JR高知駅步行約14分；或北口巴士總站2號乘車處搭巴士約10分",
+  "rec": [],
+  "notes": "主打VTuber、角色周邊、K-POP/J-POP，有部分新作洋樂與影像商品；可用WAON、iD、QUICPay、交通系IC、AEON Pay、au PAY。座標為商場概略位置，未經精確定位；Google/食べログ評分未查到，留空",
+  "wasFilled": false
+}
+,
   {
   "name": "Chikurin-ji Temple",
   "jp": "五台山 竹林寺",
