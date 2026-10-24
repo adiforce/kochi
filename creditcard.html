@@ -162,6 +162,20 @@
     text-align: center; font-size: 10px; color: var(--muted);
     margin-top: 20px; line-height: 1.6;
   }
+  .scene-wrap { margin-bottom: 18px; }
+  .scene-title { font-family: 'Zen Maru Gothic', sans-serif; font-size: 15px; font-weight: 900; color: var(--brown); margin: 4px 0 8px; }
+  .scene {
+    background: var(--surface); border: 2px solid var(--border); border-radius: 14px;
+    padding: 10px 12px; margin-bottom: 8px;
+  }
+  .scene-name { font-size: 13px; font-weight: 700; color: var(--brown); margin-bottom: 6px; }
+  .scene-row { display: flex; gap: 8px; font-size: 11.5px; line-height: 1.6; margin-top: 3px; }
+  .scene-tag { flex-shrink: 0; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 6px; height: fit-content; margin-top: 2px; }
+  .tag-1 { background: var(--pink-dark); color: #fff; }
+  .tag-2 { background: var(--pink); color: var(--brown); }
+  .tag-x { background: #fdeeee; color: #a04040; }
+  .scene-note { font-size: 10.5px; color: var(--muted); margin-top: 5px; line-height: 1.5; }
+  .section-title { font-family: 'Zen Maru Gothic', sans-serif; font-size: 15px; font-weight: 900; color: var(--brown); margin: 18px 0 8px; }
 </style>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -172,8 +186,8 @@
 <div class="container">
 
   <div class="header">
-    <h1>💳 台灣信用卡優惠</h1>
-    <div class="header-sub">Top 6 信用卡・日本旅遊回饋一覽（2026/10/24 更新）</div>
+    <h1>💳 日本刷卡／支付攻略</h1>
+    <div class="header-sub">高知 11/28–12/2 適用・信用卡＋行動支付（2026/10/24 更新）</div>
   </div>
 
   <div class="tips-card">
@@ -183,21 +197,77 @@
       • 富邦J卡Q4加碼：10月登錄窗口開到 10/31，名額有限先搶<br>
       • 交通卡儲值加碼多為「每月登錄」：富邦11/18、聯邦11/15開放<br>
       • CUBE秋日遊只到11/30，12/1要切回趣旅行<br>
-      • 星展11月記得登錄海外餐廳10%
+      • 星展11月記得登錄海外餐廳10%<br>
+      • 中信uniopen 11%每月上限500點，11、12月各算一次<br>
+      • 高知電車和公車不收Suica，交通卡加碼這趟用處不大
     </div>
   </div>
+
+  <div class="scene-wrap">
+    <div class="scene-title">🎯 依情境用哪張</div>
+
+    <div class="scene">
+      <div class="scene-name">🛍️ 一般商店／餐廳刷卡（主力）</div>
+      <div class="scene-row"><span class="scene-tag tag-1">首選</span><span>中信uniopen卡 11%：每月加碼上限500點（約刷NT$6,250）。這趟跨11、12月，可以吃兩個月的額度</span></div>
+      <div class="scene-row"><span class="scene-tag tag-2">次推</span><span>富邦J卡 6%：單筆滿NT$1,000＋季登錄，季上限NT$1,000（約刷NT$33,333）</span></div>
+      <div class="scene-row"><span class="scene-tag tag-2">吃滿後</span><span>無上限卡：CUBE 3.5%（只到11/30）→ 台新Richart 3.3%／富邦J 3%</span></div>
+    </div>
+
+    <div class="scene">
+      <div class="scene-name">🍜 餐廳、居酒屋</div>
+      <div class="scene-row"><span class="scene-tag tag-1">首選</span><span>星展eco 10%：海外實體餐廳，每月登錄，單日上限NT$300、月上限NT$1,000</span></div>
+      <div class="scene-row"><span class="scene-tag tag-2">次推</span><span>uniopen 11%（有額度時）／富邦J 6%（單筆滿NT$1,000）</span></div>
+      <div class="scene-note">只收現金或QR碼的小店，改用下面的 PayPay</div>
+    </div>
+
+    <div class="scene">
+      <div class="scene-name">🏪 超商、小額（NT$1,000以下）</div>
+      <div class="scene-row"><span class="scene-tag tag-1">首選</span><span>uniopen 11%：沒有低消門檻，Apple Pay感應也算</span></div>
+      <div class="scene-row"><span class="scene-tag tag-2">次推</span><span>CUBE秋日遊 3.5%（11/30前）／台新Richart 3.3%</span></div>
+      <div class="scene-note">富邦J卡的6%要單筆滿NT$1,000，小額只拿得到3%</div>
+    </div>
+
+    <div class="scene">
+      <div class="scene-name">🏬 唐吉訶德、UNIQLO、BicCamera等指定店</div>
+      <div class="scene-row"><span class="scene-tag tag-1">首選</span><span>玉山熊本熊卡 8.5%：指定商店，每期加碼上限NT$500（約刷NT$8,333）</span></div>
+      <div class="scene-row"><span class="scene-tag tag-2">次推</span><span>CUBE秋日遊：UNIQLO、寶可夢中心、三麗鷗5%，BicCamera領券最高約10%（11/30前）</span></div>
+      <div class="scene-note">店家有沒有在指定名單內，以玉山／國泰官網公告為準</div>
+    </div>
+
+    <div class="scene">
+      <div class="scene-name">📱 只收 PayPay（QR）的店</div>
+      <div class="scene-row"><span class="scene-tag tag-1">首選</span><span>全支付掃PayPay 3.5%（月上限140點）；綁國泰世華或將來銀行帳戶再＋5%（週上限100點）</span></div>
+      <div class="scene-row"><span class="scene-tag tag-2">次推</span><span>台新Pay+綁Richart卡切「Pay著刷」最高3.8%（同一天就不能用玩旅刷）</span></div>
+      <div class="scene-note">全支付的加碼適合單筆約¥5,000以內的小額</div>
+    </div>
+
+    <div class="scene">
+      <div class="scene-name">🚃 交通（路面電車／公車／機場巴士）</div>
+      <div class="scene-row"><span class="scene-tag tag-x">注意</span><span>高知的とさでん電車、公車、機場巴士都不收Suica等外地IC卡，只收現金或在地的「ですか」卡</span></div>
+      <div class="scene-note">所以富邦J卡交通卡10%、聯邦交通卡1.5%、CUBE交通卡儲值這趟用處不大，除非Suica拿來在超商等地方消費</div>
+    </div>
+
+    <div class="scene">
+      <div class="scene-name">🏨 東橫INN、Times租車（現場付款）</div>
+      <div class="scene-row"><span class="scene-tag tag-1">首選</span><span>同「一般商店」：uniopen額度還有就先刷，不然富邦J 6%（單筆滿NT$1,000）</span></div>
+      <div class="scene-row"><span class="scene-tag tag-2">次推</span><span>台新Richart 3.3%／滙豐現金回饋御璽 2.22%（無上限）</span></div>
+    </div>
+  </div>
+
+  <div class="section-title">📋 全部卡片與支付</div>
 
   <div class="filter-bar">
     <button class="filter-btn active" onclick="filterCards('all')">全部</button>
     <button class="filter-btn" onclick="filterCards('nomind')">無腦刷</button>
     <button class="filter-btn" onclick="filterCards('travel')">日本旅遊</button>
     <button class="filter-btn" onclick="filterCards('pay')">支付優惠</button>
+    <button class="filter-btn" onclick="filterCards('qr')">行動支付</button>
   </div>
 
   <div class="card-list" id="cardList"></div>
 
   <div class="footer-note">
-    資料整理自公開網路資訊，實際回饋內容與活動期限請以各銀行官網公告為準。
+    回饋率皆為官方宣傳的最高值，條件與名額以各銀行公告為準。<br>資料整理自公開網路資訊，實際回饋內容與活動期限請以各銀行官網公告為準。
   </div>
 
 </div>
@@ -263,6 +333,66 @@
       usage: '11/28-11/30用「秋日遊」，12/1-12/2切回「趣旅行」',
       verdict: '✈️ 前3天剛好吃到秋日遊3.5%；12/1記得切到趣旅行，不然回饋會掉',
       tags: ['travel', 'pay']
+    },
+    {
+      rank: 7,
+      name: '中信uniopen聯名卡',
+      issuer: '中國信託',
+      baseReward: '11%',
+      rewards: '• 國外實體商店3% OPENPOINT無上限，另加碼8%，最高11%（到2026/12/31）\n• 加碼8%每月上限500點（約刷NT$6,250），不限國家、不用登錄或領券、沒有低消\n• 限面對面交易：實體卡、Apple Pay、Google Pay、Samsung Pay；網購、條碼支付、第三方支付不算\n• 回饋是OPENPOINT（1點折NT$1，用在7-11、康是美等統一集團通路）',
+      usage: '每月前NT$6,250的日本實體消費先刷這張',
+      verdict: '🏆 這趟跨11、12月兩個月，總共有約NT$12,500的11%額度，吃滿再換其他卡',
+      tags: ['nomind', 'travel']
+    },
+    {
+      rank: 8,
+      name: '滙豐現金回饋御璽卡',
+      issuer: '滙豐銀行',
+      baseReward: '2.22%',
+      rewards: '• 日本等海外一般消費2.22%無上限（2026/10/1-12/31）\n• 歐盟、英國實體通路排除',
+      usage: '備用無腦卡：不用切換、不用登錄',
+      verdict: '🙂 回饋不算高，但完全不用設定，其他卡額度都吃滿時的保底',
+      tags: ['nomind']
+    },
+    {
+      rank: 9,
+      name: '中信LINE Pay卡',
+      issuer: '中國信託',
+      baseReward: '5%',
+      rewards: '• 海外實體一般1%，登錄後最高5% LINE POINTS（含海外加碼1.8%＋活動加碼2.2%）\n• 限實體卡或行動支付面對面交易（2026/10/1-12/31）\n• 每週二開放登錄3,000名，額滿為止',
+      usage: '有這張卡的話，出發前那週二搶登錄',
+      verdict: '⚠️ 名額少要用搶的，搶到才有5%',
+      tags: ['travel']
+    },
+    {
+      rank: 10,
+      name: '全支付（掃PayPay）',
+      issuer: '全聯 PX Pay Plus',
+      baseReward: '3.5%',
+      rewards: '• 日本PayPay店家掃碼付款，筆筆3.5%，單筆上限35點、每月上限140點（約刷NT$4,000）\n• 綁國泰世華或將來銀行帳戶付款再加碼5%，單筆上限100點、每週上限100點，限量（到2027/1/3）\n• 單筆滿NT$3,000另有登錄活動4%，每月一次\n• 新戶註冊當月多5%（上限100點）',
+      usage: '只收PayPay的小店、小額付款',
+      verdict: '📱 11/28（六）～12/2（三）跨兩週，國泰加碼的週上限可以拿兩次',
+      tags: ['qr']
+    },
+    {
+      rank: 11,
+      name: '台新Pay+（掃PayPay）',
+      issuer: '台新銀行',
+      baseReward: '3.8%',
+      rewards: '• 綁台新Richart卡並切換「Pay著刷」，日本PayPay付款最高3.8%（需LEVEL 2，到2027/3/31）\n• 不收信用卡海外交易手續費\n• Richart卡一天只能選一種方案，切Pay著刷當天就沒有玩旅刷的3.3%',
+      usage: 'PayPay付款的備案',
+      verdict: '🔁 PayPay用得多的那天才值得切，不然維持玩旅刷比較省事',
+      tags: ['qr']
+    },
+    {
+      rank: 12,
+      name: '玉山Wallet（掃PayPay）',
+      issuer: '玉山銀行',
+      baseReward: '3.5%',
+      rewards: '• 用熊本熊卡綁玉山Wallet付PayPay，熊本熊卡加碼3.5%，每季上限NT$100（到2026/12/31）\n• 免1.5%國外交易服務費，但不再算信用卡的2.5%和6%',
+      usage: '有熊本熊卡的話可以順手用掉',
+      verdict: '🤏 每季上限只有100元，聊勝於無',
+      tags: ['qr']
     }
   ];
 
