@@ -519,6 +519,33 @@
     .hero-prev{left:4px;}
     .hero-next{right:4px;}
   }
+
+  /* ===== 浮動「定位到目前行程」按鈕 ===== */
+  .locate-fab{
+    position:fixed;z-index:50;
+    right:16px;bottom:calc(18px + env(safe-area-inset-bottom));
+    display:flex;align-items:center;gap:4px;
+    padding:10px 16px;border-radius:999px;
+    border:2px solid #3b4a63;background:#fff8e6;
+    color:#3b4a63;font:700 .9rem/1 inherit;font-family:inherit;
+    box-shadow:3px 3px 0 #3b4a63;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .locate-fab:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #3b4a63;}
+  .locate-toast{
+    position:fixed;z-index:51;left:50%;
+    bottom:calc(76px + env(safe-area-inset-bottom));
+    transform:translateX(-50%) translateY(10px);
+    background:#3b4a63;color:#fff;font-size:.8rem;
+    padding:8px 14px;border-radius:12px;max-width:86vw;text-align:center;
+    opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
+  }
+  .locate-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .stop.locate-flash{animation:locate-flash 1.8s ease;}
+  @keyframes locate-flash{
+    0%,100%{background:transparent;}
+    20%,60%{background:rgba(255,217,119,.45);}
+  }
 </style>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -539,14 +566,6 @@
   <div class="now-status-item" id="nowStatusCurrent"><span class="status-dot"></span>目前：讀取中…</div>
   <div class="now-status-item now-status-next-row">
     <span id="nowStatusNext">⏭️ 下一站：讀取中…</span>
-    <select class="day-nav-select" id="dayNavSelect">
-      <option value="">📅 選擇日期</option>
-      <option value="#day1">🛫 Day1（11/28六）抵達+挖寶</option>
-      <option value="#day2">⛵ Day2（11/29日）日曜市+桂濱</option>
-      <option value="#day3">🚗 Day3（11/30一）仁淀川自駕</option>
-      <option value="#day4">🏯 Day4（12/1二）高知城+逛街</option>
-      <option value="#day5">✈️ Day5（12/2三）機場返程</option>
-    </select>
   </div>
 </div>
 </div>
@@ -1125,6 +1144,8 @@
 
 <svg class="foot-fish" viewBox="0 0 130 54" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 27 l-12 -13 q5 13 0 26 z" fill="#7d97b8"/><path d="M56 14 l6 -9 l8 10" fill="#7d97b8"/><path d="M16 27 q22 -19 62 -15 q20 2 30 15 q-10 13 -30 15 q-40 4 -62 -15 z" fill="#7d97b8"/><path d="M32 32 q32 11 74 -3 q-10 11 -28 13 q-26 3 -46 -10 z" fill="#e9eef5"/><path d="M48 35 h14 M56 39 h16 M66 35 h14" fill="none" stroke-width="1.4"/><circle cx="94" cy="23" r="2.4" fill="#3b4a63" stroke="none"/><circle cx="95" cy="22" r=".8" fill="#fff" stroke="none"/><path d="M100 30 q2 2 4 0" fill="none" stroke-width="1.5"/><circle cx="96" cy="31" r="2.2" fill="#f6b8c4" stroke="none"/><circle cx="116" cy="14" r="2.6" fill="none"/><circle cx="122" cy="6" r="1.7" fill="none"/></g></svg>
 <footer>🎒 行程僅供參考，實際營業時間／交通班次請以現場公告與官方最新資訊為準 ✨ 祝旅途愉快，一路平安 🛶🍁</footer>
+<button class="locate-fab" id="locateNow" type="button" aria-label="定位到目前行程">📍<span>現在</span></button>
+<div class="locate-toast" id="locateToast" role="status"></div>
 
 
 <script>
@@ -1411,19 +1432,6 @@ function updateActiveStops(){
   updateNowStatus();
 }
 
-function initDayNavSelect(){
-  const select = document.getElementById('dayNavSelect');
-  if(!select) return;
-
-  select.addEventListener('change', () => {
-    const target = select.value;
-    if(target){
-      const n = parseInt(target.replace('#day', ''), 10);
-      if(window.goToDay && n) window.goToDay(n - 1);
-    }
-    select.value = '';
-  });
-}
 
 
 function initDaySlider(){
@@ -1454,10 +1462,10 @@ function initDaySlider(){
       if(fromUser) bringTopIntoView();
     }
   };
-  const goTo = (i, smooth = true) => {
+  const goTo = (i, smooth = true, bringTop = true) => {
     i = Math.max(0, Math.min(cards.length - 1, i));
     track.scrollTo({ left: cards[i].offsetLeft, behavior: smooth ? 'smooth' : 'auto' });
-    setActive(i, true);
+    setActive(i, bringTop);
   };
   window.goToDay = goTo;
 
@@ -1507,8 +1515,69 @@ function initDaySlider(){
 }
 
 initDaySlider();
+
+function initLocateNow(){
+  const btn = document.getElementById('locateNow');
+  const toast = document.getElementById('locateToast');
+  if(!btn) return;
+  let toastTimer;
+  const say = msg => {
+    if(!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+  };
+  const timesOf = el => {
+    const { date, start, end, idx } = el.dataset;
+    const off = (idx !== undefined ? cumulativeDelayMinutes(date, idx) : 0) * 60000;
+    return {
+      start: new Date(new Date(`${date}T${start}:00`).getTime() + off),
+      end: new Date(new Date(`${date}T${end}:00`).getTime() + off),
+    };
+  };
+
+  btn.addEventListener('click', () => {
+    const now = new Date();
+    const stops = Array.from(document.querySelectorAll('.stop[data-date][data-start][data-end]'))
+      .map(el => ({ el, ...timesOf(el) }))
+      .sort((a, b) => a.start - b.start);
+    if(!stops.length) return;
+
+    let target = stops.find(s => now >= s.start && now <= s.end);
+    if(target){
+      say('📍 目前：' + (target.el.dataset.stopName || ''));
+    } else {
+      target = stops.find(s => s.start > now);
+      if(!target){
+        target = stops[stops.length - 1];
+        say('🏁 行程已全部結束');
+      } else if(target === stops[0]){
+        say('旅程還沒開始，先帶你到第一站 ✈️');
+      } else {
+        say('⏭️ 下一站：' + (target.el.dataset.stopName || ''));
+      }
+    }
+
+    const card = target.el.closest('.day-card');
+    const cards = Array.from(document.querySelectorAll('#daysTrack > .day-card'));
+    const i = cards.indexOf(card);
+    if(i >= 0 && window.goToDay) window.goToDay(i, false, false);
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const ns = document.querySelector('.now-status');
+      const offset = (ns ? Math.max(ns.getBoundingClientRect().bottom, 0) : 0) + 16;
+      const y = target.el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top: Math.max(y, 0), behavior: 'smooth' });
+      target.el.classList.remove('locate-flash');
+      void target.el.offsetWidth;
+      target.el.classList.add('locate-flash');
+    }));
+  });
+}
+
+initLocateNow();
 initScheduleLabels();
-initDayNavSelect();
 updateActiveStops();
 setInterval(updateActiveStops, 60000);
 
