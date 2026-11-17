@@ -435,17 +435,19 @@
   /* ===== 手繪插圖 ===== */
   .doodle-defs{position:absolute;width:0;height:0;overflow:hidden;}
   .day-card{position:relative;}
+  .day-card{overflow:hidden;}
   .day-doodle{
-    position:absolute;top:10px;right:12px;
-    width:112px;height:auto;
+    position:absolute;top:-10px;right:-18px;
+    width:260px;height:auto;
+    opacity:.16;
     pointer-events:none;
-    animation:doodle-bob 3.6s ease-in-out infinite;
+    z-index:0;
+    -webkit-mask-image:radial-gradient(ellipse at 85% 15%,#000 40%,transparent 72%);
+    mask-image:radial-gradient(ellipse at 85% 15%,#000 40%,transparent 72%);
   }
-  .day-card:nth-of-type(even) .day-doodle{animation-delay:-1.8s;}
-  .day-card .day-head{padding-right:118px;}
+  .day-card > :not(.day-doodle){position:relative;z-index:1;}
   .day-card .day-title{
     display:inline-block;
-    max-width:calc(100% - 118px);
     padding-bottom:7px;
     background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='8' viewBox='0 0 36 8'><path d='M0 5 q4.5 -4 9 0 t9 0 t9 0 t9 0' fill='none' stroke='%23f6b8c4' stroke-width='2.6' stroke-linecap='round'/></svg>") left bottom/36px 8px repeat-x;
   }
@@ -463,15 +465,15 @@
     margin:6px auto -10px;
     animation:fish-swim 4s ease-in-out infinite;
   }
-  @keyframes doodle-bob{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-3px) rotate(-1.5deg);}}
   @keyframes fish-swim{0%,100%{transform:translate(0,0) rotate(0);}50%{transform:translate(6px,-2px) rotate(-3deg);}}
-  @media (max-width:600px){
-    .day-doodle{width:80px;top:8px;right:8px;}
-    .day-card .day-head{padding-right:84px;}
-    .day-card .day-title{max-width:calc(100% - 84px);}
+  @media (max-width:600px){ .day-doodle{width:190px;top:-6px;right:-14px;} }
+  @media (prefers-reduced-motion:reduce){ .foot-fish{animation:none;} }
+  .trip-alert{
+    background:#fff8e6;border:1.5px dashed var(--orange);border-radius:14px;
+    padding:12px 16px;margin-bottom:18px;font-size:.82rem;line-height:1.75;
   }
-  @media (max-width:480px){ .day-card .day-title{max-width:100%;} }
-  @media (prefers-reduced-motion:reduce){ .day-doodle,.foot-fish{animation:none;} }
+  .trip-alert b.alert-title{display:block;color:var(--orange-dark);font-size:.92rem;margin-bottom:2px;}
+  .trip-alert ul{margin:0;padding-left:1.2em;}
 </style>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -506,6 +508,16 @@
 
 <div class="wrap">
 
+  <div class="trip-alert">
+    <b class="alert-title">⚠️ 行前注意（11/17更新）</b>
+    <ul>
+      <li>🏨 東橫INN Check-in <b>15:00起</b>，Day1 13:00只能寄行李</li>
+      <li>🚌 機場巴士 11/1起漲到 <b>1,000円</b>（回數券停售），可付現／PayPay／信用卡感應</li>
+      <li>🚌 MY遊バス：Day2（週日）搭 <b>10:43</b> はりまや橋發；Day4（平日）搭 <b>12:43</b>，回程 15:01</li>
+      <li>🔎 出發前再查：Day1 知寄町末班電車、Day2 桂浜回程班次、Day5 機場巴士發車時刻</li>
+    </ul>
+  </div>
+
   <!-- DAY 1 -->
   <div class="day-card" id="day1">
     <svg class="day-doodle" viewBox="0 0 120 90" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 30 q-5 0 -5 -5 q0 -5 6 -5 q2 -6 9 -5 q5 -4 9 1 q6 0 6 6 q0 5 -6 5 z" fill="#eef5fc"/><path d="M12 78 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#eef5fc"/><g transform="rotate(-14 75 40)"><path d="M48 34 l-6 -14 q-1 -3 3 -3 h5 l12 17" fill="#f6b8c4"/><path d="M42 42 q4 -10 22 -10 h28 q14 0 18 8 q-4 8 -18 8 h-36 q-10 0 -14 -6 z" fill="#fff"/><path d="M70 44 l-12 18 q-1 3 3 3 h6 l20 -20" fill="#c9dcf0"/><circle cx="66" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="75" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="84" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="99" cy="37" r="1.3" fill="#3b4a63" stroke="none"/><path d="M97 41 q3 2.5 6 0" fill="none" stroke-width="1.6"/><circle cx="104" cy="42" r="2" fill="#f6b8c4" stroke="none"/></g><path d="M30 5 l1.6 3.4 l3.4 1.6 l-3.4 1.6 l-1.6 3.4 l-1.6 -3.4 l-3.4 -1.6 l3.4 -1.6 z" fill="#ffd977" stroke-width="1.4"/><path d="M112 68.0 l1.2800000000000002 2.72 l2.72 1.2800000000000002 l-2.72 1.2800000000000002 l-1.2800000000000002 2.72 l-1.2800000000000002 -2.72 l-2.72 -1.2800000000000002 l2.72 -1.2800000000000002 z" fill="#ffd977" stroke-width="1.4"/></g></svg>
@@ -523,7 +535,7 @@
             <div class="stop-time"><span class="stop-time-orig">🛬 12:00</span><span class="delay-adjusted"></span></div>
             <div class="delay-ctrl" data-date="2026-11-28" data-idx="0"><button class="delay-btn" data-delta="-30">－30</button><span class="delay-count"></span><button class="delay-btn" data-delta="30">＋30</button></div>
             <div class="stop-name">抵達高知龍馬空港</div>
-            <div class="stop-note">在飛機上先寫好入境卡（不支援VJW）</div>
+            <div class="stop-note">在飛機上先寫好入境卡（不支援VJW）。機場巴士到はりまや橋1,000円（11/1起漲價），可付現、PayPay或信用卡感應</div>
           </div>
         </div>
       </div>
@@ -532,8 +544,8 @@
           <div class="stop-main">
             <div class="stop-time"><span class="stop-time-orig">🏨 13:00</span><span class="delay-adjusted"></span></div>
             <div class="delay-ctrl" data-date="2026-11-28" data-idx="1"><button class="delay-btn" data-delta="-30">－30</button><span class="delay-count"></span><button class="delay-btn" data-delta="30">＋30</button></div>
-            <div class="stop-name">東橫INN高知 Check-in</div>
-            <div class="stop-note">直接櫃檯辦理，不要用自助機</div>
+            <div class="stop-name">東橫INN高知 寄放行李</div>
+            <div class="stop-note">⚠️ Check-in 15:00起，現在先寄行李；晚上回來再辦入住（直接櫃檯辦理，不要用自助機）</div>
           </div>
           <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=東横INN高知" target="_blank" rel="noopener">📍</a>
         </div>
@@ -614,7 +626,7 @@
             <div class="stop-time"><span class="stop-time-orig">🚕 逛完</span><span class="delay-adjusted"></span></div>
             <div class="delay-ctrl" data-date="2026-11-28" data-idx="8"><button class="delay-btn" data-delta="-30">－30</button><span class="delay-count"></span><button class="delay-btn" data-delta="30">＋30</button></div>
             <div class="stop-name">回飯店</div>
-            <div class="stop-note">電車大機率搭不上（末班約21:50知寄町發），改用GO叫車（先確認app已下載綁卡），或走路約40分回飯店</div>
+            <div class="stop-note">電車大機率搭不上（末班約21:50知寄町發，⚠️行前用乗換案内再確認），改用GO叫車（先確認app已下載綁卡），或走路約40分回飯店</div>
           </div>
         </div>
       </div>
@@ -645,20 +657,20 @@
           <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=日曜市" target="_blank" rel="noopener">📍</a>
         </div>
       </div>
-      <div class="stop" data-date="2026-11-29" data-start="11:00" data-end="11:52" data-idx="1">
+      <div class="stop" data-date="2026-11-29" data-start="10:43" data-end="11:27" data-idx="1">
         <div class="stop-top">
           <div class="stop-main">
-            <div class="stop-time"><span class="stop-time-orig">🚌 11:00</span><span class="delay-adjusted"></span></div>
+            <div class="stop-time"><span class="stop-time-orig">🚌 10:43</span><span class="delay-adjusted"></span></div>
             <div class="delay-ctrl" data-date="2026-11-29" data-idx="1"><button class="delay-btn" data-delta="-30">－30</button><span class="delay-count"></span><button class="delay-btn" data-delta="30">＋30</button></div>
-            <div class="stop-name">搭MY遊バス（はりまや橋出發）</div>
-            <div class="stop-note">桂浜券1,500円（2026/4起新價），官方建議事前購票（はりまや橋サービスセンター、高知駅とさてらす等，或用ジョルダン乗換案内App買手機票），人多時車上買會拖慢發車，週日加開班次；買票當天路面電車市內均一區間免費搭</div>
+            <div class="stop-name">搭MY遊バス（はりまや橋 10:43發，約11:27到桂浜）</div>
+            <div class="stop-note">桂浜券1,500円（2026/4起新價），官方建議事前購票（はりまや橋サービスセンター、高知駅とさてらす等，或用ジョルダン乗換案内App買手機票），人多時車上買會拖慢發車；週日はりまや橋發車約 09:08／10:08／10:43／11:33／12:43…，錯過10:43就搭11:33（約12:17到）；買票當天路面電車市內均一區間免費搭</div>
           </div>
         </div>
       </div>
-      <div class="stop" data-date="2026-11-29" data-start="11:52" data-end="13:00" data-idx="2">
+      <div class="stop" data-date="2026-11-29" data-start="11:27" data-end="13:00" data-idx="2">
         <div class="stop-top">
           <div class="stop-main">
-            <div class="stop-time"><span class="stop-time-orig">🌊 11:52</span><span class="delay-adjusted"></span></div>
+            <div class="stop-time"><span class="stop-time-orig">🌊 11:27</span><span class="delay-adjusted"></span></div>
             <div class="delay-ctrl" data-date="2026-11-29" data-idx="2"><button class="delay-btn" data-delta="-30">－30</button><span class="delay-count"></span><button class="delay-btn" data-delta="30">＋30</button></div>
             <div class="stop-name">桂濱：龍馬像、海岸</div>
             <div class="stop-note">坂本龍馬像高5.3m（含台座13.5m），海岸禁止游泳。文化祭期間有「モコナとめぐる言霊結び」語音導覽（免費，至12/6，桂浜公園也是據點之一）</div>
@@ -697,7 +709,7 @@
             <div class="stop-time"><span class="stop-time-orig">🚌 15:00</span><span class="delay-adjusted"></span></div>
             <div class="delay-ctrl" data-date="2026-11-29" data-idx="5"><button class="delay-btn" data-delta="-30">－30</button><span class="delay-count"></span><button class="delay-btn" data-delta="30">＋30</button></div>
             <div class="stop-name">MY遊バス返回市區</div>
-            <div class="stop-note">已含在1,500円一日券內，不用再付費</div>
+            <div class="stop-note">已含在1,500円一日券內，不用再付費。⚠️回程班次未確認，到記念館先看站牌或用NAVITIME查（大約每小時一班）</div>
           </div>
         </div>
       </div>
@@ -834,7 +846,7 @@
             <div class="stop-time"><span class="stop-time-orig">🛍️ 15:00</span><span class="delay-adjusted"></span></div>
             <div class="delay-ctrl" data-date="2026-11-30" data-idx="8"><button class="delay-btn" data-delta="-30">－30</button><span class="delay-count"></span><button class="delay-btn" data-delta="30">＋30</button></div>
             <div class="stop-name">イオンモール高知</div>
-            <div class="stop-note">駅北口徒歩約10分，約160間專門店</div>
+            <div class="stop-note">高知駅徒歩約14分（約1.1km），約140間專門店</div>
             <span class="stop-tag">🛍️ 購物商場</span>
           </div>
           <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=イオンモール高知" target="_blank" rel="noopener">📍</a>
@@ -904,7 +916,7 @@
             <div class="stop-time"><span class="stop-time-orig">🍽️ 11:45</span><span class="delay-adjusted"></span></div>
             <div class="delay-ctrl" data-date="2026-12-01" data-idx="2"><button class="delay-btn" data-delta="-30">－30</button><span class="delay-count"></span><button class="delay-btn" data-delta="30">＋30</button></div>
             <div class="stop-name">午餐：藁焼き鰹たたき明神丸帯屋町店</div>
-            <div class="stop-note">吃快一點，12:30前出發走去はりまや橋</div>
+            <div class="stop-note">吃快一點，12:30前出發，12:43前要到はりまや橋站</div>
             <span class="stop-tag">🐟 鰹魚半敲燒</span>
           </div>
           <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=明神丸 帯屋町店" target="_blank" rel="noopener">📍</a>
@@ -916,7 +928,7 @@
             <div class="stop-time"><span class="stop-time-orig">🚌 12:30</span><span class="delay-adjusted"></span></div>
             <div class="delay-ctrl" data-date="2026-12-01" data-idx="3"><button class="delay-btn" data-delta="-30">－30</button><span class="delay-count"></span><button class="delay-btn" data-delta="30">＋30</button></div>
             <div class="stop-name">前往竹林寺（二選一）</div>
-            <div class="stop-note">【A 巴士】12:48 はりまや橋搭MY遊バス → 13:09 竹林寺前。五台山券大人1,000円，官方建議事前在はりまや橋サービスセンター等處買票；去程班次出發前用NAVITIME再確認｜【B 單車】はりまや橋観光バスターミナル站借COGICOGI（全車電動輔助，3小時1,500円、超時每小時200円），App要先註冊綁卡；五台山附近沒有站，要騎回原站還；上山路窄彎多，與汽車共用</div>
+            <div class="stop-note">【A 巴士】12:43 はりまや橋搭MY遊バス → 13:04 竹林寺前。五台山券大人1,000円，官方建議事前在はりまや橋サービスセンター等處買票；去程班次出發前用NAVITIME再確認｜【B 單車】はりまや橋観光バスターミナル站借COGICOGI（全車電動輔助，3小時1,500円、超時每小時200円），App要先註冊綁卡；五台山附近沒有站，要騎回原站還；上山路窄彎多，與汽車共用</div>
           </div>
         </div>
       </div>
@@ -1025,7 +1037,7 @@
             <div class="stop-time"><span class="stop-time-orig">🚌 11:35</span><span class="delay-adjusted"></span></div>
             <div class="delay-ctrl" data-date="2026-12-02" data-idx="4"><button class="delay-btn" data-delta="-30">－30</button><span class="delay-count"></span><button class="delay-btn" data-delta="30">＋30</button></div>
             <div class="stop-name">機場巴士出發</div>
-            <div class="stop-note">900円/人，現金上車付，別帶5000/10000円大鈔</div>
+            <div class="stop-note">1,000円/人（11/1起漲價），上車先付；可付現、PayPay或信用卡感應。⚠️此班不配合航班，行前確認はりまや橋發車時刻</div>
           </div>
         </div>
       </div>
@@ -1049,7 +1061,7 @@
         </div>
       </div>
     </div>
-    <div class="day-summary">💡 14:00起飛前2小時抵達機場很充裕，早上還有近2小時空檔可以補最後的伴手禮。機場巴士900円記得備零錢，別帶大鈔上車。</div>
+    <div class="day-summary">💡 14:00起飛前2小時抵達機場很充裕，早上還有近2小時空檔可以補最後的伴手禮。機場巴士已漲到1,000円，可用PayPay或信用卡感應，不用特地換零錢。</div>
   </div>
 
 </div>
