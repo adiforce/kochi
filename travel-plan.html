@@ -431,6 +431,47 @@
     color:var(--orange-dark);
     text-decoration:none;
   }
+
+  /* ===== 手繪插圖 ===== */
+  .doodle-defs{position:absolute;width:0;height:0;overflow:hidden;}
+  .day-card{position:relative;}
+  .day-doodle{
+    position:absolute;top:10px;right:12px;
+    width:112px;height:auto;
+    pointer-events:none;
+    animation:doodle-bob 3.6s ease-in-out infinite;
+  }
+  .day-card:nth-of-type(even) .day-doodle{animation-delay:-1.8s;}
+  .day-card .day-head{padding-right:118px;}
+  .day-card .day-title{
+    display:inline-block;
+    max-width:calc(100% - 118px);
+    padding-bottom:7px;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='8' viewBox='0 0 36 8'><path d='M0 5 q4.5 -4 9 0 t9 0 t9 0 t9 0' fill='none' stroke='%23f6b8c4' stroke-width='2.6' stroke-linecap='round'/></svg>") left bottom/36px 8px repeat-x;
+  }
+  header{position:relative;}
+  .head-tram{
+    position:absolute;right:18px;top:50%;
+    width:118px;height:auto;
+    transform:translateY(-50%);
+    pointer-events:none;
+  }
+  @media (min-width:721px){ header{padding-right:156px;} }
+  @media (max-width:720px){ .head-tram{display:none;} }
+  .foot-fish{
+    display:block;width:92px;height:auto;
+    margin:6px auto -10px;
+    animation:fish-swim 4s ease-in-out infinite;
+  }
+  @keyframes doodle-bob{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-3px) rotate(-1.5deg);}}
+  @keyframes fish-swim{0%,100%{transform:translate(0,0) rotate(0);}50%{transform:translate(6px,-2px) rotate(-3deg);}}
+  @media (max-width:600px){
+    .day-doodle{width:80px;top:8px;right:8px;}
+    .day-card .day-head{padding-right:84px;}
+    .day-card .day-title{max-width:calc(100% - 84px);}
+  }
+  @media (max-width:480px){ .day-card .day-title{max-width:100%;} }
+  @media (prefers-reduced-motion:reduce){ .day-doodle,.foot-fish{animation:none;} }
 </style>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -438,11 +479,13 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
 <body>
+<svg class="doodle-defs" aria-hidden="true" focusable="false"><defs><filter id="crayon" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
 
 <div class="sticky-top">
 <header>
   <div class="logo">🛶 高知五日獨旅 ✈️<span style="font-size:12px;font-weight:400;opacity:.6;margin-left:6px;">🏠 定點慢玩・帯屋町大橋通基地</span></div>
   <div class="flight-info">✈️ 去程 <b>IT250</b> TPE 11/28 08:40 → KCZ 11/28 12:00｜回程 <b>IT251</b> KCZ 12/02 14:00 → TPE 12/02 15:50</div>
+  <svg class="head-tram" viewBox="0 0 140 72" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M0 8 H140" fill="none" stroke-width="1.2" stroke-dasharray="2 4"/><path d="M62 18 l8 -10 l8 10" fill="none"/><rect x="18" y="18" width="104" height="38" rx="9" fill="#fff6e0"/><path d="M18 40 H122 V47 q0 9 -9 9 H27 q-9 0 -9 -9 z" fill="#7bbf6a"/><rect x="26" y="24" width="13" height="11" rx="2.5" fill="#c9dcf0"/><rect x="44" y="24" width="13" height="11" rx="2.5" fill="#c9dcf0"/><rect x="83" y="24" width="13" height="11" rx="2.5" fill="#c9dcf0"/><rect x="101" y="24" width="13" height="11" rx="2.5" fill="#c9dcf0"/><rect x="62" y="24" width="15" height="30" rx="2" fill="#c9dcf0"/><circle cx="117" cy="47" r="2.3" fill="#ffd977"/><circle cx="40" cy="60" r="5" fill="#3b4a63"/><circle cx="100" cy="60" r="5" fill="#3b4a63"/><path d="M4 66 H136" fill="none"/></g></svg>
 </header>
 
 <div class="now-status">
@@ -465,6 +508,7 @@
 
   <!-- DAY 1 -->
   <div class="day-card" id="day1">
+    <svg class="day-doodle" viewBox="0 0 120 90" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 30 q-5 0 -5 -5 q0 -5 6 -5 q2 -6 9 -5 q5 -4 9 1 q6 0 6 6 q0 5 -6 5 z" fill="#eef5fc"/><path d="M12 78 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#eef5fc"/><g transform="rotate(-14 75 40)"><path d="M48 34 l-6 -14 q-1 -3 3 -3 h5 l12 17" fill="#f6b8c4"/><path d="M42 42 q4 -10 22 -10 h28 q14 0 18 8 q-4 8 -18 8 h-36 q-10 0 -14 -6 z" fill="#fff"/><path d="M70 44 l-12 18 q-1 3 3 3 h6 l20 -20" fill="#c9dcf0"/><circle cx="66" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="75" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="84" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="99" cy="37" r="1.3" fill="#3b4a63" stroke="none"/><path d="M97 41 q3 2.5 6 0" fill="none" stroke-width="1.6"/><circle cx="104" cy="42" r="2" fill="#f6b8c4" stroke="none"/></g><path d="M30 5 l1.6 3.4 l3.4 1.6 l-3.4 1.6 l-1.6 3.4 l-1.6 -3.4 l-3.4 -1.6 l3.4 -1.6 z" fill="#ffd977" stroke-width="1.4"/><path d="M112 68.0 l1.2800000000000002 2.72 l2.72 1.2800000000000002 l-2.72 1.2800000000000002 l-1.2800000000000002 2.72 l-1.2800000000000002 -2.72 l-2.72 -1.2800000000000002 l2.72 -1.2800000000000002 z" fill="#ffd977" stroke-width="1.4"/></g></svg>
     <div class="day-head">
       <span class="day-num">🛫 Day 1</span>
       <span class="day-date">2026/11/28（六）</span>
@@ -580,6 +624,7 @@
 
   <!-- DAY 2 -->
   <div class="day-card" id="day2">
+    <svg class="day-doodle" viewBox="0 0 120 90" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M108.0 24.0 L113.0 24.0" fill="none"/><path d="M103.3 35.3 L106.8 38.8" fill="none"/><path d="M92.0 40.0 L92.0 45.0" fill="none"/><path d="M80.7 35.3 L77.2 38.8" fill="none"/><path d="M76.0 24.0 L71.0 24.0" fill="none"/><path d="M80.7 12.7 L77.2 9.2" fill="none"/><path d="M92.0 8.0 L92.0 3.0" fill="none"/><path d="M103.3 12.7 L106.8 9.2" fill="none"/><circle cx="92" cy="24" r="12" fill="#ffd977"/><circle cx="88.6" cy="23" r="1.105" fill="#3b4a63" stroke="none"/><circle cx="95.4" cy="23" r="1.105" fill="#3b4a63" stroke="none"/><path d="M89.875 25.975 q2.125 2.125 4.25 0" fill="none" stroke-width="1.6"/><circle cx="86.05" cy="25.975" r="1.87" fill="#f6b8c4" stroke="none"/><circle cx="97.95" cy="25.975" r="1.87" fill="#f6b8c4" stroke="none"/><path d="M22 22 q4 -5 8 0 q4 -5 8 0 M46 36 q3 -3.5 6 0 q3 -3.5 6 0" fill="none"/><path d="M0 64 q10 -9 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 h6 V96 H-6 V64 z" fill="#c9dcf0"/><path d="M54 60 h20 l-4 6 h-12 z" fill="#f2a65a"/><path d="M64 60 V40" fill="none"/><path d="M65 42 L76 58 H65 z" fill="#fff"/><path d="M0 76 q12 -10 24 0 t24 0 t24 0 t24 0 t24 0 h6 V96 H-6 V76 z" fill="#7fb3e0"/><path d="M14 72 q4 -5 8 0 M62 72 q4 -5 8 0 M100 82 q4 -5 8 0" fill="none" stroke="#fff" stroke-width="1.8"/></g></svg>
     <div class="day-head">
       <span class="day-num">⛵ Day 2</span>
       <span class="day-date">2026/11/29（日）</span>
@@ -686,6 +731,7 @@
 
   <!-- DAY 3 -->
   <div class="day-card" id="day3">
+    <svg class="day-doodle" viewBox="0 0 120 90" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M60 60 L88 32 L126 66 z" fill="#cfe8c4"/><path d="M-2 60 L22 30 L40 50 L58 24 L84 60 z" fill="#a8d59a"/><path d="M0 58 H120 V74 H0 z" fill="#f3e6c8" stroke="none"/><path d="M0 74 q20 -8 40 0 t40 0 t40 0 h6 V96 H-6 V74 z" fill="#5cc3d6"/><path d="M12 82 q4 -2.5 8 0 M60 86 q4 -2.5 8 0 M96 81 q4 -2.5 8 0" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="22" cy="58" r="3.2" fill="#eef5fc"/><circle cx="15" cy="53" r="2.3" fill="#eef5fc"/><path d="M28 66 v-6 q0 -6 8 -6 h10 l8 -9 q2 -2 5 -2 h16 q3 0 5 2 l7 9 h8 q8 0 8 6 v6 z" fill="#ffd977"/><path d="M57 52 l5 -6 h7 v6 z" fill="#c9dcf0"/><path d="M73 46 h6 l5 6 h-11 z" fill="#c9dcf0"/><circle cx="94" cy="58" r="2" fill="#fff"/><circle cx="43" cy="67" r="6" fill="#3b4a63"/><circle cx="43" cy="67" r="2" fill="#fff" stroke="none"/><circle cx="83" cy="67" r="6" fill="#3b4a63"/><circle cx="83" cy="67" r="2" fill="#fff" stroke="none"/></g></svg>
     <div class="day-head">
       <span class="day-num">🚗 Day 3</span>
       <span class="day-date">2026/11/30（一）</span>
@@ -819,6 +865,7 @@
 
   <!-- DAY 4 -->
   <div class="day-card" id="day4">
+    <svg class="day-doodle" viewBox="0 0 120 90" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M30 86 L36 64 H84 L90 86 z" fill="#ddd6cb"/><path d="M33 75 H87 M48 64 L46 75 M72 64 L74 75 M40 75 L38 86 M60 75 V86 M80 75 L82 86" fill="none" stroke-width="1.4"/><rect x="40" y="50" width="40" height="14" fill="#fff"/><rect x="48" y="35" width="24" height="12" fill="#fff"/><rect x="53" y="22" width="14" height="10" fill="#fff"/><path d="M28 52 q9 0 15 -8 H77 q6 8 15 8 z" fill="#5a6b85"/><path d="M40 37 q6 0 10 -7 H70 q4 7 10 7 z" fill="#5a6b85"/><path d="M47 24 q5 0 8 -8 H65 q3 8 8 8 z" fill="#5a6b85"/><circle cx="54" cy="15" r="1.8" fill="#ffd977"/><circle cx="66" cy="15" r="1.8" fill="#ffd977"/><rect x="57" y="39" width="6" height="5" fill="#3b4a63" stroke="none"/><rect x="46" y="55" width="5" height="5" fill="#3b4a63" stroke="none"/><rect x="69" y="55" width="5" height="5" fill="#3b4a63" stroke="none"/><polygon points="9.6,27.0 10.7,26.4 8.3,23.2 11.9,24.8 12.3,23.6 14.9,24.7 15.7,20.7 17.0,21.4 18.8,17.1 19.4,21.8 20.8,21.4 20.5,25.5 23.3,25.1 23.3,26.4 27.2,25.9 24.1,28.2 24.9,29.2 22.7,30.8 21.8,31.9 21.1,32.4 22.6,34.4 20.3,33.4 20.0,34.2 16.6,32.8 12.9,33.2 12.9,32.4 10.4,32.7 12.4,31.1 11.9,30.5 11.3,29.2" fill="#e06a4e" stroke-width="1.6"/><path d="M17 30 L15.3 42.2" fill="none" stroke-width="1.6"/><polygon points="96.3,22.8 96.9,21.9 94.1,20.1 97.5,20.3 97.4,19.2 99.8,19.4 99.3,16.0 100.5,16.2 100.7,12.2 102.5,15.8 103.6,15.1 104.5,18.4 106.6,17.3 107.0,18.3 109.9,16.7 108.1,19.5 109.1,20.0 107.7,22.0 107.4,23.2 106.9,23.7 108.8,24.9 106.6,24.8 106.6,25.4 103.5,25.4 100.7,26.7 100.4,26.1 98.5,27.0 99.7,25.2 99.1,24.9 98.3,24.0" fill="#f2a65a" stroke-width="1.6"/><path d="M103 23 L105.2 33.2" fill="none" stroke-width="1.6"/><polygon points="100.4,60.9 101.2,60.6 100.1,58.1 102.3,59.7 102.8,59.0 104.3,60.1 105.5,57.5 106.2,58.2 108.1,55.5 107.8,58.8 108.8,58.8 108.0,61.5 110.0,61.6 109.8,62.4 112.5,62.7 110.0,63.8 110.5,64.6 108.7,65.4 108.0,66.0 107.4,66.2 108.2,67.8 106.7,66.8 106.4,67.3 104.3,65.9 101.8,65.6 101.9,65.0 100.1,64.9 101.7,64.1 101.5,63.6 101.3,62.6" fill="#e06a4e" stroke-width="1.6"/><path d="M105 64 L102.1 72.0" fill="none" stroke-width="1.6"/><polygon points="8.2,69.3 8.7,68.8 6.8,67.2 9.2,67.6 9.2,66.9 10.9,67.2 10.8,64.7 11.7,64.9 12.2,62.0 13.2,64.7 14.0,64.3 14.4,66.8 16.0,66.1 16.2,66.9 18.5,66.0 17.0,67.9 17.6,68.3 16.5,69.6 16.1,70.4 15.8,70.8 17.0,71.8 15.5,71.5 15.4,72.0 13.2,71.8 11.0,72.5 10.9,72.0 9.4,72.6 10.4,71.4 10.0,71.1 9.5,70.4" fill="#f2a65a" stroke-width="1.6"/><path d="M13 70 L13.8 77.6" fill="none" stroke-width="1.6"/></g></svg>
     <div class="day-head">
       <span class="day-num">🏯 Day 4</span>
       <span class="day-date">2026/12/01（二）</span>
@@ -925,6 +972,7 @@
 
   <!-- DAY 5 -->
   <div class="day-card" id="day5">
+    <svg class="day-doodle" viewBox="0 0 120 90" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M50 68 q20 -6 34 -26 t26 -22" fill="none" stroke-dasharray="3 5"/><g transform="translate(78 -2) scale(.4) rotate(-32 75 40)"><path d="M48 34 l-6 -14 q-1 -3 3 -3 h5 l12 17" fill="#f6b8c4"/><path d="M42 42 q4 -10 22 -10 h28 q14 0 18 8 q-4 8 -18 8 h-36 q-10 0 -14 -6 z" fill="#fff"/><path d="M70 44 l-12 18 q-1 3 3 3 h6 l20 -20" fill="#c9dcf0"/><circle cx="66" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="75" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="84" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="99" cy="37" r="1.3" fill="#3b4a63" stroke="none"/><path d="M97 41 q3 2.5 6 0" fill="none" stroke-width="1.6"/><circle cx="104" cy="42" r="2" fill="#f6b8c4" stroke="none"/></g><path d="M32 44 v-5" fill="none"/><path d="M32 44 q8 -12 20 -8 q-6 12 -20 8 z" fill="#a8d59a"/><circle cx="32" cy="62" r="17" fill="#ffd23f"/><circle cx="24" cy="54" r=".9" fill="#e0a800" stroke="none"/><circle cx="41" cy="55" r=".9" fill="#e0a800" stroke="none"/><circle cx="38" cy="73" r=".9" fill="#e0a800" stroke="none"/><circle cx="28.0" cy="62" r="1.3" fill="#3b4a63" stroke="none"/><circle cx="36.0" cy="62" r="1.3" fill="#3b4a63" stroke="none"/><path d="M29.5 65.5 q2.5 2.5 5.0 0" fill="none" stroke-width="1.6"/><circle cx="25.0" cy="65.5" r="2.2" fill="#f6b8c4" stroke="none"/><circle cx="39.0" cy="65.5" r="2.2" fill="#f6b8c4" stroke="none"/><path d="M66 72 c-3 -4 -9 -1 -6 4 l6 6 l6 -6 c3 -5 -3 -8 -6 -4 z" fill="#f6b8c4"/><path d="M10 16.0 l1.2800000000000002 2.72 l2.72 1.2800000000000002 l-2.72 1.2800000000000002 l-1.2800000000000002 2.72 l-1.2800000000000002 -2.72 l-2.72 -1.2800000000000002 l2.72 -1.2800000000000002 z" fill="#ffd977" stroke-width="1.4"/><path d="M70 12.5 l1.1199999999999999 2.38 l2.38 1.1199999999999999 l-2.38 1.1199999999999999 l-1.1199999999999999 2.38 l-1.1199999999999999 -2.38 l-2.38 -1.1199999999999999 l2.38 -1.1199999999999999 z" fill="#c9dcf0" stroke-width="1.4"/></g></svg>
     <div class="day-head">
       <span class="day-num">✈️ Day 5</span>
       <span class="day-date">2026/12/02（三）</span>
@@ -1006,6 +1054,7 @@
 
 </div>
 
+<svg class="foot-fish" viewBox="0 0 130 54" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 27 l-12 -13 q5 13 0 26 z" fill="#7d97b8"/><path d="M56 14 l6 -9 l8 10" fill="#7d97b8"/><path d="M16 27 q22 -19 62 -15 q20 2 30 15 q-10 13 -30 15 q-40 4 -62 -15 z" fill="#7d97b8"/><path d="M32 32 q32 11 74 -3 q-10 11 -28 13 q-26 3 -46 -10 z" fill="#e9eef5"/><path d="M48 35 h14 M56 39 h16 M66 35 h14" fill="none" stroke-width="1.4"/><circle cx="94" cy="23" r="2.4" fill="#3b4a63" stroke="none"/><circle cx="95" cy="22" r=".8" fill="#fff" stroke="none"/><path d="M100 30 q2 2 4 0" fill="none" stroke-width="1.5"/><circle cx="96" cy="31" r="2.2" fill="#f6b8c4" stroke="none"/><circle cx="116" cy="14" r="2.6" fill="none"/><circle cx="122" cy="6" r="1.7" fill="none"/></g></svg>
 <footer>🎒 行程僅供參考，實際營業時間／交通班次請以現場公告與官方最新資訊為準 ✨ 祝旅途愉快，一路平安 🛶🍁</footer>
 
 
