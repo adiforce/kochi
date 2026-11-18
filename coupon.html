@@ -184,6 +184,13 @@
   .tag-yellow { background: var(--yellow);  color: #6b5000; }
   .tag-purple { background: var(--lavender);color: #3d2080; }
   .tag-orange { background: var(--orange);  color: #7a3000; }
+  .tag-zero   { background: #1f9d55;     color: #fff; }
+  .coupon-card.zero-fee { border-color: #1f9d55; }
+  .coupon-card.zero-fee .card-name::after {
+    content: "0%"; display: inline-block; margin-left: 6px;
+    font-size: 10px; font-weight: 900; color: #fff; background: #1f9d55;
+    padding: 1px 6px; border-radius: 99px; vertical-align: 2px;
+  }
   .tag-gray   { background: #dde4ec;        color: #5a4a40; }
 
   .expiry {
@@ -221,7 +228,8 @@
   <div class="top-note">
     📌 使用方式：結帳時出示手機畫面＋護照給店員即可<br>
     📌 大部分免稅（10%）＋額外折扣可疊加<br>
-    📌 部分特價品、餐廳、食品不適用，現場確認
+    📌 部分特價品、餐廳、食品不適用，現場確認<br>
+    💰 <b style="color:#1f9d55">綠框＝退稅免手續費</b>（退信用卡，11/15 林氏璧整理；機場領現金另收約1%）
   </div>
 
   <!-- 分類 Tabs -->
@@ -262,7 +270,7 @@
       </div>
     </a>
 
-    <a class="coupon-card" href="https://www.letsgojp.com/coupon/daikoku/" target="_blank">
+    <a class="coupon-card zero-fee" href="https://www.letsgojp.com/coupon/daikoku/" target="_blank">
       <div class="card-inner">
         <div class="card-accent pink-dark"></div>
         <div class="card-content">
@@ -273,6 +281,7 @@
           <div class="card-discount">免稅10%＋最高5%OFF</div>
           <div class="card-desc">號稱日本最便宜藥妝，大量零食伴手禮<br>店員大多會中英文</div>
           <div class="card-footer">
+            <span class="tag tag-zero">💰 退稅0手續費</span>
             <span class="tag tag-pink">關西為主</span>
             <span class="tag tag-mint">手機出示</span>
           </div>
@@ -280,7 +289,7 @@
       </div>
     </a>
 
-    <a class="coupon-card" href="https://www.flyasia.co/2026/japan-coupon/#sundrug" target="_blank">
+    <a class="coupon-card zero-fee" href="https://www.flyasia.co/2026/japan-coupon/#sundrug" target="_blank">
       <div class="card-inner">
         <div class="card-accent pink-dark"></div>
         <div class="card-content">
@@ -291,6 +300,7 @@
           <div class="card-discount">免稅10%＋最高7%OFF → 最高17%</div>
           <div class="card-desc">¥10,000起享3%、¥30,000享5%、¥50,000享7%<br>上野、淺草、池袋都有，營業超晚</div>
           <div class="card-footer">
+            <span class="tag tag-zero">💰 退稅0手續費（J-TaxRefund）</span>
             <span class="tag tag-pink">全日本</span>
             <span class="tag tag-mint">手機出示</span>
             <span class="expiry">效期 2026/10/31</span>
@@ -354,7 +364,7 @@
       </div>
     </a>
 
-    <a class="coupon-card" href="https://www.letsgojp.com/coupon/sapporo-drug/" target="_blank">
+    <a class="coupon-card zero-fee" href="https://www.letsgojp.com/coupon/sapporo-drug/" target="_blank">
       <div class="card-inner">
         <div class="card-accent pink-dark"></div>
         <div class="card-content">
@@ -365,6 +375,7 @@
           <div class="card-discount">免稅10%＋再折扣</div>
           <div class="card-desc">北海道深耕超50年，有大量北海道限定商品<br>狸小路旗艦店三層樓</div>
           <div class="card-footer">
+            <span class="tag tag-zero">💰 實質0手續費（收1%但降價1%補回）</span>
             <span class="tag tag-pink">北海道為主</span>
             <span class="tag tag-mint">手機出示</span>
           </div>
@@ -399,7 +410,7 @@
       <div class="line"></div>
     </div>
 
-    <a class="coupon-card" href="https://www.letsgojp.com/coupon/biccamera/" target="_blank">
+    <a class="coupon-card zero-fee" href="https://www.letsgojp.com/coupon/biccamera/" target="_blank">
       <div class="card-inner">
         <div class="card-accent mint"></div>
         <div class="card-content">
@@ -410,6 +421,7 @@
           <div class="card-discount">電器免稅10%＋7%OFF → 最高17%<br>藥妝免稅10%＋5%OFF → 最高15%</div>
           <div class="card-desc">日本最大家電專賣，大車站附近必有<br>含家電、相機、藥妝、玩具一站購齊</div>
           <div class="card-footer">
+            <span class="tag tag-zero">💰 退稅0手續費</span>
             <span class="tag tag-mint">全日本</span>
             <span class="tag tag-yellow">掃條碼</span>
             <span class="expiry">效期 2026/8/31</span>
@@ -456,7 +468,7 @@
       </div>
     </a>
 
-    <a class="coupon-card" href="https://gogojp.tw/coupon-all/#yamada" target="_blank">
+    <a class="coupon-card zero-fee" href="https://gogojp.tw/coupon-all/#yamada" target="_blank">
       <div class="card-inner">
         <div class="card-accent mint"></div>
         <div class="card-content">
@@ -467,6 +479,7 @@
           <div class="card-discount">免稅10%＋折扣</div>
           <div class="card-desc">日本最大電器連鎖，YAMADA/LABI/Tecc.Land<br>含家電、美妝、日用品</div>
           <div class="card-footer">
+            <span class="tag tag-zero">💰 退稅0手續費</span>
             <span class="tag tag-mint">全日本</span>
             <span class="tag tag-yellow">手機出示</span>
           </div>
@@ -697,7 +710,7 @@
       <div class="line"></div>
     </div>
 
-    <a class="coupon-card" href="https://japanportal.donki-global.com/coupon/?ptcd=0026000103" target="_blank">
+    <a class="coupon-card zero-fee" href="https://japanportal.donki-global.com/coupon/?ptcd=0026000103" target="_blank">
       <div class="card-inner">
         <div class="card-accent orange"></div>
         <div class="card-content">
@@ -708,6 +721,7 @@
           <div class="card-discount">免稅10%＋最高7%OFF</div>
           <div class="card-desc">¥10,000享5%、¥30,000享7%<br>全日本皆可、部分24小時、生鮮零食伴手禮齊全</div>
           <div class="card-footer">
+            <span class="tag tag-zero">💰 退稅0手續費</span>
             <span class="tag tag-orange">全日本</span>
             <span class="tag tag-mint">手機出示</span>
           </div>
@@ -715,7 +729,7 @@
       </div>
     </a>
 
-    <a class="coupon-card" href="https://shinblog.com.tw/japan-coupon/#takeya" target="_blank">
+    <a class="coupon-card zero-fee" href="https://shinblog.com.tw/japan-coupon/#takeya" target="_blank">
       <div class="card-inner">
         <div class="card-accent orange"></div>
         <div class="card-content">
@@ -726,6 +740,7 @@
           <div class="card-discount">免稅10%＋最高7%OFF<br>持JCB卡最高22%</div>
           <div class="card-desc">上野御徒町八棟主題館，10萬項商品<br>食品、藥妝、服飾、家電、寢具全有</div>
           <div class="card-footer">
+            <span class="tag tag-zero">💰 退稅0手續費</span>
             <span class="tag tag-orange">上野</span>
             <span class="tag tag-mint">手機出示</span>
             <span class="expiry">效期 2026/4/30</span>
