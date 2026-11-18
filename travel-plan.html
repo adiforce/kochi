@@ -482,7 +482,7 @@
     scrollbar-width:none;
     align-items:flex-start;
     padding:2px 0 8px;
-    transition:height .25s ease;
+    -webkit-overflow-scrolling:touch;
   }
   .days-track::-webkit-scrollbar{display:none;}
   .days-track > .day-card{
@@ -592,7 +592,8 @@
   .ha-trail path{animation:inherit;}
   @keyframes ha-bounce{0%,100%{transform:translateY(0) scale(1,1);}40%{transform:translateY(-8px) scale(.97,1.03);}55%{transform:translateY(0) scale(1.05,.95);}}
   @keyframes ha-pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.25);}}
-  .days-track > .day-card:not(.is-active) .hero-art .ha{animation-play-state:paused;}
+  .days-track > .day-card:not(.is-active) .hero-art .ha,
+  .days-track.is-swiping .hero-art .ha{animation-play-state:paused;}
   @media (prefers-reduced-motion:reduce){ .hero-art .ha{animation:none !important;} }
 
   /* ===== 即時天氣 ===== */
@@ -1721,21 +1722,43 @@ function initDaySlider(){
       if(fromUser) bringTopIntoView();
     }
   };
+  // 滑動中不改高度、不捲動頁面，等完全停下來才更新，避免打斷慣性與吸附
+  let swiping = false, settleTimer, pendingBringTop = true;
+  const currentIndex = () => {
+    const w = cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth;
+    return Math.round(track.scrollLeft / w);
+  };
+  const settle = () => {
+    clearTimeout(settleTimer);
+    if(!swiping) return;
+    swiping = false;
+    track.classList.remove('is-swiping');
+    setActive(currentIndex(), pendingBringTop);
+    pendingBringTop = true;
+  };
   const goTo = (i, smooth = true, bringTop = true) => {
     i = Math.max(0, Math.min(cards.length - 1, i));
-    track.scrollTo({ left: cards[i].offsetLeft, behavior: smooth ? 'smooth' : 'auto' });
-    setActive(i, bringTop);
+    if(!smooth){
+      track.scrollLeft = cards[i].offsetLeft;
+      setActive(i, bringTop);
+      return;
+    }
+    pendingBringTop = bringTop;
+    track.scrollTo({ left: cards[i].offsetLeft, behavior: 'smooth' });
   };
   window.goToDay = goTo;
 
-  let t;
+  const hasScrollEnd = 'onscrollend' in window;
   track.addEventListener('scroll', () => {
-    clearTimeout(t);
-    t = setTimeout(() => {
-      const w = cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth;
-      setActive(Math.round(track.scrollLeft / w), true);
-    }, 90);
+    if(!swiping){
+      swiping = true;
+      track.classList.add('is-swiping');
+    }
+    clearTimeout(settleTimer);
+    // 有 scrollend 的瀏覽器以它為主，這裡只是保險
+    settleTimer = setTimeout(settle, hasScrollEnd ? 600 : 180);
   }, { passive: true });
+  if(hasScrollEnd) track.addEventListener('scrollend', settle);
 
   track.addEventListener('click', e => {
     const b = e.target.closest('.hero-nav[data-go]');
@@ -1749,11 +1772,15 @@ function initDaySlider(){
   });
 
   if('ResizeObserver' in window){
-    const ro = new ResizeObserver(() => fitHeight());
+    const ro = new ResizeObserver(() => { if(!swiping) fitHeight(); });
     cards.forEach(c => ro.observe(c));
   }
+  // 手機捲動時網址列伸縮也會觸發 resize，只在寬度真的變了才重新對齊
+  let lastW = track.clientWidth;
   window.addEventListener('resize', () => {
-    track.scrollTo({ left: cards[idx].offsetLeft, behavior: 'auto' });
+    if(swiping || track.clientWidth === lastW) return;
+    lastW = track.clientWidth;
+    track.scrollLeft = cards[idx].offsetLeft;
     fitHeight();
   });
 
