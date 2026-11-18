@@ -594,6 +594,14 @@
   @keyframes ha-pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.25);}}
   .days-track > .day-card:not(.is-active) .hero-art .ha{animation-play-state:paused;}
   @media (prefers-reduced-motion:reduce){ .hero-art .ha{animation:none !important;} }
+
+  /* ===== 即時天氣 ===== */
+  .day-weather[role="button"]{cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;}
+  .day-weather[role="button"]::after{content:'↻';font-size:.72rem;opacity:.55;margin-left:2px;}
+  .day-weather[role="button"]:active{transform:scale(.96);}
+  .day-weather.wx-loading::after{display:inline-block;animation:wx-spin .8s linear infinite;}
+  .day-weather .wx-time{font-weight:500;font-size:.66rem;opacity:.6;margin-left:3px;}
+  @keyframes wx-spin{to{transform:rotate(360deg);}}
 </style>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -639,7 +647,7 @@
     <div class="day-head">
       <span class="day-num">🛫 Day 1</span>
       <span class="day-date">2026/11/28（六）</span>
-      <span class="day-weather" data-wdate="2026-11-28">🌤️ 出發前再查</span>
+      <span class="day-weather" data-wdate="2026-11-28" role="button" tabindex="0" title="點一下更新天氣">🌤️ 點我查天氣</span>
       <button class="day-reset-delay" data-date="2026-11-28" title="清除本日所有延誤調整">↺ 重置延誤</button>
     </div>
     <div class="day-title">🛬 抵達日＋深夜挖寶</div>
@@ -817,7 +825,7 @@
     <div class="day-head">
       <span class="day-num">⛵ Day 2</span>
       <span class="day-date">2026/11/29（日）</span>
-      <span class="day-weather" data-wdate="2026-11-29">🌤️ 出發前再查</span>
+      <span class="day-weather" data-wdate="2026-11-29" role="button" tabindex="0" title="點一下更新天氣">🌤️ 點我查天氣</span>
       <button class="day-reset-delay" data-date="2026-11-29" title="清除本日所有延誤調整">↺ 重置延誤</button>
     </div>
     <div class="day-title">🌅 日曜市＋桂濱</div>
@@ -926,7 +934,7 @@
     <div class="day-head">
       <span class="day-num">🚗 Day 3</span>
       <span class="day-date">2026/11/30（一）</span>
-      <span class="day-weather" data-wdate="2026-11-30">🌤️ 出發前再查</span>
+      <span class="day-weather" data-wdate="2026-11-30" role="button" tabindex="0" title="點一下更新天氣">🌤️ 點我查天氣</span>
       <button class="day-reset-delay" data-date="2026-11-30" title="清除本日所有延誤調整">↺ 重置延誤</button>
     </div>
     <div class="day-title">💎 仁淀川自駕日＋AEON</div>
@@ -1062,7 +1070,7 @@
     <div class="day-head">
       <span class="day-num">🏯 Day 4</span>
       <span class="day-date">2026/12/01（二）</span>
-      <span class="day-weather" data-wdate="2026-12-01">🌤️ 出發前再查</span>
+      <span class="day-weather" data-wdate="2026-12-01" role="button" tabindex="0" title="點一下更新天氣">🌤️ 點我查天氣</span>
       <button class="day-reset-delay" data-date="2026-12-01" title="清除本日所有延誤調整">↺ 重置延誤</button>
     </div>
     <div class="day-title">🏯 高知城＋竹林寺賞楓＋逛街日</div>
@@ -1171,7 +1179,7 @@
     <div class="day-head">
       <span class="day-num">✈️ Day 5</span>
       <span class="day-date">2026/12/02（三）</span>
-      <span class="day-weather" data-wdate="2026-12-02">🌤️ 出發前再查</span>
+      <span class="day-weather" data-wdate="2026-12-02" role="button" tabindex="0" title="點一下更新天氣">🌤️ 點我查天氣</span>
       <button class="day-reset-delay" data-date="2026-12-02" title="清除本日所有延誤調整">↺ 重置延誤</button>
     </div>
     <div class="day-title">✈️ 機場日</div>
@@ -1281,7 +1289,7 @@
 </div>
 
 <svg class="foot-fish" viewBox="0 0 130 54" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 27 l-12 -13 q5 13 0 26 z" fill="#7d97b8"/><path d="M56 14 l6 -9 l8 10" fill="#7d97b8"/><path d="M16 27 q22 -19 62 -15 q20 2 30 15 q-10 13 -30 15 q-40 4 -62 -15 z" fill="#7d97b8"/><path d="M32 32 q32 11 74 -3 q-10 11 -28 13 q-26 3 -46 -10 z" fill="#e9eef5"/><path d="M48 35 h14 M56 39 h16 M66 35 h14" fill="none" stroke-width="1.4"/><circle cx="94" cy="23" r="2.4" fill="#3b4a63" stroke="none"/><circle cx="95" cy="22" r=".8" fill="#fff" stroke="none"/><path d="M100 30 q2 2 4 0" fill="none" stroke-width="1.5"/><circle cx="96" cy="31" r="2.2" fill="#f6b8c4" stroke="none"/><circle cx="116" cy="14" r="2.6" fill="none"/><circle cx="122" cy="6" r="1.7" fill="none"/></g></svg>
-<footer>🎒 行程僅供參考，實際營業時間／交通班次請以現場公告與官方最新資訊為準 ✨ 祝旅途愉快，一路平安 🛶🍁</footer>
+<footer>🎒 行程僅供參考，實際營業時間／交通班次請以現場公告與官方最新資訊為準 ✨ 祝旅途愉快，一路平安 🛶🍁<br>天氣資料：<a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>（CC BY 4.0）</footer>
 <button class="locate-fab" id="locateNow" type="button" aria-label="定位到目前行程">📍<span>現在</span></button>
 <div class="locate-toast" id="locateToast" role="status"></div>
 
@@ -1415,6 +1423,94 @@ async function loadWeather(){
   } catch(err){
     console.warn('weather.json 載入失敗：', err.message, '（將顯示行程表內建的預設天氣文字）');
   }
+}
+
+
+// ===== 即時天氣（Open-Meteo，免 API key）=====
+const WX_POINTS = {
+  default: { lat: 33.5597, lon: 133.5311, name: '高知市' },
+  '2026-11-30': { lat: 33.60, lon: 133.20, name: '仁淀川一帶' },
+};
+const WX_TTL = 30 * 60 * 1000;
+const WX_CODES = {
+  0:['☀️','晴'], 1:['🌤️','晴時多雲'], 2:['⛅','多雲'], 3:['☁️','陰'],
+  45:['🌫️','霧'], 48:['🌫️','霧'],
+  51:['🌦️','毛毛雨'], 53:['🌦️','毛毛雨'], 55:['🌦️','毛毛雨'], 56:['🌧️','凍雨'], 57:['🌧️','凍雨'],
+  61:['🌧️','小雨'], 63:['🌧️','雨'], 65:['🌧️','大雨'], 66:['🌧️','凍雨'], 67:['🌧️','凍雨'],
+  71:['🌨️','小雪'], 73:['🌨️','雪'], 75:['❄️','大雪'], 77:['🌨️','雪粒'],
+  80:['🌦️','陣雨'], 81:['🌧️','陣雨'], 82:['⛈️','強陣雨'], 85:['🌨️','陣雪'], 86:['🌨️','陣雪'],
+  95:['⛈️','雷雨'], 96:['⛈️','雷雨'], 99:['⛈️','雷雨'],
+};
+
+function wxPointKey(date){ return WX_POINTS[date] ? date : 'default'; }
+
+async function wxFetchPoint(key, force){
+  const ck = 'wx::om::' + key;
+  if(!force){
+    try {
+      const c = JSON.parse(localStorage.getItem(ck) || 'null');
+      if(c && Date.now() - c.t < WX_TTL) return c;
+    } catch(e) {}
+  }
+  const pt = WX_POINTS[key];
+  const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + pt.lat + '&longitude=' + pt.lon +
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+    '&timezone=Asia%2FTokyo&forecast_days=16';
+  const res = await fetch(url, { cache: 'no-store' });
+  if(!res.ok) throw new Error('HTTP ' + res.status);
+  const j = await res.json();
+  const data = { t: Date.now(), daily: j.daily };
+  try { localStorage.setItem(ck, JSON.stringify(data)); } catch(e) {}
+  return data;
+}
+
+function wxRender(el, data, key){
+  const d = data.daily, date = el.dataset.wdate;
+  const i = d && d.time ? d.time.indexOf(date) : -1;
+  const hhmm = new Date(data.t).toTimeString().slice(0, 5);
+  const place = WX_POINTS[key].name;
+  if(i < 0){
+    el.textContent = '🗓️ 16天內才有預報';
+    el.title = place + '：目前還超出預報範圍，越接近出發日越準';
+    return;
+  }
+  const [icon, desc] = WX_CODES[d.weather_code[i]] || ['🌡️', ''];
+  const hi = Math.round(d.temperature_2m_max[i]);
+  const lo = Math.round(d.temperature_2m_min[i]);
+  const pp = d.precipitation_probability_max[i];
+  el.innerHTML = '';
+  el.append(`${icon} ${desc} ${hi}°/${lo}°` + (pp != null ? ` ☔${pp}%` : ''));
+  const t = document.createElement('span');
+  t.className = 'wx-time';
+  t.textContent = hhmm;
+  el.append(t);
+  el.title = `${place}・${hhmm} 更新（Open-Meteo）・點一下重新整理`;
+}
+
+async function refreshLiveWeather(force, clickedEl){
+  const els = Array.from(document.querySelectorAll('.day-weather[data-wdate]'));
+  if(clickedEl){ clickedEl.classList.add('wx-loading'); }
+  const keys = [...new Set(els.map(el => wxPointKey(el.dataset.wdate)))];
+  const results = {};
+  await Promise.all(keys.map(async k => {
+    try { results[k] = await wxFetchPoint(k, force); }
+    catch(err){ console.warn('天氣更新失敗（' + k + '）：', err.message); }
+  }));
+  els.forEach(el => {
+    const k = wxPointKey(el.dataset.wdate);
+    if(results[k]) wxRender(el, results[k], k);
+    else if(el === clickedEl) el.title = '更新失敗，請確認網路後再點一次';
+  });
+  if(clickedEl) clickedEl.classList.remove('wx-loading');
+}
+
+function initLiveWeather(){
+  document.querySelectorAll('.day-weather[data-wdate]').forEach(el => {
+    const go = () => { if(!el.classList.contains('wx-loading')) refreshLiveWeather(true, el); };
+    el.addEventListener('click', go);
+    el.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } });
+  });
+  refreshLiveWeather(false);
 }
 
 function findVenue(queryText){
@@ -1723,7 +1819,7 @@ updateActiveStops();
 setInterval(updateActiveStops, 60000);
 
 loadVenues();
-loadWeather();
+loadWeather().finally(initLiveWeather);
 </script>
 
 </body>
