@@ -188,6 +188,12 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2f6fb3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="日本工具箱">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 </head>
 <body>
 <!-- Header -->
@@ -352,6 +358,14 @@
   function dismissA2HS() {
     localStorage.setItem('japan-toolbox-a2hs-dismissed', '1');
     document.getElementById('a2hsBanner').classList.remove('show');
+  }
+</script>
+<script>
+  // ── PWA：註冊 Service Worker（離線可用）──
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW 註冊失敗', err));
+    });
   }
 </script>
 </body>
