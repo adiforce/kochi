@@ -1468,16 +1468,25 @@ async function wxFetchPoint(key, force){
     '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
     '&timezone=Asia%2FTokyo&forecast_days=16';
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 8000);
-  let j;
+  const timer = setTimeout(() => ctrl.abort(), 5000);
+  let data;
   try {
     const res = await fetch(url, { cache: 'no-store', signal: ctrl.signal });
     if(!res.ok) throw new Error('HTTP ' + res.status);
-    j = await res.json();
+    const j = await res.json();
+    data = { t: Date.now(), daily: j.daily, via: 'live' };
+  } catch(err){
+    // 連不到 Open-Meteo 時，改讀 GitHub 每 3 小時自動更新的 weather.json（同網域，不會被擋）
+    console.warn('Open-Meteo 直連失敗，改用 weather.json：', err.message);
+    const r2 = await fetch('weather.json?t=' + Date.now(), { cache: 'no-store' });
+    if(!r2.ok) throw new Error('weather.json HTTP ' + r2.status);
+    const wj = await r2.json();
+    const pt = wj.points && wj.points[key];
+    if(!pt || !pt.daily) throw new Error('weather.json 還沒有資料');
+    data = { t: wj.updated ? new Date(wj.updated).getTime() : Date.now(), daily: pt.daily, via: 'json' };
   } finally {
     clearTimeout(timer);
   }
-  const data = { t: Date.now(), daily: j.daily };
   try { localStorage.setItem(ck, JSON.stringify(data)); } catch(e) {}
   return data;
 }
@@ -1485,7 +1494,8 @@ async function wxFetchPoint(key, force){
 function wxRender(el, data, key){
   const d = data.daily, date = el.dataset.wdate;
   const i = d && d.time ? d.time.indexOf(date) : -1;
-  const hhmm = new Date(data.t).toTimeString().slice(0, 5);
+  const dt = new Date(data.t);
+  const hhmm = (dt.toDateString() === new Date().toDateString() ? '' : (dt.getMonth() + 1) + '/' + dt.getDate() + ' ') + dt.toTimeString().slice(0, 5);
   const place = WX_POINTS[key].name;
   if(i < 0){
     el.textContent = '🗓️ 16天內才有預報';
@@ -1502,7 +1512,7 @@ function wxRender(el, data, key){
   t.className = 'wx-time';
   t.textContent = hhmm;
   el.append(t);
-  el.title = `${place}・${hhmm} 更新（Open-Meteo）・點一下重新整理`;
+  el.title = `${place}・${hhmm} ${data.via === 'json' ? '自動更新' : '即時'}（Open-Meteo）・點一下重新整理`;
 }
 
 async function refreshLiveWeather(force, clickedEl){
@@ -1519,7 +1529,7 @@ async function refreshLiveWeather(force, clickedEl){
     if(results[k]) wxRender(el, results[k], k);
     else if(!el.querySelector('.wx-time')){
       el.textContent = '⚠️ 連不上天氣，點我重試';
-      el.title = '天氣服務（api.open-meteo.com）連線逾時；公司網路可能擋掉了，換手機網路試試';
+      el.title = '即時天氣和備援資料都讀不到，稍後再點一次';
     } else if(el === clickedEl){
       el.title = '這次更新失敗，顯示的是上次的資料；換個網路再點一次';
     }
@@ -1868,7 +1878,7 @@ updateActiveStops();
 setInterval(updateActiveStops, 60000);
 
 loadVenues();
-loadWeather().finally(initLiveWeather);
+initLiveWeather();
 </script>
 
 </body>
