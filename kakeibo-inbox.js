@@ -10,10 +10,14 @@
   function save(list) {
     localStorage.setItem(KEY, JSON.stringify(list));
   }
-  // 同一個來源（srcId）只會進暫存一次，回傳 false 代表已經在暫存裡
-  function push(entry) {
+  // 這個來源（srcId）目前是否還在暫存裡
+  function has(srcId) {
+    return !!srcId && load().some(e => e.srcId === srcId);
+  }
+  // 預設同一來源只進一次；force=true 時允許重複送（呼叫端先跟使用者確認）
+  function push(entry, force) {
     const list = load();
-    if (entry.srcId && list.some(e => e.srcId === entry.srcId)) return false;
+    if (!force && has(entry.srcId)) return false;
     list.unshift(Object.assign({
       id: 'ib' + Date.now() + Math.random().toString(36).slice(2, 6),
       createdAt: Date.now(),
@@ -22,5 +26,5 @@
     save(list);
     return true;
   }
-  window.KakeiboInbox = { KEY, load, save, push };
+  window.KakeiboInbox = { KEY, load, save, push, has };
 })();

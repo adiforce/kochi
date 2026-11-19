@@ -593,7 +593,7 @@ function renderHistory() {
             </div>
             <div class="action-grid">
                 <button class="act-btn copy" onclick="copyText(${idx})">📋 複製 Excel</button>
-                <button class="act-btn send" onclick="sendToKakeibo(${idx})" ${rec.sentToKakeibo ? 'disabled' : ''}>${rec.sentToKakeibo ? '✓ 已送暫存' : '📥 送記帳暫存'}</button>
+                <button class="act-btn send" onclick="sendToKakeibo(${idx})">${rec.sentToKakeibo ? '✓ 已送・再送' : '📥 送記帳暫存'}</button>
                 <button class="act-btn del" onclick="deleteRec(${idx})">🗑 刪除</button>
             </div>
         </div>
@@ -612,7 +612,13 @@ function copyText(idx) {
 // 整張發票變成家計簿暫存的一筆（名稱用店名、金額用總計，明細帶過去可扣除）
 function sendToKakeibo(idx) {
     const rec = invoiceHistory[idx];
-    if (!rec || rec.sentToKakeibo) return;
+    if (!rec) return;
+    const srcId = 'receipt-' + rec.timestamp;
+    if (KakeiboInbox.has(srcId)) {
+        if (!confirm('這張發票還在家計簿暫存裡，確定要再送一筆？')) return;
+    } else if (rec.sentToKakeibo) {
+        if (!confirm('這張發票之前送過暫存（可能已經入檔），確定要再送一次？')) return;
+    }
     const rows = (rec.data || []).filter(r => r.item !== '總計');
     const totalRow = (rec.data || []).find(r => r.item === '總計');
     const sum = rows.reduce((s, r) => s + (Number(r.price) || 0), 0);
@@ -624,16 +630,16 @@ function sendToKakeibo(idx) {
     else { const d = new Date(rec.timestamp); date = `${d.getMonth() + 1}/${d.getDate()}`; }
     const ok = KakeiboInbox.push({
         src: 'receipt',
-        srcId: 'receipt-' + rec.timestamp,
+        srcId,
         date,
         name: first.store || first.translation || first.item || '',
         jpy: total,
         lines: rows.map(r => ({ name: r.translation || r.item, sub: r.translation ? r.item : '', jpy: Number(r.price) || 0 })),
-    });
+    }, true);
     rec.sentToKakeibo = true;
     localStorage.setItem(HIS_KEY, JSON.stringify(invoiceHistory));
     renderHistory();
-    alert(ok ? '已送到家計簿「暫存」頁籤，補完類別和付款工具再入檔' : '這張已經在暫存裡了');
+    if (ok) alert('已送到家計簿「暫存」頁籤，補完類別和付款工具再入檔');
 }
 
 function deleteRec(idx) {

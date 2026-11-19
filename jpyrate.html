@@ -607,7 +607,7 @@
       const tax8  = Math.round(item.totalJpy * 8 / 108);
       const lock = item.bought
         ? `<div class="cart-item-lock">已購買・${item.boughtAt}・匯率 ${item.lockRate.toFixed(4)} 已鎖定</div>
-           <button class="send-kakeibo" onclick="sendToKakeibo(${i})" ${item.sentToKakeibo ? 'disabled' : ''}>${item.sentToKakeibo ? '✓ 已送記帳暫存' : '📥 送記帳暫存'}</button>` : '';
+           <button class="send-kakeibo" onclick="sendToKakeibo(${i})">${item.sentToKakeibo ? '✓ 已送暫存・再送' : '📥 送記帳暫存'}</button>` : '';
       return `
       <div class="cart-item${item.bought ? ' bought' : ''}">
         <input type="checkbox" class="buy-check" ${item.bought ? 'checked' : ''} onchange="toggleBought(${i}, this)" title="已購買" aria-label="已購買">
@@ -658,7 +658,13 @@
   // 已購買的商品送到家計簿「暫存」頁籤，補完類別、付款工具再入檔
   function sendToKakeibo(index) {
     const item = cart[index];
-    if (!item || !item.bought || item.sentToKakeibo) return;
+    if (!item || !item.bought) return;
+    const srcId = 'cart-' + item.id;
+    if (KakeiboInbox.has(srcId)) {
+      if (!confirm('這筆還在家計簿暫存裡，確定要再送一筆？')) return;
+    } else if (item.sentToKakeibo) {
+      if (!confirm('這筆之前送過暫存（可能已經入檔），確定要再送一次？')) return;
+    }
     let date = '';
     if (item.boughtTs) {
       const d = new Date(item.boughtTs);
@@ -670,15 +676,15 @@
     }
     const ok = KakeiboInbox.push({
       src: 'cart',
-      srcId: 'cart-' + item.id,
+      srcId,
       date,
       name: item.qty > 1 ? `${item.name} ×${item.qty}` : item.name,
       jpy: item.totalJpy,
-    });
+    }, true);
     item.sentToKakeibo = true;
     localStorage.setItem(CART_KEY, JSON.stringify(cart));
     renderCart();
-    alert(ok ? '已送到家計簿「暫存」頁籤，補完類別和付款工具再入檔' : '這筆已經在暫存裡了');
+    if (ok) alert('已送到家計簿「暫存」頁籤，補完類別和付款工具再入檔');
   }
 
   function esc(s) {
