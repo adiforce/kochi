@@ -346,49 +346,6 @@
     opacity:.45;
     padding:20px 18px;
   }
-  .detail-toggle{
-    font-size:.74rem;
-    font-weight:700;
-    color:var(--orange-dark);
-    cursor:pointer;
-    margin-top:6px;
-    display:inline-block;
-    user-select:none;
-  }
-  .detail-wrap{
-    display:none;
-    margin-top:6px;
-    background:#fdf1e2;
-    border:1px dashed var(--orange);
-    border-radius:10px;
-    padding:10px 12px;
-  }
-  .detail-wrap.open{display:block;}
-  .detail-scores{
-    font-size:.78rem;
-    font-weight:700;
-    color:var(--orange-dark);
-    margin-bottom:4px;
-  }
-  .detail-meta{
-    font-size:.78rem;
-    color:var(--brown);
-    opacity:.75;
-    margin-bottom:4px;
-  }
-  .detail-rec{
-    margin:4px 0 6px;
-    padding-left:16px;
-    font-size:.8rem;
-    line-height:1.55;
-    color:var(--brown);
-  }
-  .detail-notes{
-    font-size:.8rem;
-    line-height:1.6;
-    color:var(--brown);
-    opacity:.85;
-  }
   .stop.active::before{
     background:var(--green);
     box-shadow:0 0 0 2px var(--white),0 0 0 5px rgba(123,191,106,.35);
@@ -423,14 +380,81 @@
     0%,100%{opacity:1;}
     50%{opacity:.6;}
   }
-  .detail-list-link{
-    display:inline-block;
-    margin-top:6px;
-    font-size:.74rem;
-    font-weight:700;
-    color:var(--orange-dark);
-    text-decoration:none;
+  /* ===== 地點資訊彈出卡 ===== */
+  .vinfo-btn{
+    display:inline-flex;align-items:center;gap:3px;
+    margin-top:6px;padding:3px 10px;
+    font:700 .74rem/1.4 inherit;font-family:inherit;
+    color:var(--orange-dark);background:#fff8ee;
+    border:1px dashed var(--orange);border-radius:999px;
+    cursor:pointer;user-select:none;
   }
+  .vinfo-btn:active{transform:scale(.96);}
+  .vsheet-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(31,51,80,.38);
+    display:flex;align-items:flex-end;justify-content:center;
+    opacity:0;pointer-events:none;transition:opacity .2s;
+  }
+  .vsheet-overlay.open{opacity:1;pointer-events:auto;}
+  .vsheet{
+    position:relative;
+    width:100%;max-width:560px;max-height:82vh;
+    overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+    background:var(--white);color:var(--brown);
+    border-radius:20px 20px 0 0;
+    padding:10px 18px calc(18px + env(safe-area-inset-bottom));
+    box-shadow:0 -4px 20px rgba(31,51,80,.18);
+    transform:translateY(100%);transition:transform .25s ease;
+  }
+  .vsheet-overlay.open .vsheet{transform:translateY(0);}
+  @media (min-width:700px){
+    .vsheet-overlay{align-items:center;}
+    .vsheet{border-radius:20px;max-height:80vh;padding-bottom:20px;transform:translateY(24px) scale(.97);}
+    .vsheet-overlay.open .vsheet{transform:none;}
+  }
+  .vsheet-grip{width:40px;height:4px;border-radius:4px;background:var(--border);margin:0 auto 10px;}
+  .vsheet-close{
+    position:absolute;top:10px;right:12px;
+    width:32px;height:32px;border-radius:50%;
+    border:1.5px solid var(--border);background:var(--white);
+    color:var(--brown);font-size:1rem;line-height:1;cursor:pointer;
+  }
+  .vs-top{display:flex;gap:12px;align-items:flex-start;padding-right:36px;}
+  .vs-thumb,.vs-thumb-fb{
+    flex-shrink:0;width:72px;height:72px;border-radius:12px;
+    border:1.5px solid var(--border);background:var(--cream);object-fit:cover;
+  }
+  .vs-thumb-fb{display:flex;align-items:center;justify-content:center;font-size:30px;}
+  .vs-title{min-width:0;flex:1;}
+  .vs-title h3{margin:2px 0 4px;font-family:'Zen Maru Gothic',sans-serif;font-size:1.06rem;line-height:1.4;}
+  .vs-sub{font-size:.8rem;opacity:.6;}
+  .vs-copy{cursor:pointer;border-bottom:1px dashed var(--border);}
+  .vs-copy:active{opacity:.55;}
+  .vs-tags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 6px;}
+  .vs-tags span{font-size:.72rem;font-weight:700;background:var(--pink);padding:2px 10px;border-radius:999px;}
+  .vs-scores{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0;}
+  .vs-score{font-size:.75rem;background:var(--cream);border:1.5px solid var(--border);border-radius:10px;padding:6px 12px;min-width:104px;opacity:.85;}
+  .vs-score b{display:block;font-family:'Zen Maru Gothic',sans-serif;font-size:1.02rem;color:var(--green);}
+  .vs-score.tabelog b{color:var(--pink-dark);}
+  .vs-line{font-size:.82rem;line-height:1.6;margin:4px 0;opacity:.8;}
+  .vs-label{font-size:.76rem;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;color:var(--pink-dark);margin:12px 0 3px;}
+  .vs-rec{margin:2px 0 6px;padding-left:18px;font-size:.86rem;line-height:1.55;}
+  .vs-notes{font-size:.85rem;line-height:1.65;opacity:.85;}
+  .vs-map{
+    display:block;margin-top:14px;padding:10px;text-align:center;
+    font-weight:700;font-size:.9rem;text-decoration:none;
+    color:#fff;background:var(--pink-dark);border-radius:12px;
+  }
+  .vs-toast{
+    position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));z-index:210;
+    transform:translateX(-50%) translateY(16px);opacity:0;pointer-events:none;
+    background:var(--brown);color:#fff;font-size:.78rem;font-weight:700;
+    padding:8px 18px;border-radius:20px;white-space:nowrap;max-width:80vw;overflow:hidden;text-overflow:ellipsis;
+    transition:opacity .2s,transform .2s;
+  }
+  .vs-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  body.vsheet-lock{overflow:hidden;}
 
   /* ===== 手繪插圖 ===== */
   .doodle-defs{position:absolute;width:0;height:0;overflow:hidden;}
@@ -595,6 +619,31 @@
   .days-track > .day-card:not(.is-active) .hero-art .ha,
   .days-track.is-swiping .hero-art .ha{animation-play-state:paused;}
   @media (prefers-reduced-motion:reduce){ .hero-art .ha{animation:none !important;} }
+
+  /* 插圖橫跨卡片間距，滑動時五張接成一條長圖 */
+  .days-track > .day-card{overflow:visible;}
+  .days-track > .day-card .day-hero{
+    margin:-21.5px -29.5px 10px;
+    padding-left:55.5px;padding-right:55.5px;
+    border-radius:0;
+  }
+  .days-track > .day-card:first-child .day-hero{margin-left:-21.5px;padding-left:47.5px;border-top-left-radius:18px;}
+  .days-track > .day-card:last-child .day-hero{margin-right:-21.5px;padding-right:47.5px;border-top-right-radius:18px;}
+  .days-track > .day-card .hero-prev{left:17.5px;}
+  .days-track > .day-card .hero-next{right:17.5px;}
+  .days-track > .day-card .hero-page{right:21.5px;top:10px;}
+  .days-track > .day-card:first-child .hero-prev{left:9.5px;}
+  .days-track > .day-card:last-child .hero-next{right:9.5px;}
+  .days-track > .day-card:last-child .hero-page{right:13.5px;}
+  @media (max-width:600px){
+    .days-track > .day-card .day-hero{padding-left:47.5px;padding-right:47.5px;}
+    .days-track > .day-card:first-child .day-hero{padding-left:39.5px;}
+    .days-track > .day-card:last-child .day-hero{padding-right:39.5px;}
+    .days-track > .day-card .hero-prev{left:13.5px;}
+    .days-track > .day-card .hero-next{right:13.5px;}
+    .days-track > .day-card:first-child .hero-prev{left:5.5px;}
+    .days-track > .day-card:last-child .hero-next{right:5.5px;}
+  }
 
   /* ===== 即時天氣 ===== */
   .day-weather[role="button"]{cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;}
@@ -940,7 +989,7 @@
 
   <!-- DAY 3 -->
   <div class="day-card" id="day3">
-    <div class="day-hero"><button class="hero-nav hero-prev" data-go="1" aria-label="前一天">‹</button><svg class="hero-art" viewBox="0 0 320 130" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M-600 98 L-6 98 L34 50 L66 80 L110 40 L156 92 L200 54 L246 92 L290 46 L330 98 L920 98 z" fill="#cfe8c4"/><path d="M-600 100 L-6 100 L50 62 L96 96 L150 58 L210 100 L270 66 L330 100 L920 100 z" fill="#a8d59a"/><g class="ha ha-drift"><path transform="translate(40 30) scale(0.8)" d="M0 0 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#fff"/></g><g class="ha ha-drift" style="animation-delay:3s"><path transform="translate(230 24) scale(0.7)" d="M0 0 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#fff"/></g><g class="ha ha-bob"><path d="M307.0 24.0 L312.0 24.0" fill="none"/><path d="M302.6 34.6 L306.1 38.1" fill="none"/><path d="M292.0 39.0 L292.0 44.0" fill="none"/><path d="M281.4 34.6 L277.9 38.1" fill="none"/><path d="M277.0 24.0 L272.0 24.0" fill="none"/><path d="M281.4 13.4 L277.9 9.9" fill="none"/><path d="M292.0 9.0 L292.0 4.0" fill="none"/><path d="M302.6 13.4 L306.1 9.9" fill="none"/><circle cx="292" cy="24" r="11" fill="#ffd977"/><circle cx="288.4" cy="23" r="1.17" fill="#3b4a63" stroke="none"/><circle cx="295.6" cy="23" r="1.17" fill="#3b4a63" stroke="none"/><path d="M289.8 26.1 q2.2 2.2 4.5 0" fill="none" stroke-width="1.6"/><circle cx="285.7" cy="26.1" r="1.98" fill="#f6b8c4" stroke="none"/><circle cx="298.3" cy="26.1" r="1.98" fill="#f6b8c4" stroke="none"/></g><path d="M-600 98 H920 V140 H-600 z" fill="#5cc3d6" stroke="none"/><g class="ha ha-wave"><path d="M-600 100 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 q9.0 -3 18 0 V140 H-600 z" fill="#5cc3d6"/></g><rect x="46" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><rect x="86" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><rect x="126" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><rect x="166" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><rect x="206" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><rect x="246" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><rect x="286" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><path d="M28 92 H296 V99 H28 z" fill="#e3ddd2"/><g class="ha ha-car"><g transform="translate(150 51) scale(.56)"><path d="M28 66 v-6 q0 -6 8 -6 h10 l8 -9 q2 -2 5 -2 h16 q3 0 5 2 l7 9 h8 q8 0 8 6 v6 z" fill="#ffd977"/><path d="M57 52 l5 -6 h7 v6 z" fill="#c9dcf0"/><path d="M73 46 h6 l5 6 h-11 z" fill="#c9dcf0"/><circle cx="94" cy="58" r="2" fill="#fff"/><circle cx="43" cy="67" r="6" fill="#3b4a63"/><circle cx="43" cy="67" r="2" fill="#fff" stroke="none"/><circle cx="83" cy="67" r="6" fill="#3b4a63"/><circle cx="83" cy="67" r="2" fill="#fff" stroke="none"/></g></g><g class="ha ha-shimmer"><path d="M60 120 q5 -3 10 0 M150 126 q5 -3 10 0 M250 118 q5 -3 10 0" fill="none" stroke="#fff" stroke-width="1.8"/></g><g class="ha ha-float"><path d="M96 120 q14 6 28 0 l-4 4 h-20 z" fill="#f2a65a"/><path d="M104 114 l12 10" fill="none" stroke-width="1.6"/></g></g></svg><button class="hero-nav hero-next" data-go="3" aria-label="下一天">›</button><span class="hero-page">3 / 5</span></div>
+    <div class="day-hero"><button class="hero-nav hero-prev" data-go="1" aria-label="前一天">‹</button><svg class="hero-art" viewBox="0 0 320 130" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M-13 106 L34 50 L66 80 L110 40 L156 92 L200 54 L246 92 L290 46 L336 106 z" fill="#cfe8c4"/><path d="M-15 106 L50 62 L96 96 L150 58 L210 100 L270 66 L341 106 z" fill="#a8d59a"/><g class="ha ha-drift"><path transform="translate(40 30) scale(0.8)" d="M0 0 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#fff"/></g><g class="ha ha-drift" style="animation-delay:3s"><path transform="translate(230 24) scale(0.7)" d="M0 0 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#fff"/></g><g class="ha ha-bob"><path d="M307.0 24.0 L312.0 24.0" fill="none"/><path d="M302.6 34.6 L306.1 38.1" fill="none"/><path d="M292.0 39.0 L292.0 44.0" fill="none"/><path d="M281.4 34.6 L277.9 38.1" fill="none"/><path d="M277.0 24.0 L272.0 24.0" fill="none"/><path d="M281.4 13.4 L277.9 9.9" fill="none"/><path d="M292.0 9.0 L292.0 4.0" fill="none"/><path d="M302.6 13.4 L306.1 9.9" fill="none"/><circle cx="292" cy="24" r="11" fill="#ffd977"/><circle cx="288.4" cy="23" r="1.17" fill="#3b4a63" stroke="none"/><circle cx="295.6" cy="23" r="1.17" fill="#3b4a63" stroke="none"/><path d="M289.8 26.1 q2.2 2.2 4.5 0" fill="none" stroke-width="1.6"/><circle cx="285.7" cy="26.1" r="1.98" fill="#f6b8c4" stroke="none"/><circle cx="298.3" cy="26.1" r="1.98" fill="#f6b8c4" stroke="none"/></g><defs><linearGradient id="niyodoBase" gradientUnits="userSpaceOnUse" x1="-40" y1="0" x2="360" y2="0"><stop offset="0" stop-color="#7fb3e0"/><stop offset=".22" stop-color="#3fb0c6"/><stop offset=".78" stop-color="#3fb0c6"/><stop offset="1" stop-color="#7fb3e0"/></linearGradient><linearGradient id="niyodoWave" gradientUnits="userSpaceOnUse" x1="-40" y1="0" x2="360" y2="0"><stop offset="0" stop-color="#9cc7ea"/><stop offset=".22" stop-color="#5cc3d6"/><stop offset=".78" stop-color="#5cc3d6"/><stop offset="1" stop-color="#9cc7ea"/></linearGradient></defs><path d="M-600 104 H920 V140 H-600 z" fill="url(#niyodoBase)" stroke="none"/><g class="ha ha-wave"><path d="M-600 106 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 V140 H-600 z" fill="url(#niyodoWave)"/></g><g class="ha ha-wave2"><path d="M-600 118 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 V140 H-600 z" fill="url(#niyodoBase)"/></g><rect x="46" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><rect x="86" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><rect x="126" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><rect x="166" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><rect x="206" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><rect x="246" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><rect x="286" y="98" width="7" height="16" fill="#c8c2b8" stroke-width="1.6"/><path d="M28 92 H296 V99 H28 z" fill="#e3ddd2"/><g class="ha ha-car"><g transform="translate(150 51) scale(.56)"><path d="M28 66 v-6 q0 -6 8 -6 h10 l8 -9 q2 -2 5 -2 h16 q3 0 5 2 l7 9 h8 q8 0 8 6 v6 z" fill="#ffd977"/><path d="M57 52 l5 -6 h7 v6 z" fill="#c9dcf0"/><path d="M73 46 h6 l5 6 h-11 z" fill="#c9dcf0"/><circle cx="94" cy="58" r="2" fill="#fff"/><circle cx="43" cy="67" r="6" fill="#3b4a63"/><circle cx="43" cy="67" r="2" fill="#fff" stroke="none"/><circle cx="83" cy="67" r="6" fill="#3b4a63"/><circle cx="83" cy="67" r="2" fill="#fff" stroke="none"/></g></g><g class="ha ha-shimmer"><path d="M60 120 q5 -3 10 0 M150 126 q5 -3 10 0 M250 118 q5 -3 10 0" fill="none" stroke="#fff" stroke-width="1.8"/></g><g class="ha ha-float"><path d="M96 120 q14 6 28 0 l-4 4 h-20 z" fill="#f2a65a"/><path d="M104 114 l12 10" fill="none" stroke-width="1.6"/></g></g></svg><button class="hero-nav hero-next" data-go="3" aria-label="下一天">›</button><span class="hero-page">3 / 5</span></div>
     <p class="hero-desc">08:00 取車 → 名越屋沈下橋 → にこ淵 → 安居渓谷 → 高知駅還車 → AEON 逛街＋晚餐</p>
     <div class="hero-chips"><span>🚗 Times 08:00–17:00</span><span>💎 仁淀ブルー</span></div>
     <div class="day-head">
@@ -1076,7 +1125,7 @@
 
   <!-- DAY 4 -->
   <div class="day-card" id="day4">
-    <div class="day-hero"><button class="hero-nav hero-prev" data-go="2" aria-label="前一天">‹</button><svg class="hero-art" viewBox="0 0 320 130" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M-600 104 H-6 q70 -54 140 -40 q60 -36 120 -6 q40 -14 72 4 H920 V140 H-600 z" fill="#cfe8c4"/><path d="M-600 104 H920 V140 H-600 z" fill="#f3e6c8"/><g class="ha ha-drift"><path transform="translate(150 26) scale(0.7)" d="M0 0 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#fff"/></g><g transform="translate(-16 26) scale(.92)"><path d="M30 86 L36 64 H84 L90 86 z" fill="#ddd6cb"/><path d="M33 75 H87" fill="none" stroke-width="1.4"/><rect x="40" y="50" width="40" height="14" fill="#fff"/><rect x="48" y="35" width="24" height="12" fill="#fff"/><rect x="53" y="22" width="14" height="10" fill="#fff"/><path d="M28 52 q9 0 15 -8 H77 q6 8 15 8 z" fill="#5a6b85"/><path d="M40 37 q6 0 10 -7 H70 q4 7 10 7 z" fill="#5a6b85"/><path d="M47 24 q5 0 8 -8 H65 q3 8 8 8 z" fill="#5a6b85"/><circle cx="54" cy="15" r="1.8" fill="#ffd977"/><circle cx="66" cy="15" r="1.8" fill="#ffd977"/><rect x="57" y="39" width="6" height="5" fill="#3b4a63" stroke="none"/><rect x="46" y="55" width="5" height="5" fill="#3b4a63" stroke="none"/><rect x="69" y="55" width="5" height="5" fill="#3b4a63" stroke="none"/></g><g class="ha ha-sway"><path d="M136 104 V86" fill="none" stroke-width="2.6"/><circle cx="127" cy="82" r="12.0" fill="#f2a65a"/><circle cx="145" cy="80" r="12.0" fill="#f2a65a"/><circle cx="136" cy="70" r="14.0" fill="#f2a65a"/></g><g class="ha ha-sway" style="animation-delay:0.8s"><path d="M290 104 V86" fill="none" stroke-width="2.6"/><circle cx="281" cy="82" r="13.2" fill="#e06a4e"/><circle cx="299" cy="80" r="13.2" fill="#e06a4e"/><circle cx="290" cy="70" r="15.399999999999999" fill="#e06a4e"/></g><rect x="188" y="98" width="52" height="6" fill="#ddd6cb"/><rect x="199.0" y="89" width="30" height="9" fill="#c0704f"/><path d="M189.0 91 q5 0 9 -6 H230.0 q4 6 9 6 z" fill="#5a6b85"/><rect x="201.0" y="75" width="26" height="9" fill="#c0704f"/><path d="M191.0 77 q5 0 9 -6 H228.0 q4 6 9 6 z" fill="#5a6b85"/><rect x="203.0" y="61" width="22" height="9" fill="#c0704f"/><path d="M193.0 63 q5 0 9 -6 H226.0 q4 6 9 6 z" fill="#5a6b85"/><rect x="205.0" y="47" width="18" height="9" fill="#c0704f"/><path d="M195.0 49 q5 0 9 -6 H224.0 q4 6 9 6 z" fill="#5a6b85"/><rect x="207.0" y="33" width="14" height="9" fill="#c0704f"/><path d="M197.0 35 q5 0 9 -6 H222.0 q4 6 9 6 z" fill="#5a6b85"/><path d="M214 30 V12" fill="none" stroke-width="2.2"/><path d="M211 24 h6" fill="none" stroke-width="1.6"/><path d="M211 20 h6" fill="none" stroke-width="1.6"/><path d="M211 16 h6" fill="none" stroke-width="1.6"/><g class="ha ha-sway" style="animation-delay:1.6s"><path d="M256 104 V86" fill="none" stroke-width="2.6"/><circle cx="247" cy="82" r="9.6" fill="#e06a4e"/><circle cx="265" cy="80" r="9.6" fill="#e06a4e"/><circle cx="256" cy="70" r="11.2" fill="#e06a4e"/></g><g class="ha ha-fall"><polygon points="105.5,18.0 106.2,17.6 104.8,15.6 107.0,16.7 107.3,15.9 108.8,16.7 109.4,14.3 110.2,14.7 111.4,12.1 111.6,15.0 112.5,14.8 112.3,17.3 114.0,17.1 114.0,17.9 116.4,17.7 114.4,19.1 114.9,19.7 113.5,20.6 112.9,21.3 112.5,21.5 113.4,22.8 111.9,22.2 111.8,22.6 109.7,21.7 107.4,21.9 107.4,21.4 105.9,21.5 107.2,20.6 106.8,20.2 106.5,19.4" fill="#e06a4e" stroke-width="1.4"/></g><g class="ha ha-fall" style="animation-delay:1.4s"><polygon points="172.3,30.4 172.6,29.9 171.0,29.1 172.8,29.0 172.7,28.4 174.0,28.3 173.5,26.5 174.1,26.5 173.9,24.4 175.2,26.1 175.7,25.7 176.5,27.4 177.5,26.6 177.8,27.1 179.3,26.1 178.5,27.7 179.0,27.9 178.5,29.1 178.4,29.8 178.2,30.1 179.2,30.6 178.1,30.7 178.1,31.0 176.5,31.2 175.0,32.2 174.8,31.8 173.9,32.5 174.4,31.5 174.0,31.3 173.5,30.9" fill="#f2a65a" stroke-width="1.4"/></g><g class="ha ha-fall" style="animation-delay:2.6s"><polygon points="295.2,15.3 296.0,15.0 294.6,12.6 297.0,14.0 297.3,13.2 299.0,14.2 299.9,11.5 300.7,12.1 302.3,9.3 302.3,12.5 303.3,12.4 302.8,15.2 304.7,15.2 304.6,16.0 307.4,16.0 305.0,17.4 305.5,18.1 303.8,19.0 303.1,19.7 302.6,20.0 303.5,21.5 302.0,20.6 301.7,21.1 299.5,19.9 296.9,19.8 297.0,19.3 295.2,19.3 296.8,18.4 296.4,17.9 296.2,17.0" fill="#f2a65a" stroke-width="1.4"/></g><g class="ha ha-fall" style="animation-delay:3.8s"><polygon points="246.3,9.6 246.7,9.2 245.3,8.1 247.1,8.3 247.1,7.7 248.4,7.9 248.2,6.1 248.9,6.2 249.2,4.1 250.0,6.0 250.6,5.7 251.0,7.6 252.2,7.0 252.3,7.6 254.0,6.9 252.9,8.3 253.4,8.6 252.6,9.6 252.4,10.2 252.1,10.5 253.1,11.2 251.9,11.1 251.9,11.5 250.2,11.3 248.6,11.9 248.5,11.6 247.4,12.0 248.1,11.1 247.8,10.9 247.4,10.4" fill="#e06a4e" stroke-width="1.4"/></g><g class="ha ha-fall" style="animation-delay:4.6s"><polygon points="67.4,27.4 67.9,27.3 67.5,25.6 68.7,26.9 69.1,26.4 70.0,27.4 71.0,25.8 71.5,26.3 73.0,24.8 72.4,26.9 73.1,27.0 72.3,28.7 73.5,29.0 73.3,29.5 75.1,30.0 73.3,30.5 73.5,31.0 72.3,31.3 71.7,31.7 71.3,31.7 71.7,32.9 70.8,32.0 70.6,32.3 69.3,31.1 67.7,30.7 67.8,30.3 66.7,30.0 67.8,29.7 67.7,29.3 67.7,28.7" fill="#f2a65a" stroke-width="1.4"/></g><g class="ha ha-fall" style="animation-delay:5.6s"><polygon points="195.7,13.7 196.2,13.2 194.4,12.0 196.5,12.2 196.5,11.5 198.0,11.6 197.8,9.5 198.6,9.6 198.8,7.1 199.8,9.4 200.5,9.0 201.1,11.1 202.4,10.4 202.6,11.1 204.6,10.2 203.3,11.9 203.9,12.3 203.0,13.5 202.8,14.2 202.5,14.5 203.6,15.3 202.2,15.2 202.2,15.6 200.3,15.5 198.4,16.3 198.3,15.9 197.1,16.5 197.8,15.3 197.5,15.1 197.0,14.5" fill="#e06a4e" stroke-width="1.4"/></g></g></svg><button class="hero-nav hero-next" data-go="4" aria-label="下一天">›</button><span class="hero-page">4 / 5</span></div>
+    <div class="day-hero"><button class="hero-nav hero-prev" data-go="2" aria-label="前一天">‹</button><svg class="hero-art" viewBox="0 0 320 130" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M-6 104 q70 -54 140 -40 q60 -36 120 -6 q40 -14 66 46 V140 H-6 z" fill="#cfe8c4"/><path d="M-600 104 H40 V140 H-600 z" fill="#7fb3e0" stroke="none"/><g class="ha ha-wave"><path d="M-600 106 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 q10.0 -5 20 0 V140 H-600 z" fill="#9cc7ea"/></g><g class="ha ha-wave2"><path d="M-600 118 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 q12.0 -5 24 0 V140 H-600 z" fill="#7fb3e0"/></g><path d="M-4 104 H920 V140 H-26 q8 -8 6 -16 q-12 -6 -2 -12 q4 -4 18 -8 z" fill="#f3e6c8"/><g class="ha ha-drift"><path transform="translate(150 26) scale(0.7)" d="M0 0 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#fff"/></g><g transform="translate(-16 26) scale(.92)"><path d="M30 86 L36 64 H84 L90 86 z" fill="#ddd6cb"/><path d="M33 75 H87" fill="none" stroke-width="1.4"/><rect x="40" y="50" width="40" height="14" fill="#fff"/><rect x="48" y="35" width="24" height="12" fill="#fff"/><rect x="53" y="22" width="14" height="10" fill="#fff"/><path d="M28 52 q9 0 15 -8 H77 q6 8 15 8 z" fill="#5a6b85"/><path d="M40 37 q6 0 10 -7 H70 q4 7 10 7 z" fill="#5a6b85"/><path d="M47 24 q5 0 8 -8 H65 q3 8 8 8 z" fill="#5a6b85"/><circle cx="54" cy="15" r="1.8" fill="#ffd977"/><circle cx="66" cy="15" r="1.8" fill="#ffd977"/><rect x="57" y="39" width="6" height="5" fill="#3b4a63" stroke="none"/><rect x="46" y="55" width="5" height="5" fill="#3b4a63" stroke="none"/><rect x="69" y="55" width="5" height="5" fill="#3b4a63" stroke="none"/></g><g class="ha ha-sway"><path d="M136 104 V86" fill="none" stroke-width="2.6"/><circle cx="127" cy="82" r="12.0" fill="#f2a65a"/><circle cx="145" cy="80" r="12.0" fill="#f2a65a"/><circle cx="136" cy="70" r="14.0" fill="#f2a65a"/></g><g class="ha ha-sway" style="animation-delay:0.8s"><path d="M290 104 V86" fill="none" stroke-width="2.6"/><circle cx="281" cy="82" r="13.2" fill="#e06a4e"/><circle cx="299" cy="80" r="13.2" fill="#e06a4e"/><circle cx="290" cy="70" r="15.399999999999999" fill="#e06a4e"/></g><rect x="188" y="98" width="52" height="6" fill="#ddd6cb"/><rect x="199.0" y="89" width="30" height="9" fill="#c0704f"/><path d="M189.0 91 q5 0 9 -6 H230.0 q4 6 9 6 z" fill="#5a6b85"/><rect x="201.0" y="75" width="26" height="9" fill="#c0704f"/><path d="M191.0 77 q5 0 9 -6 H228.0 q4 6 9 6 z" fill="#5a6b85"/><rect x="203.0" y="61" width="22" height="9" fill="#c0704f"/><path d="M193.0 63 q5 0 9 -6 H226.0 q4 6 9 6 z" fill="#5a6b85"/><rect x="205.0" y="47" width="18" height="9" fill="#c0704f"/><path d="M195.0 49 q5 0 9 -6 H224.0 q4 6 9 6 z" fill="#5a6b85"/><rect x="207.0" y="33" width="14" height="9" fill="#c0704f"/><path d="M197.0 35 q5 0 9 -6 H222.0 q4 6 9 6 z" fill="#5a6b85"/><path d="M214 30 V12" fill="none" stroke-width="2.2"/><path d="M211 24 h6" fill="none" stroke-width="1.6"/><path d="M211 20 h6" fill="none" stroke-width="1.6"/><path d="M211 16 h6" fill="none" stroke-width="1.6"/><g class="ha ha-sway" style="animation-delay:1.6s"><path d="M256 104 V86" fill="none" stroke-width="2.6"/><circle cx="247" cy="82" r="9.6" fill="#e06a4e"/><circle cx="265" cy="80" r="9.6" fill="#e06a4e"/><circle cx="256" cy="70" r="11.2" fill="#e06a4e"/></g><g class="ha ha-fall"><polygon points="105.5,18.0 106.2,17.6 104.8,15.6 107.0,16.7 107.3,15.9 108.8,16.7 109.4,14.3 110.2,14.7 111.4,12.1 111.6,15.0 112.5,14.8 112.3,17.3 114.0,17.1 114.0,17.9 116.4,17.7 114.4,19.1 114.9,19.7 113.5,20.6 112.9,21.3 112.5,21.5 113.4,22.8 111.9,22.2 111.8,22.6 109.7,21.7 107.4,21.9 107.4,21.4 105.9,21.5 107.2,20.6 106.8,20.2 106.5,19.4" fill="#e06a4e" stroke-width="1.4"/></g><g class="ha ha-fall" style="animation-delay:1.4s"><polygon points="172.3,30.4 172.6,29.9 171.0,29.1 172.8,29.0 172.7,28.4 174.0,28.3 173.5,26.5 174.1,26.5 173.9,24.4 175.2,26.1 175.7,25.7 176.5,27.4 177.5,26.6 177.8,27.1 179.3,26.1 178.5,27.7 179.0,27.9 178.5,29.1 178.4,29.8 178.2,30.1 179.2,30.6 178.1,30.7 178.1,31.0 176.5,31.2 175.0,32.2 174.8,31.8 173.9,32.5 174.4,31.5 174.0,31.3 173.5,30.9" fill="#f2a65a" stroke-width="1.4"/></g><g class="ha ha-fall" style="animation-delay:2.6s"><polygon points="295.2,15.3 296.0,15.0 294.6,12.6 297.0,14.0 297.3,13.2 299.0,14.2 299.9,11.5 300.7,12.1 302.3,9.3 302.3,12.5 303.3,12.4 302.8,15.2 304.7,15.2 304.6,16.0 307.4,16.0 305.0,17.4 305.5,18.1 303.8,19.0 303.1,19.7 302.6,20.0 303.5,21.5 302.0,20.6 301.7,21.1 299.5,19.9 296.9,19.8 297.0,19.3 295.2,19.3 296.8,18.4 296.4,17.9 296.2,17.0" fill="#f2a65a" stroke-width="1.4"/></g><g class="ha ha-fall" style="animation-delay:3.8s"><polygon points="246.3,9.6 246.7,9.2 245.3,8.1 247.1,8.3 247.1,7.7 248.4,7.9 248.2,6.1 248.9,6.2 249.2,4.1 250.0,6.0 250.6,5.7 251.0,7.6 252.2,7.0 252.3,7.6 254.0,6.9 252.9,8.3 253.4,8.6 252.6,9.6 252.4,10.2 252.1,10.5 253.1,11.2 251.9,11.1 251.9,11.5 250.2,11.3 248.6,11.9 248.5,11.6 247.4,12.0 248.1,11.1 247.8,10.9 247.4,10.4" fill="#e06a4e" stroke-width="1.4"/></g><g class="ha ha-fall" style="animation-delay:4.6s"><polygon points="67.4,27.4 67.9,27.3 67.5,25.6 68.7,26.9 69.1,26.4 70.0,27.4 71.0,25.8 71.5,26.3 73.0,24.8 72.4,26.9 73.1,27.0 72.3,28.7 73.5,29.0 73.3,29.5 75.1,30.0 73.3,30.5 73.5,31.0 72.3,31.3 71.7,31.7 71.3,31.7 71.7,32.9 70.8,32.0 70.6,32.3 69.3,31.1 67.7,30.7 67.8,30.3 66.7,30.0 67.8,29.7 67.7,29.3 67.7,28.7" fill="#f2a65a" stroke-width="1.4"/></g><g class="ha ha-fall" style="animation-delay:5.6s"><polygon points="195.7,13.7 196.2,13.2 194.4,12.0 196.5,12.2 196.5,11.5 198.0,11.6 197.8,9.5 198.6,9.6 198.8,7.1 199.8,9.4 200.5,9.0 201.1,11.1 202.4,10.4 202.6,11.1 204.6,10.2 203.3,11.9 203.9,12.3 203.0,13.5 202.8,14.2 202.5,14.5 203.6,15.3 202.2,15.2 202.2,15.6 200.3,15.5 198.4,16.3 198.3,15.9 197.1,16.5 197.8,15.3 197.5,15.1 197.0,14.5" fill="#e06a4e" stroke-width="1.4"/></g></g></svg><button class="hero-nav hero-next" data-go="4" aria-label="下一天">›</button><span class="hero-page">4 / 5</span></div>
     <p class="hero-desc">高知城天守 → 帯屋町 → 明神丸午餐 → 12:43 MY遊バス去竹林寺賞楓 → 高知大丸 → 長宗我部晚餐</p>
     <div class="hero-chips"><span>🚌 五台山券 1,000円</span><span>🍁 竹林寺賞楓</span></div>
     <div class="day-head">
@@ -1185,7 +1234,7 @@
 
   <!-- DAY 5 -->
   <div class="day-card" id="day5">
-    <div class="day-hero"><button class="hero-nav hero-prev" data-go="3" aria-label="前一天">‹</button><svg class="hero-art" viewBox="0 0 320 130" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M-600 104 H920 V140 H-600 z" fill="#e6e8ec"/><path d="M120 116 H316" fill="none" stroke="#fff" stroke-width="2.6" stroke-dasharray="10 8"/><g class="ha ha-drift"><path transform="translate(170 40) scale(0.9)" d="M0 0 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#fff"/></g><g class="ha ha-drift" style="animation-delay:2s"><path transform="translate(286 70) scale(0.7)" d="M0 0 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#fff"/></g><g class="ha ha-drift" style="animation-delay:4s"><path transform="translate(30 28) scale(0.6)" d="M0 0 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#fff"/></g><g class="ha ha-trail"><path d="M140 104 q50 -10 90 -44 t70 -36" fill="none" stroke-dasharray="3 6"/></g><g class="ha ha-plane"><g transform="translate(196 -4) scale(.95) rotate(-24 75 40)"><path d="M48 34 l-6 -14 q-1 -3 3 -3 h5 l12 17" fill="#f6b8c4"/><path d="M42 42 q4 -10 22 -10 h28 q14 0 18 8 q-4 8 -18 8 h-36 q-10 0 -14 -6 z" fill="#fff"/><path d="M70 44 l-12 18 q-1 3 3 3 h6 l20 -20" fill="#c9dcf0"/><circle cx="66" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="75" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="84" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="99" cy="37" r="1.3" fill="#3b4a63" stroke="none"/><path d="M97 41 q3 2.5 6 0" fill="none" stroke-width="1.6"/><circle cx="104" cy="42" r="2" fill="#f6b8c4" stroke="none"/></g></g><g class="ha ha-bounce"><path d="M70 50 v-6" fill="none"/><path d="M70 50 q12 -16 28 -10 q-9 16 -28 10 z" fill="#a8d59a"/><circle cx="70" cy="78" r="28" fill="#ffd23f"/><circle cx="56" cy="62" r="1.1" fill="#e0a800" stroke="none"/><circle cx="84" cy="64" r="1.1" fill="#e0a800" stroke="none"/><circle cx="88" cy="90" r="1.1" fill="#e0a800" stroke="none"/><circle cx="54" cy="94" r="1.1" fill="#e0a800" stroke="none"/><circle cx="72" cy="100" r="1.1" fill="#e0a800" stroke="none"/><circle cx="63.6" cy="78" r="2.08" fill="#3b4a63" stroke="none"/><circle cx="76.4" cy="78" r="2.08" fill="#3b4a63" stroke="none"/><path d="M66.0 83.6 q4.0 4.0 8.0 0" fill="none" stroke-width="1.6"/><circle cx="58.8" cy="83.6" r="3.52" fill="#f6b8c4" stroke="none"/><circle cx="81.2" cy="83.6" r="3.52" fill="#f6b8c4" stroke="none"/></g><g class="ha ha-pulse"><path d="M118 84 c-3 -4 -9 -1 -6 4 l6 6 l6 -6 c3 -5 -3 -8 -6 -4 z" fill="#f6b8c4"/></g><text x="128" y="98" font-size="15" font-weight="700" fill="#3b4a63" stroke="none" font-family="'Zen Maru Gothic','M PLUS Rounded 1c',sans-serif">またね！</text><g class="ha ha-twinkle"><path d="M36 56.0 l1.28 2.72 l2.72 1.28 l-2.72 1.28 l-1.28 2.72 l-1.28 -2.72 l-2.72 -1.28 l2.72 -1.28 z" fill="#ffd977" stroke-width="1.4"/></g><g class="ha ha-twinkle" style="animation-delay:0.9s"><path d="M140 16.5 l1.12 2.38 l2.38 1.12 l-2.38 1.12 l-1.12 2.38 l-1.12 -2.38 l-2.38 -1.12 l2.38 -1.12 z" fill="#c9dcf0" stroke-width="1.4"/></g></g></svg><span class="hero-nav hero-next hero-nav-off" aria-hidden="true">›</span><span class="hero-page">5 / 5</span></div>
+    <div class="day-hero"><button class="hero-nav hero-prev" data-go="3" aria-label="前一天">‹</button><svg class="hero-art" viewBox="0 0 320 130" aria-hidden="true" focusable="false"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M-600 104 H920 V140 H-600 z" fill="#f3e6c8"/><path d="M104 104 H920 V140 H96 z" fill="#e6e8ec"/><path d="M120 116 H316" fill="none" stroke="#fff" stroke-width="2.6" stroke-dasharray="10 8"/><g class="ha ha-drift"><path transform="translate(170 40) scale(0.9)" d="M0 0 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#fff"/></g><g class="ha ha-drift" style="animation-delay:2s"><path transform="translate(286 70) scale(0.7)" d="M0 0 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#fff"/></g><g class="ha ha-drift" style="animation-delay:4s"><path transform="translate(30 28) scale(0.6)" d="M0 0 q-9 0 -9 -8 q0 -8 9 -8 q1 -10 12 -10 q6 -8 15 -2 q9 -3 12 6 q8 0 8 8 q0 8 -9 8 z" fill="#fff"/></g><g class="ha ha-trail"><path d="M140 104 q50 -10 90 -44 t70 -36" fill="none" stroke-dasharray="3 6"/></g><g class="ha ha-plane"><g transform="translate(196 -4) scale(.95) rotate(-24 75 40)"><path d="M48 34 l-6 -14 q-1 -3 3 -3 h5 l12 17" fill="#f6b8c4"/><path d="M42 42 q4 -10 22 -10 h28 q14 0 18 8 q-4 8 -18 8 h-36 q-10 0 -14 -6 z" fill="#fff"/><path d="M70 44 l-12 18 q-1 3 3 3 h6 l20 -20" fill="#c9dcf0"/><circle cx="66" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="75" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="84" cy="38" r="2.4" fill="#9cc7ea"/><circle cx="99" cy="37" r="1.3" fill="#3b4a63" stroke="none"/><path d="M97 41 q3 2.5 6 0" fill="none" stroke-width="1.6"/><circle cx="104" cy="42" r="2" fill="#f6b8c4" stroke="none"/></g></g><g class="ha ha-bounce"><path d="M70 50 v-6" fill="none"/><path d="M70 50 q12 -16 28 -10 q-9 16 -28 10 z" fill="#a8d59a"/><circle cx="70" cy="78" r="28" fill="#ffd23f"/><circle cx="56" cy="62" r="1.1" fill="#e0a800" stroke="none"/><circle cx="84" cy="64" r="1.1" fill="#e0a800" stroke="none"/><circle cx="88" cy="90" r="1.1" fill="#e0a800" stroke="none"/><circle cx="54" cy="94" r="1.1" fill="#e0a800" stroke="none"/><circle cx="72" cy="100" r="1.1" fill="#e0a800" stroke="none"/><circle cx="63.6" cy="78" r="2.08" fill="#3b4a63" stroke="none"/><circle cx="76.4" cy="78" r="2.08" fill="#3b4a63" stroke="none"/><path d="M66.0 83.6 q4.0 4.0 8.0 0" fill="none" stroke-width="1.6"/><circle cx="58.8" cy="83.6" r="3.52" fill="#f6b8c4" stroke="none"/><circle cx="81.2" cy="83.6" r="3.52" fill="#f6b8c4" stroke="none"/></g><g class="ha ha-pulse"><path d="M118 84 c-3 -4 -9 -1 -6 4 l6 6 l6 -6 c3 -5 -3 -8 -6 -4 z" fill="#f6b8c4"/></g><text x="128" y="98" font-size="15" font-weight="700" fill="#3b4a63" stroke="none" font-family="'Zen Maru Gothic','M PLUS Rounded 1c',sans-serif">またね！</text><g class="ha ha-twinkle"><path d="M36 56.0 l1.28 2.72 l2.72 1.28 l-2.72 1.28 l-1.28 2.72 l-1.28 -2.72 l-2.72 -1.28 l2.72 -1.28 z" fill="#ffd977" stroke-width="1.4"/></g><g class="ha ha-twinkle" style="animation-delay:0.9s"><path d="M140 16.5 l1.12 2.38 l2.38 1.12 l-2.38 1.12 l-1.12 2.38 l-1.12 -2.38 l-2.38 -1.12 l2.38 -1.12 z" fill="#c9dcf0" stroke-width="1.4"/></g></g></svg><span class="hero-nav hero-next hero-nav-off" aria-hidden="true">›</span><span class="hero-page">5 / 5</span></div>
     <p class="hero-desc">飯店早餐 → 補最後的伴手禮 → 11:35 機場巴士 → 14:00 IT251 → 15:50 桃園落地 → 開車回汐止</p>
     <div class="hero-chips"><span>🚌 機場巴士 1,000円</span><span>✈️ IT251 14:00</span><span>🅿️ 富士捷取車</span></div>
     <div class="day-head">
@@ -1547,20 +1596,37 @@ function initLiveWeather(){
   refreshLiveWeather(false);
 }
 
+// 名稱比對：完全相同優先，其次依「共同字詞」長度打分，避免「高知駅前店」被比成「高知駅」
+function venueTokens(s){
+  return (s || '').toLowerCase().split(/[\s・／/()（）]+/).filter(Boolean);
+}
 function findVenue(queryText){
   const q = (queryText || '').trim().toLowerCase();
   if(!q) return null;
   for(const d of DATA){
-    const n = (d.name || '').toLowerCase();
-    const j = (d.jp || '').toLowerCase();
-    if(n === q || j === q) return d;
+    if((d.name || '').toLowerCase() === q || (d.jp || '').toLowerCase() === q) return d;
   }
+  const qt = venueTokens(q);
+  const qLen = qt.join('').length;
+  let best = null, bestScore = 0;
   for(const d of DATA){
-    const n = (d.name || '').toLowerCase();
-    const j = (d.jp || '').toLowerCase();
-    if((n && (n.includes(q) || q.includes(n))) || (j && (j.includes(q) || q.includes(j)))) return d;
+    let score = 0;
+    for(const field of [d.jp, d.name]){
+      const vt = venueTokens(field);
+      if(!vt.length) continue;
+      let s = 0;
+      for(const a of qt){
+        let m = 0;
+        for(const b of vt){
+          if(a.includes(b) || b.includes(a)) m = Math.max(m, Math.min(a.length, b.length));
+        }
+        s += m;
+      }
+      score = Math.max(score, s);
+    }
+    if(score > bestScore){ bestScore = score; best = d; }
   }
-  return null;
+  return (best && bestScore >= 3 && bestScore >= qLen * 0.5) ? best : null;
 }
 
 function escapeHTML(s){
@@ -1571,23 +1637,111 @@ function escapeHTML(s){
     .replace(/"/g,'&quot;');
 }
 
-function detailBoxHTML(d, rawQuery){
+const VS_TYPE_LABELS = {food:'美食',teacake:'點心',shop:'購物',sight:'景點',hotel:'住宿'};
+const VS_CAT_ICONS = {
+  '咖啡廳':'☕','甜點':'🍰','豬排':'🍱','拉麵':'🍜','交通':'🚉','市場':'🏮','商店街':'🏮',
+  '藥妝／生活雜貨':'💊','景點／絕景':'🏞️','神社':'⛩️','公園':'🌳','購物中心':'🛍️',
+  '二手書／二手商品':'📚','住宿':'🏨','寺廟':'🛕','歷史地標':'🏯'
+};
+function vsIcon(d){
+  return VS_CAT_ICONS[d.cat] || (d.type==='food'?'🍽️':d.type==='shop'?'🛍️':d.type==='hotel'?'🏨':'📍');
+}
+function vsMapUrl(d){
+  if(d.lat && d.lng) return `https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}`;
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent([d.jp || d.name, d.mapAddr || d.addr || '高知'].join(' '));
+}
+
+function venueSheetHTML(d){
+  const main = d.jp || d.name;
+  const sub = (d.jp && d.name && d.name !== d.jp) ? d.name : '';
+  const thumb = d.img
+    ? `<img class="vs-thumb" src="${escapeHTML(d.img)}" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;vs-thumb-fb&quot;>${vsIcon(d)}</div>'">`
+    : `<div class="vs-thumb-fb">${vsIcon(d)}</div>`;
+  const tags = [VS_TYPE_LABELS[d.type], d.cat].filter(Boolean).map(t => `<span>${escapeHTML(t)}</span>`).join('');
   const scores = [];
-  if(d.gRating) scores.push(`Google ★${d.gRating}${d.gReviews ? `（${d.gReviews}則）` : ''}`);
-  if(d.tRating) scores.push(`食べログ ${d.tRating.toFixed(2)}${d.tReviews ? `（${d.tReviews}則）` : ''}`);
+  if(d.gRating) scores.push(`<div class="vs-score"><span>Google評分</span><b>★ ${Number(d.gRating).toFixed(1)}</b>${d.gReviews ? `<span>(${d.gReviews}則)</span>` : ''}</div>`);
+  if(d.tRating) scores.push(`<div class="vs-score tabelog"><span>食べログ</span><b>${Number(d.tRating).toFixed(2)}</b>${d.tReviews ? `<span>(${d.tReviews}則)</span>` : ''}</div>`);
   const meta = [];
   if(d.hours) meta.push('⏰ ' + escapeHTML(d.hours));
   if(d.price) meta.push('💰 ' + escapeHTML(d.price));
-  const rec = (d.rec && d.rec.length) ? `<ul class="detail-rec">${d.rec.map(r => `<li>${escapeHTML(r)}</li>`).join('')}</ul>` : '';
-  const listUrl = 'travel-list.html?q=' + encodeURIComponent(rawQuery);
   return `
-    <div class="detail-wrap" data-loaded="1">
-      ${scores.length ? `<div class="detail-scores">${scores.join(' ・ ')}</div>` : ''}
-      ${meta.length ? `<div class="detail-meta">${meta.join(' ・ ')}</div>` : ''}
-      ${rec}
-      ${d.notes ? `<div class="detail-notes">${escapeHTML(d.notes)}</div>` : ''}
-      <a class="detail-list-link" href="${listUrl}">在完整清單中查看 →</a>
+    <div class="vs-top">
+      ${thumb}
+      <div class="vs-title">
+        <h3><span class="vs-copy" data-copy="${escapeHTML(main)}">${escapeHTML(main)}</span></h3>
+        ${sub ? `<div class="vs-sub"><span class="vs-copy" data-copy="${escapeHTML(sub)}">${escapeHTML(sub)}</span></div>` : ''}
+      </div>
+    </div>
+    ${tags ? `<div class="vs-tags">${tags}</div>` : ''}
+    ${scores.length ? `<div class="vs-scores">${scores.join('')}</div>` : ''}
+    ${meta.length ? `<div class="vs-line">${meta.join(' ・ ')}</div>` : ''}
+    ${d.addr ? `<div class="vs-line">📍 ${escapeHTML(d.addr)}</div>` : ''}
+    ${d.access ? `<div class="vs-line">🚶 ${escapeHTML(d.access)}</div>` : ''}
+    ${(d.rec && d.rec.length) ? `<div class="vs-label">推薦品項／亮點</div><ul class="vs-rec">${d.rec.map(r => `<li>${escapeHTML(r)}</li>`).join('')}</ul>` : ''}
+    ${d.notes ? `<div class="vs-label">評論觀察／備註</div><div class="vs-notes">${escapeHTML(d.notes)}</div>` : ''}
+    <a class="vs-map" href="${vsMapUrl(d)}" target="_blank" rel="noopener">📍 在 Google Map 開啟</a>`;
+}
+
+let vsOverlay = null, vsBody = null, vsHistory = false;
+function ensureVenueSheet(){
+  if(vsOverlay) return;
+  vsOverlay = document.createElement('div');
+  vsOverlay.className = 'vsheet-overlay';
+  vsOverlay.innerHTML = `<div class="vsheet" role="dialog" aria-modal="true" aria-label="地點資訊">
+      <div class="vsheet-grip"></div>
+      <button class="vsheet-close" type="button" aria-label="關閉">✕</button>
+      <div class="vsheet-body"></div>
     </div>`;
+  document.body.appendChild(vsOverlay);
+  vsBody = vsOverlay.querySelector('.vsheet-body');
+  vsOverlay.addEventListener('click', e => {
+    if(e.target === vsOverlay || e.target.closest('.vsheet-close')) closeVenueSheet();
+    const c = e.target.closest('.vs-copy');
+    if(c) vsCopy(c.dataset.copy);
+  });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && vsOverlay.classList.contains('open')) closeVenueSheet(); });
+  // 手機按返回鍵＝關閉卡片
+  window.addEventListener('popstate', () => {
+    if(vsHistory){ vsHistory = false; hideVenueSheet(); }
+  });
+}
+function openVenueSheet(d){
+  ensureVenueSheet();
+  vsBody.innerHTML = venueSheetHTML(d);
+  vsOverlay.querySelector('.vsheet').scrollTop = 0;
+  vsOverlay.classList.add('open');
+  document.body.classList.add('vsheet-lock');
+  if(!vsHistory){
+    try { history.pushState({ vsheet: 1 }, '', location.href); vsHistory = true; } catch(e) {}
+  }
+}
+function hideVenueSheet(){
+  if(!vsOverlay) return;
+  vsOverlay.classList.remove('open');
+  document.body.classList.remove('vsheet-lock');
+}
+function closeVenueSheet(){
+  if(vsHistory){ history.back(); }  // popstate 會負責收起
+  else hideVenueSheet();
+}
+function vsCopy(text){
+  const done = () => {
+    let t = document.querySelector('.vs-toast');
+    if(!t){ t = document.createElement('div'); t.className = 'vs-toast'; document.body.appendChild(t); }
+    t.textContent = '已複製：' + text;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 1600);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(done);
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    ta.remove(); done();
+  }
 }
 
 function initDetailToggles(){
@@ -1604,23 +1758,14 @@ function initDetailToggles(){
     }
 
     const stopMain = a.closest('.stop-top')?.querySelector('.stop-main');
-    if(!stopMain) return;
+    if(!stopMain || stopMain.querySelector('.vinfo-btn')) return;
 
-    const toggle = document.createElement('div');
-    toggle.className = 'detail-toggle';
-    toggle.textContent = '▼ 詳細資訊';
-
-    const box = document.createElement('div');
-    box.innerHTML = detailBoxHTML(venue, query);
-    const boxInner = box.firstElementChild;
-
-    toggle.addEventListener('click', () => {
-      const isOpen = boxInner.classList.toggle('open');
-      toggle.textContent = isOpen ? '▲ 收合' : '▼ 詳細資訊';
-    });
-
-    stopMain.appendChild(toggle);
-    stopMain.appendChild(boxInner);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'vinfo-btn';
+    btn.textContent = 'ℹ️ 地點資訊';
+    btn.addEventListener('click', () => openVenueSheet(venue));
+    stopMain.appendChild(btn);
   });
 }
 
