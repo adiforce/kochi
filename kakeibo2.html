@@ -511,6 +511,42 @@
     .tab-badge:empty { display: none; }
     .inbox-hint { font-size: 11.5px; opacity: 0.6; line-height: 1.6; margin-bottom: 4px; }
     .inbox-card { position: relative; }
+    .inbox-list { padding: 4px 12px; }
+    .inbox-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 2px;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      background: none;
+      color: var(--brown);
+      font-family: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+    .inbox-item:last-child { border-bottom: none; }
+    .inbox-item:active { background: var(--cream); }
+    .ii-src { font-size: 18px; flex-shrink: 0; }
+    .ii-date { font-size: 12px; opacity: 0.6; width: 34px; flex-shrink: 0; }
+    .ii-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .ii-name { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ii-miss { font-size: 11px; color: var(--red); }
+    .ii-miss.ok { color: var(--green); }
+    .ii-jpy { font-size: 14px; font-weight: 700; color: var(--pink-dark); flex-shrink: 0; }
+    .ii-arrow { font-size: 20px; opacity: 0.35; flex-shrink: 0; }
+    .inbox-back {
+      margin: 12px 14px 0;
+      padding: 6px 4px;
+      border: none;
+      background: none;
+      color: var(--pink-dark);
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
     .inbox-head {
       display: flex;
       align-items: center;
@@ -633,7 +669,7 @@
 </div><!-- end page-list -->
 <!-- ── 暫存匣頁 ── -->
 <div class="page" id="page-inbox">
-<div class="card">
+<div class="card" id="inboxIntro">
   <div class="card-title">📥 待入檔</div>
   <div class="inbox-hint">從「發票解析」和「日幣換算」送過來的資料會先放這裡，補完類別、付款工具後再入檔；不要的直接捨棄。</div>
 </div>
@@ -658,7 +694,7 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   ['form', 'inbox', 'list'].forEach(t => document.getElementById('page-' + t).classList.toggle('active', t === tab));
   if (tab === 'list') loadRecords();
-  if (tab === 'inbox') renderInbox();
+  if (tab === 'inbox') { inboxOpenId = null; renderInbox(); }
 }
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxUxCLCjOcAW-6Xmjmbxe8bPfv8XZ3sEJEXBKYJbK_yM8CNtkNnTnVsZA2VcNoeCc0Hkw/exec';
   
@@ -945,6 +981,17 @@ async function deleteRecord(row) {
 }
 // ── 暫存匣（發票解析／日幣換算送來的資料） ──
 const inboxSubmitting = new Set();
+let inboxOpenId = null;
+function inboxOpen(id) {
+  inboxOpenId = id;
+  renderInbox();
+  window.scrollTo(0, 0);
+}
+function inboxClose() {
+  inboxOpenId = null;
+  renderInbox();
+  window.scrollTo(0, 0);
+}
 function inboxEsc(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
@@ -981,7 +1028,27 @@ function renderInbox() {
     box.innerHTML = '<div class="card"><div class="loading-msg">暫存是空的</div></div>';
     return;
   }
-  box.innerHTML = list.map(e => {
+  const open = inboxOpenId && list.find(e => e.id === inboxOpenId);
+  document.getElementById('inboxIntro').style.display = open ? 'none' : '';
+  if (!open) {
+    inboxOpenId = null;
+    box.innerHTML = '<div class="card inbox-list">' + list.map(e => {
+      const miss = inboxMissing(e);
+      return `
+      <button class="inbox-item" onclick="inboxOpen('${e.id}')">
+        <span class="ii-src">${e.src === 'cart' ? '🛒' : '🧾'}</span>
+        <span class="ii-date">${inboxEsc(e.date || '')}</span>
+        <span class="ii-main">
+          <span class="ii-name">${inboxEsc(e.name || '（未命名）')}</span>
+          <span class="ii-miss${miss.length ? '' : ' ok'}">${miss.length ? '還缺：' + miss.join('、') : '✓ 可以入檔'}</span>
+        </span>
+        <span class="ii-jpy">¥${(Number(e.jpy) || 0).toLocaleString()}</span>
+        <span class="ii-arrow">›</span>
+      </button>`;
+    }).join('') + '</div>';
+    return;
+  }
+  box.innerHTML = '<button class="inbox-back" onclick="inboxClose()">‹ 回暫存清單</button>' + [open].map(e => {
     const [m, d] = String(e.date || '').split('/');
     const srcLabel = e.src === 'cart' ? '🛒 日幣換算' : '🧾 發票';
     const t = new Date(e.createdAt).toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
@@ -1072,6 +1139,7 @@ function inboxToggleLine(id, idx, on) {
 function inboxDiscard(id) {
   if (!confirm('捨棄這筆暫存？（不會入檔）')) return;
   KakeiboInbox.save(KakeiboInbox.load().filter(e => e.id !== id));
+  inboxOpenId = null;
   renderInbox();
 }
 async function inboxSubmit(id) {
@@ -1098,6 +1166,7 @@ async function inboxSubmit(id) {
       en: Number(e.en) || 0,
     }, requestId);
     KakeiboInbox.save(KakeiboInbox.load().filter(x => x.id !== id));
+    if (inboxOpenId === id) inboxOpenId = null;
     showToast('✓ 已入檔');
   } catch (err) {
     showToast('❌ 入檔失敗，請到紀錄頁確認是否已有這筆再重送');
@@ -1110,8 +1179,7 @@ window.addEventListener('storage', ev => {
   if (ev.key !== KakeiboInbox.KEY) return;
   if (document.getElementById('page-inbox').classList.contains('active')) {
     // 正在輸入時不重畫，避免游標跳掉
-    const focused = document.activeElement && document.activeElement.closest && document.activeElement.closest('.inbox-card');
-    if (!focused) renderInbox(); else updateInboxBadge();
+    if (!inboxOpenId) renderInbox(); else updateInboxBadge();
   } else {
     updateInboxBadge();
   }
