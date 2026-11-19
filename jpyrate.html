@@ -293,6 +293,9 @@
   .cart-item-tax { font-size: 11px; color: var(--mint-dark); margin-top: 3px; }
   .cart-item-lock { font-size: 10.5px; color: var(--mint-dark); font-weight: 700; margin-top: 3px; }
 
+  .tax-hint { font-size: 11.5px; color: var(--muted); margin: -4px 0 10px; line-height: 1.5; }
+  .tax-hint b { color: var(--mint-dark); }
+
   .empty-cart {
     text-align: center; color: var(--muted);
     font-size: 13px; padding: 24px 0;
@@ -353,7 +356,7 @@
     <!-- 換算 -->
     <div class="input-row">
       <div class="input-group">
-        <label>輸入日幣 JPY</label>
+        <label>輸入日幣 JPY（含稅價）</label>
         <input type="number" id="jpyInput" placeholder="0" inputmode="numeric" oninput="calcTWD()">
         <span class="input-flag">🇯🇵</span>
       </div>
@@ -364,6 +367,8 @@
         <span class="input-flag">🇹🇼</span>
       </div>
     </div>
+
+    <div class="tax-hint">請輸入標價上的<b>「税込」含稅價</b>；明細的稅額是從含稅價裡拆出來的。</div>
 
     <button class="cart-btn" id="addCartBtn" onclick="openModal()" disabled>
       🛍️ 加入購物車
@@ -600,7 +605,7 @@
         <div class="cart-item-info">
           <div class="cart-item-name">${esc(item.name)}</div>
           <div class="cart-item-qty">¥${fmt(item.unitJpy)} × ${item.qty} 個</div>
-          <div class="cart-item-tax">稅 ¥${fmt(tax10)}（10%）・食品 ¥${fmt(tax8)}（8%）</div>
+          <div class="cart-item-tax">內含稅 ¥${fmt(tax10)}（10%）・食品 ¥${fmt(tax8)}（8%）</div>
           ${lock}
         </div>
         <div class="cart-item-price">
