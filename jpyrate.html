@@ -276,6 +276,23 @@
   }
   .cart-del-btn:hover { background: var(--pink-dark); color: white; border-color: var(--pink-dark); }
 
+  .cart-item.bought { background: #f0fff8; border-color: var(--mint); }
+  .cart-item.bought .cart-item-name { color: var(--mint-dark); }
+  .buy-check {
+    appearance: none; -webkit-appearance: none;
+    width: 22px; height: 22px; min-width: 22px; border-radius: 7px;
+    border: 2px solid var(--mint-dark); background: white; cursor: pointer;
+    position: relative; margin: 0;
+  }
+  .buy-check:checked { background: var(--mint-dark); }
+  .buy-check:checked::after {
+    content: ""; position: absolute; left: 6px; top: 2px;
+    width: 5px; height: 10px; border: solid white; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
+  }
+  .buy-check:disabled { opacity: .5; }
+  .cart-item-tax { font-size: 11px; color: var(--mint-dark); margin-top: 3px; }
+  .cart-item-lock { font-size: 10.5px; color: var(--mint-dark); font-weight: 700; margin-top: 3px; }
+
   .empty-cart {
     text-align: center; color: var(--muted);
     font-size: 13px; padding: 24px 0;
@@ -376,13 +393,13 @@
       <span class="label">💵 合計（TWD）</span>
       <span class="value" id="sumTwd">NT$0</span>
     </div>
-    <div class="summary-row tax">
-      <span class="label">🧾 退稅 8% 後實付（TWD）</span>
-      <span class="value" id="sumTax8">NT$0</span>
+    <div class="summary-row">
+      <span class="label">✅ 已購買（購買當下匯率）</span>
+      <span class="value" id="sumBought">NT$0</span>
     </div>
-    <div class="summary-row tax">
-      <span class="label">🧾 退稅 10% 後實付（TWD）</span>
-      <span class="value" id="sumTax10">NT$0</span>
+    <div class="summary-row">
+      <span class="label">🛒 未購買（即時匯率）</span>
+      <span class="value" id="sumPending">NT$0</span>
     </div>
   </div>
 
@@ -424,6 +441,7 @@
   let cart = [];
   let currentRate = 0;
   let pendingJpy = 0;
+  let rateTs = 0;
 
   // ── 初始化 ──
   function init() {
@@ -434,6 +452,7 @@
     if (savedRate) {
       const r = JSON.parse(savedRate);
       currentRate = r.rate;
+      rateTs = r.ts || 0;
       document.getElementById('rateDisplay').textContent = `NT$ ${r.rate.toFixed(4)}`;
       document.getElementById('rateTime').textContent = `更新：${r.time}`;
     }
@@ -467,8 +486,10 @@
         const now = new Date().toLocaleString('zh-TW', { hour12: false });
         document.getElementById('rateDisplay').textContent = `NT$ ${rate.toFixed(4)}`;
         document.getElementById('rateTime').textContent = `更新：${now}`;
-        localStorage.setItem(RATE_KEY, JSON.stringify({ rate, time: now }));
+        rateTs = Date.now();
+        localStorage.setItem(RATE_KEY, JSON.stringify({ rate, time: now, ts: rateTs }));
         calcTWD();
+        renderCart();
         success = true;
         break;
       } catch (e) {
@@ -567,21 +588,60 @@
       return;
     }
 
-    el.innerHTML = cart.map((item, i) => `
-      <div class="cart-item">
+    el.innerHTML = cart.map((item, i) => {
+      const twd = itemTwd(item);
+      const tax10 = Math.round(item.totalJpy * 10 / 110);
+      const tax8  = Math.round(item.totalJpy * 8 / 108);
+      const lock = item.bought
+        ? `<div class="cart-item-lock">已購買・${item.boughtAt}・匯率 ${item.lockRate.toFixed(4)} 已鎖定</div>` : '';
+      return `
+      <div class="cart-item${item.bought ? ' bought' : ''}">
+        <input type="checkbox" class="buy-check" ${item.bought ? 'checked' : ''} onchange="toggleBought(${i}, this)" title="已購買" aria-label="已購買">
         <div class="cart-item-info">
-          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-name">${esc(item.name)}</div>
           <div class="cart-item-qty">¥${fmt(item.unitJpy)} × ${item.qty} 個</div>
+          <div class="cart-item-tax">稅 ¥${fmt(tax10)}（10%）・食品 ¥${fmt(tax8)}（8%）</div>
+          ${lock}
         </div>
         <div class="cart-item-price">
           <div class="cart-item-jpy">¥${fmt(item.totalJpy)}</div>
-          <div class="cart-item-twd">≈ NT$${fmt(item.totalTwd)}</div>
+          <div class="cart-item-twd">≈ NT$${fmt(twd)}</div>
         </div>
         <button class="cart-del-btn" onclick="deleteItem(${i})">✕</button>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
 
     updateSummary();
+  }
+
+  // 已購買：鎖定購買當下的匯率；未購買：跟著即時匯率
+  function itemTwd(item) {
+    if (item.bought) return item.lockTwd;
+    return currentRate ? Math.round(item.totalJpy * currentRate) : item.totalTwd;
+  }
+
+  async function toggleBought(index, el) {
+    const item = cart[index];
+    if (!item) return;
+    if (el.checked) {
+      el.disabled = true;
+      // 匯率超過 10 分鐘沒更新，先抓一次最新的再鎖定
+      if (!currentRate || Date.now() - rateTs > 10 * 60 * 1000) await fetchRate();
+      if (!currentRate) { el.checked = false; el.disabled = false; alert('抓不到匯率，請稍後再試'); return; }
+      item.bought = true;
+      item.lockRate = currentRate;
+      item.lockTwd = Math.round(item.totalJpy * currentRate);
+      item.boughtAt = new Date().toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+    } else {
+      item.bought = false;
+      delete item.lockRate; delete item.lockTwd; delete item.boughtAt;
+    }
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    renderCart();
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   function deleteItem(index) {
@@ -600,15 +660,14 @@
   function updateSummary() {
     const totalItems = cart.length;
     const totalJpy = cart.reduce((s, i) => s + i.totalJpy, 0);
-    const totalTwd = cart.reduce((s, i) => s + i.totalTwd, 0);
-    const afterTax8  = Math.round(totalTwd * (1 - 0.08));
-    const afterTax10 = Math.round(totalTwd * (1 - 0.10));
+    const bought = cart.filter(i => i.bought).reduce((s, i) => s + itemTwd(i), 0);
+    const pending = cart.filter(i => !i.bought).reduce((s, i) => s + itemTwd(i), 0);
 
-    document.getElementById('sumItems').textContent = `${totalItems} 項`;
+    document.getElementById('sumItems').textContent = `${totalItems} 項（已買 ${cart.filter(i => i.bought).length}）`;
     document.getElementById('sumJpy').textContent = `¥${fmt(totalJpy)}`;
-    document.getElementById('sumTwd').textContent = `NT$${fmt(totalTwd)}`;
-    document.getElementById('sumTax8').textContent = `NT$${fmt(afterTax8)}`;
-    document.getElementById('sumTax10').textContent = `NT$${fmt(afterTax10)}`;
+    document.getElementById('sumTwd').textContent = `NT$${fmt(bought + pending)}`;
+    document.getElementById('sumBought').textContent = `NT$${fmt(bought)}`;
+    document.getElementById('sumPending').textContent = `NT$${fmt(pending)}`;
   }
 
   function fmt(n) {
