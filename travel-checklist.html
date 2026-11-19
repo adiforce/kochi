@@ -115,6 +115,24 @@
     font-size: 15px; font-weight: 700; color: var(--brown);
   }
 
+
+  /* ── 天氣穿搭建議 ── */
+  .wx-card .cat-index{background:rgba(232,160,77,.18);color:#cf8830;}
+  .wx-refresh{margin-left:auto;font:700 12px/1 inherit;font-family:inherit;color:var(--pink-dark);background:#fff;border:1.5px solid var(--border);border-radius:99px;padding:5px 10px;cursor:pointer;}
+  .wx-status{font-size:12px;color:var(--muted);margin:2px 0 8px;}
+  .wx-days{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+  .wx-day{display:grid;grid-template-columns:92px 1fr auto;gap:4px 10px;align-items:center;background:var(--cream);border:1px solid var(--border);border-radius:12px;padding:8px 10px;}
+  .wx-date{font-weight:700;font-size:13px;color:var(--brown);line-height:1.3;}
+  .wx-date small{display:block;font-weight:400;font-size:11px;color:var(--muted);}
+  .wx-sky{font-size:13px;}
+  .wx-temp{font-size:13px;font-weight:700;text-align:right;white-space:nowrap;}
+  .wx-temp .hi{color:#e06a4e;} .wx-temp .lo{color:#2f6fb3;}
+  .wx-temp small{display:block;font-size:11px;font-weight:400;color:var(--muted);}
+  .wx-wear{grid-column:1/-1;font-size:12.5px;color:var(--text);line-height:1.5;border-top:1px dashed var(--border);padding-top:5px;}
+  .wx-sum{font-size:13px;line-height:1.6;background:#fff8ee;border:1px dashed #e8a04d;border-radius:12px;padding:8px 12px;margin-bottom:6px;}
+  .wx-sub{font-size:12px;font-weight:700;color:var(--pink-dark);margin:10px 0 0;}
+  .items li .why{display:block;font-size:12px;color:var(--muted);}
+
   .items { list-style: none; }
   .items li {
     display: flex;
@@ -207,6 +225,7 @@
 <meta name="theme-color" content="#2f6fb3">
 </head>
 <body>
+<script src="doodle-icons.js"></script>
 
 <div class="container">
 
@@ -218,6 +237,19 @@
   <div class="progress-card">
     <span class="progress-num" id="progressNum">0/0</span>
     <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+
+  <div class="cat wx-card" id="wxCard">
+    <div class="cat-head">
+      <span class="cat-index">🌡️</span><span class="cat-name">高知天氣 × 穿搭建議</span>
+      <button class="wx-refresh" id="wxRefresh" type="button">↻ 更新</button>
+    </div>
+    <div class="wx-status" id="wxStatus">讀取天氣中…</div>
+    <div class="wx-days" id="wxDays"></div>
+    <div id="wxSum"></div>
+    <div class="wx-sub" id="wxSubHead" hidden>依天氣加帶（會隨預報自動調整）</div>
+    <ul class="items" id="wxItems"></ul>
   </div>
 
   <div id="board">
@@ -302,9 +334,9 @@
 
 <script>
   const STORAGE_KEY = "travel-checklist-state";
-  const checkboxes = Array.from(document.querySelectorAll('.items input[type="checkbox"]'));
   const progressNum = document.getElementById('progressNum');
   const progressFill = document.getElementById('progressFill');
+  const allBoxes = () => Array.from(document.querySelectorAll('.items input[type="checkbox"]'));
 
   function loadState(){
     try{
@@ -312,42 +344,197 @@
       return raw ? JSON.parse(raw) : {};
     }catch(e){ return {}; }
   }
-
   function saveState(){
-    const state = {};
-    checkboxes.forEach(cb => state[cb.id] = cb.checked);
+    const state = loadState();          // 保留目前沒顯示的天氣項目狀態
+    allBoxes().forEach(cb => state[cb.id] = cb.checked);
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
   }
-
   function updateProgress(){
-    const total = checkboxes.length;
-    const checked = checkboxes.filter(cb => cb.checked).length;
+    const boxes = allBoxes();
+    const total = boxes.length;
+    const checked = boxes.filter(cb => cb.checked).length;
     progressNum.textContent = `${checked}/${total}`;
     progressFill.style.width = total ? `${(checked/total)*100}%` : '0%';
   }
-
   function applyRowState(cb){
     const li = cb.closest('li');
     if(li) li.classList.toggle('checked', cb.checked);
   }
-
-  const saved = loadState();
-  checkboxes.forEach(cb => {
+  function bindBox(cb, saved){
+    if(cb.dataset.bound) return;
+    cb.dataset.bound = '1';
     if(saved[cb.id]) cb.checked = true;
     applyRowState(cb);
-    cb.addEventListener('change', () => {
-      applyRowState(cb);
-      updateProgress();
-      saveState();
-    });
-  });
-  updateProgress();
+    cb.addEventListener('change', () => { applyRowState(cb); updateProgress(); saveState(); });
+  }
+  function bindAll(){
+    const saved = loadState();
+    allBoxes().forEach(cb => bindBox(cb, saved));
+    updateProgress();
+  }
+  bindAll();
 
   document.getElementById('resetBtn').addEventListener('click', () => {
-    checkboxes.forEach(cb => { cb.checked = false; applyRowState(cb); });
+    allBoxes().forEach(cb => { cb.checked = false; applyRowState(cb); });
+    try{ localStorage.setItem(STORAGE_KEY, '{}'); }catch(e){}
     updateProgress();
-    saveState();
   });
+
+  /* ===== 高知天氣 × 穿搭建議（與行程表共用 Open-Meteo 與快取） ===== */
+  const TRIP_DAYS = [
+    { date:'2026-11-28', label:'Day1', note:'抵達、市區' },
+    { date:'2026-11-29', label:'Day2', note:'日曜市、桂浜海邊' },
+    { date:'2026-11-30', label:'Day3', note:'仁淀川自駕' },
+    { date:'2026-12-01', label:'Day4', note:'高知城、竹林寺' },
+    { date:'2026-12-02', label:'Day5', note:'回程' }
+  ];
+  const WX_POINTS = {
+    default: { lat: 33.5597, lon: 133.5311, name: '高知市' },
+    '2026-11-30': { lat: 33.60, lon: 133.20, name: '仁淀川一帶' }
+  };
+  const WX_TTL = 30 * 60 * 1000;
+  const WX_CODES = {
+    0:['☀️','晴'], 1:['🌤️','晴時多雲'], 2:['⛅','多雲'], 3:['☁️','陰'],
+    45:['🌫️','霧'], 48:['🌫️','霧'],
+    51:['🌦️','毛毛雨'], 53:['🌦️','毛毛雨'], 55:['🌦️','毛毛雨'], 56:['🌧️','凍雨'], 57:['🌧️','凍雨'],
+    61:['🌧️','小雨'], 63:['🌧️','雨'], 65:['🌧️','大雨'], 66:['🌧️','凍雨'], 67:['🌧️','凍雨'],
+    71:['🌨️','小雪'], 73:['🌨️','雪'], 75:['❄️','大雪'], 77:['🌨️','雪粒'],
+    80:['🌦️','陣雨'], 81:['🌧️','陣雨'], 82:['⛈️','強陣雨'], 85:['🌨️','陣雪'], 86:['🌨️','陣雪'],
+    95:['⛈️','雷雨'], 96:['⛈️','雷雨'], 99:['⛈️','雷雨']
+  };
+  const SNOW_CODES = [71,73,75,77,85,86];
+
+  async function wxFetchPoint(key, force){
+    const ck = 'wx::om::' + key;
+    if(!force){
+      try {
+        const c = JSON.parse(localStorage.getItem(ck) || 'null');
+        if(c && Date.now() - c.t < WX_TTL) return c;
+      } catch(e) {}
+    }
+    const pt = WX_POINTS[key];
+    const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + pt.lat + '&longitude=' + pt.lon +
+      '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+      '&timezone=Asia%2FTokyo&forecast_days=16';
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 5000);
+    let data;
+    try {
+      const res = await fetch(url, { cache: 'no-store', signal: ctrl.signal });
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const j = await res.json();
+      data = { t: Date.now(), daily: j.daily, via: 'live' };
+    } catch(err){
+      const r2 = await fetch('weather.json?t=' + Date.now(), { cache: 'no-store' });
+      if(!r2.ok) throw new Error('weather.json HTTP ' + r2.status);
+      const wj = await r2.json();
+      const p = wj.points && wj.points[key];
+      if(!p || !p.daily) throw new Error('weather.json 還沒有資料');
+      data = { t: wj.updated ? new Date(wj.updated).getTime() : Date.now(), daily: p.daily, via: 'json' };
+    } finally {
+      clearTimeout(timer);
+    }
+    try { localStorage.setItem(ck, JSON.stringify(data)); } catch(e) {}
+    return data;
+  }
+
+  // 依當天最低／最高溫給一句穿搭
+  function outfitFor(lo, hi, rain){
+    let base;
+    if(lo <= 3) base = '發熱衣＋毛衣／刷毛＋羽絨或厚大衣';
+    else if(lo <= 7) base = '發熱衣＋毛衣或刷毛＋防風保暖外套';
+    else if(lo <= 11) base = '長袖＋針織衫＋防風外套';
+    else if(lo <= 15) base = '長袖＋薄外套';
+    else base = '短袖＋薄長袖';
+    const tips = [];
+    if(hi - lo >= 9) tips.push(`中午 ${Math.round(hi)}° 會熱，內層穿薄一點方便脫`);
+    if(rain >= 50) tips.push('降雨機率高，帶傘＋穿防水鞋');
+    else if(rain >= 30) tips.push('可能下雨，帶折傘');
+    return base + (tips.length ? '；' + tips.join('；') : '');
+  }
+
+  function suggestItems(days){
+    const lo = Math.min(...days.map(d => d.lo));
+    const hi = Math.max(...days.map(d => d.hi));
+    const rain = Math.max(...days.map(d => d.rain));
+    const swing = Math.max(...days.map(d => d.hi - d.lo));
+    const snow = days.some(d => SNOW_CODES.includes(d.code));
+    const items = [];
+    const add = (id, text, why) => items.push({ id: 'wx-' + id, text, why });
+
+    if(lo <= 5) add('down', '羽絨外套或厚大衣', `最低 ${Math.round(lo)}°，早晚接近台灣寒流等級`);
+    else if(lo <= 11) add('jacket', '防風保暖外套（可擋風的夾克、薄羽絨）', `最低 ${Math.round(lo)}°，早晚偏冷`);
+    else add('light', '薄外套或針織外套', `最低 ${Math.round(lo)}°`);
+    if(lo <= 9) add('heat', '發熱衣 2–3 件（Heattech 之類）', '早上出門、晚上逛街最需要');
+    if(lo <= 12) add('knit', '毛衣或刷毛上衣 1–2 件', '室內有暖氣，選好穿脫的');
+    if(hi >= 17 && swing >= 9) add('layer', '短袖或薄長袖當內層（洋蔥式穿法）', `白天最高 ${Math.round(hi)}°、日夜溫差約 ${Math.round(swing)}°`);
+    if(lo <= 6) add('warm', '圍巾、手套、毛帽', '早晚騎車、等公車、海邊風大時用得到');
+    if(lo <= 8) add('pants', '厚一點的長褲（或內搭褲）', '下半身保暖常被忽略');
+    if(rain >= 50) add('rain', '折傘＋防潑水外套', `最高降雨機率 ${rain}%`);
+    else if(rain >= 30) add('umbrella', '折傘', `最高降雨機率 ${rain}%`);
+    if(rain >= 50 || snow) add('shoes', '防水、防滑的好走鞋', snow ? '預報有降雪' : '下雨天走沈下橋、石階比較安全');
+    const d3 = days.find(d => d.date === '2026-11-30');
+    if(d3 && d3.lo <= 8) add('niyodo', '11/30 仁淀川多帶一件保暖層放車上', `山區河谷最低 ${Math.round(d3.lo)}°，比市區冷`);
+    add('lip', '護唇膏、乳液', '天冷乾燥，飯店暖氣也會讓皮膚變乾');
+    return { items, lo, hi, rain };
+  }
+
+  function md(dateStr){
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const w = '日一二三四五六'[new Date(y, m - 1, d).getDay()];
+    return `${m}/${d}（${w}）`;
+  }
+
+  async function loadWx(force){
+    const st = document.getElementById('wxStatus');
+    st.textContent = '讀取天氣中…';
+    try {
+      const keys = [...new Set(TRIP_DAYS.map(d => WX_POINTS[d.date] ? d.date : 'default'))];
+      const res = {};
+      await Promise.all(keys.map(async k => { res[k] = await wxFetchPoint(k, force); }));
+      const days = [];
+      TRIP_DAYS.forEach(td => {
+        const k = WX_POINTS[td.date] ? td.date : 'default';
+        const dd = res[k].daily;
+        const i = dd.time.indexOf(td.date);
+        if(i < 0) return;
+        days.push({ ...td, place: WX_POINTS[k].name, code: dd.weather_code[i],
+          hi: dd.temperature_2m_max[i], lo: dd.temperature_2m_min[i],
+          rain: dd.precipitation_probability_max ? (dd.precipitation_probability_max[i] ?? 0) : 0 });
+      });
+      if(!days.length){
+        st.textContent = '出發日還超出 16 天預報範圍，越接近出發日就會出現建議。';
+        return;
+      }
+      const t = new Date(Math.min(...Object.values(res).map(r => r.t)));
+      const via = Object.values(res).some(r => r.via === 'json') ? '（備援資料）' : '';
+      st.textContent = `Open-Meteo 預報${via}，更新於 ${t.getMonth()+1}/${t.getDate()} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`
+        + (days.length < TRIP_DAYS.length ? `；還有 ${TRIP_DAYS.length - days.length} 天超出預報範圍` : '');
+
+      document.getElementById('wxDays').innerHTML = days.map(d => {
+        const [ic, desc] = WX_CODES[d.code] || ['🌡️', ''];
+        return `<div class="wx-day">
+          <div class="wx-date">${md(d.date)}<small>${d.label}・${d.note}</small></div>
+          <div class="wx-sky">${ic} ${desc}${d.place !== '高知市' ? `<br><small style="color:var(--muted)">${d.place}</small>` : ''}</div>
+          <div class="wx-temp"><span class="hi">${Math.round(d.hi)}°</span> / <span class="lo">${Math.round(d.lo)}°</span><small>☔ ${d.rain}%</small></div>
+          <div class="wx-wear">👕 ${outfitFor(d.lo, d.hi, d.rain)}</div>
+        </div>`;
+      }).join('');
+
+      const s = suggestItems(days);
+      document.getElementById('wxSum').innerHTML =
+        `<div class="wx-sum">旅程期間氣溫約 <b>${Math.round(s.lo)}°～${Math.round(s.hi)}°</b>，最高降雨機率 <b>${s.rain}%</b>。下面是依預報建議加帶的衣物，勾選會一起算進進度。</div>`;
+      document.getElementById('wxSubHead').hidden = false;
+      document.getElementById('wxItems').innerHTML = s.items.map(it =>
+        `<li><input type="checkbox" id="${it.id}"><label for="${it.id}">${it.text}<span class="why">${it.why}</span></label></li>`).join('');
+      bindAll();
+    } catch(err){
+      st.textContent = '連不上天氣資料，點「↻ 更新」再試一次。';
+      console.warn(err);
+    }
+  }
+  document.getElementById('wxRefresh').addEventListener('click', () => loadWx(true));
+  loadWx(false);
 </script>
 
 </body>

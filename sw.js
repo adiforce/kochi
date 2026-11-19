@@ -1,7 +1,7 @@
 /* 日本工具箱 Service Worker — 離線可用
  * 改了任何頁面後，把 VERSION 數字 +1，手機下次開啟就會抓新版。
  */
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CORE_CACHE = `core-${VERSION}`;
 const RUNTIME_CACHE = 'runtime';        // 字型、圖片（跨版本保留）
 const RUNTIME_MAX = 200;                // 最多存幾個字型/圖片檔
