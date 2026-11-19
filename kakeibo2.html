@@ -495,6 +495,58 @@
     /* ── 頁面區塊 ── */
     .page { display: none; padding-bottom: 40px; }
     .page.active { display: block; }
+    /* ── 暫存匣 ── */
+    .tab-badge {
+      display: inline-block;
+      min-width: 17px;
+      padding: 0 5px;
+      margin-left: 3px;
+      border-radius: 9px;
+      background: var(--red);
+      color: #fff;
+      font-size: 10.5px;
+      line-height: 17px;
+      vertical-align: 1px;
+    }
+    .tab-badge:empty { display: none; }
+    .inbox-hint { font-size: 11.5px; opacity: 0.6; line-height: 1.6; margin-bottom: 4px; }
+    .inbox-card { position: relative; }
+    .inbox-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 11.5px;
+    }
+    .src-tag {
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-weight: 700;
+      background: var(--pink);
+      color: var(--pink-dark);
+    }
+    .src-tag.cart { background: #e3f1dc; color: #3f7d31; }
+    .inbox-time { opacity: 0.5; flex: 1; }
+    .inbox-row { display: grid; grid-template-columns: 74px 1fr; gap: 8px; margin-bottom: 8px; }
+    .inbox-row.date { grid-template-columns: 1fr 14px 1fr 2fr; align-items: center; }
+    .inbox-card input[type=text], .inbox-card input[type=number] { margin-top: 0; }
+    .inbox-row .date-sep { padding: 0; margin: 0; text-align: center; align-self: center; }
+    .detail-box {
+      border: 1.5px dashed var(--border);
+      border-radius: 10px;
+      padding: 6px 10px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+    .detail-box summary { cursor: pointer; font-weight: 700; color: var(--pink-dark); padding: 2px 0; }
+    .detail-line { display: flex; align-items: center; gap: 8px; padding: 4px 0; margin: 0; border-top: 1px solid var(--cream); font-size: 12px; opacity: 1; letter-spacing: 0; cursor: pointer; }
+    .detail-line input { width: auto; margin: 0; min-height: 0; }
+    .detail-line .dl-name { flex: 1; line-height: 1.35; }
+    .detail-line .dl-name small { opacity: 0.5; display: block; font-size: 10.5px; }
+    .detail-line.off .dl-name, .detail-line.off .dl-jpy { opacity: 0.35; text-decoration: line-through; }
+    .inbox-card .cat-grid, .inbox-card .pay-grid { margin-bottom: 10px; }
+    .inbox-missing { font-size: 11.5px; color: var(--red); margin: 2px 0 8px; min-height: 0; }
+    .inbox-card .submit-btn { padding: 11px; font-size: 15px; }
   </style>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -504,13 +556,15 @@
 </head>
 <body>
 <script src="doodle-icons.js"></script>
+<script src="kakeibo-inbox.js"></script>
 <header>
   <div class="logo">🇯🇵 家計簿<span>Japan Trip</span></div>
   <button class="lock-icon-btn" id="lockIconBtn" onclick="openLockOverlay()" title="輸入密碼解鎖">🔒</button>
 </header>
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('form')">✏️ 記帳</button>
-  <button class="tab-btn" onclick="switchTab('list')">📋 紀錄</button>
+  <button class="tab-btn active" data-tab="form" onclick="switchTab('form')">✏️ 記帳</button>
+  <button class="tab-btn" data-tab="inbox" onclick="switchTab('inbox')">📥 暫存<span class="tab-badge" id="inboxBadge"></span></button>
+  <button class="tab-btn" data-tab="list" onclick="switchTab('list')">📋 紀錄</button>
 </div>
 <!-- ── 記帳表單頁 ── -->
 <div class="page active" id="page-form">
@@ -577,6 +631,14 @@
   <div id="recordList"><div class="loading-msg">讀取中…</div></div>
 </div>
 </div><!-- end page-list -->
+<!-- ── 暫存匣頁 ── -->
+<div class="page" id="page-inbox">
+<div class="card">
+  <div class="card-title">📥 待入檔</div>
+  <div class="inbox-hint">從「發票解析」和「日幣換算」送過來的資料會先放這裡，補完類別、付款工具後再入檔；不要的直接捨棄。</div>
+</div>
+<div id="inboxList"></div>
+</div><!-- end page-inbox -->
 <div id="toast"></div>
 <!-- ── 進站密碼遮罩層 ── -->
 <div id="lockOverlay">
@@ -593,12 +655,10 @@
 <script>
 // ── 分頁切換 ──
 function switchTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach((b, i) => {
-    b.classList.toggle('active', (i === 0 && tab === 'form') || (i === 1 && tab === 'list'));
-  });
-  document.getElementById('page-form').classList.toggle('active', tab === 'form');
-  document.getElementById('page-list').classList.toggle('active', tab === 'list');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  ['form', 'inbox', 'list'].forEach(t => document.getElementById('page-' + t).classList.toggle('active', t === tab));
   if (tab === 'list') loadRecords();
+  if (tab === 'inbox') renderInbox();
 }
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxUxCLCjOcAW-6Xmjmbxe8bPfv8XZ3sEJEXBKYJbK_yM8CNtkNnTnVsZA2VcNoeCc0Hkw/exec';
   
@@ -646,6 +706,7 @@ function confirmPassword() {
   if (val && val === todayPassword()) {
     unlocked = true;
     updateLockUI();
+    refreshInboxIfOpen();
     closeLockOverlay();
     showToast('🔓 解鎖成功');
   } else {
@@ -670,6 +731,9 @@ function updateLockUI() {
     iconBtn.classList.remove('unlocked');
     submitBtn.disabled = true;
   }
+}
+function refreshInboxIfOpen() {
+  if (document.getElementById('page-inbox').classList.contains('active')) renderInbox();
 }
 // ── 初始化 ──
 function init() {
@@ -698,16 +762,17 @@ function init() {
     payGrid.appendChild(btn);
   });
   updateLockUI();
+  updateInboxBadge();
   openLockOverlay();
   loadRecords();
 }
 function selectCat(c) {
   selectedCat = c;
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.key === c));
+  document.querySelectorAll('#catGrid .cat-btn').forEach(b => b.classList.toggle('active', b.dataset.key === c));
 }
 function selectPay(p) {
   selectedPay = p;
-  document.querySelectorAll('.pay-btn').forEach(b => b.classList.toggle('active', b.dataset.key === p));
+  document.querySelectorAll('#payGrid .pay-btn').forEach(b => b.classList.toggle('active', b.dataset.key === p));
 }
 // ── JPY 累加器 ──
 function addChip() {
@@ -746,6 +811,20 @@ let isSubmitting = false;
 function makeRequestId() {
   return 'r' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
 }
+// 寫入 Google Sheet（記帳表單與暫存匣共用）
+async function gasWrite(fields, requestId) {
+  const params = new URLSearchParams({ action: 'write', ...fields, requestId: requestId || makeRequestId() });
+  // 網路不穩時避免無限卡住：15 秒逾時就視為失敗，讓使用者可重試
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+  try {
+    const res = await fetch(`${GAS_URL}?${params}`, { signal: controller.signal });
+    const json = await res.json().catch(() => null);
+    if (json && json.success === false) throw new Error(json.error || '送出失敗');
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
 async function submitRecord() {
   if (!unlocked) return showToast('🔒 請先輸入密碼解鎖');
   if (isSubmitting) return; // 防止網路重試/連點造成重複送出
@@ -765,26 +844,16 @@ async function submitRecord() {
   isSubmitting = true;
   btn.disabled = true;
   btn.textContent = '送出中…';
-  const requestId = makeRequestId();
-  const params = new URLSearchParams({
-    action: 'write',
-    date: `${month}/${day}`,
-    chinese: name,
-    jpy: totalJpy,
-    category: selectedCat,
-    payment: selectedPay,
-    kid: kid,
-    en: en,
-    requestId: requestId,
-  });
   try {
-    // 網路不穩時避免無限卡住：15 秒逾時就視為失敗，讓使用者可重試
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
-    const res = await fetch(`${GAS_URL}?${params}`, { signal: controller.signal });
-    clearTimeout(timeoutId);
-    const json = await res.json().catch(() => null);
-    if (json && json.success === false) throw new Error(json.error || '送出失敗');
+    await gasWrite({
+      date: `${month}/${day}`,
+      chinese: name,
+      jpy: totalJpy,
+      category: selectedCat,
+      payment: selectedPay,
+      kid: kid,
+      en: en,
+    });
     // 清空
     document.getElementById('inputName').value = '';
     document.getElementById('inputJpy').value = '';
@@ -874,6 +943,179 @@ async function deleteRecord(row) {
     showToast('❌ 刪除失敗');
   }
 }
+// ── 暫存匣（發票解析／日幣換算送來的資料） ──
+const inboxSubmitting = new Set();
+function inboxEsc(s) {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function inboxGet(id) {
+  return KakeiboInbox.load().find(e => e.id === id);
+}
+function inboxUpdate(id, patch) {
+  const list = KakeiboInbox.load();
+  const e = list.find(x => x.id === id);
+  if (!e) return null;
+  Object.assign(e, typeof patch === 'function' ? patch(e) : patch);
+  KakeiboInbox.save(list);
+  return e;
+}
+function inboxMissing(e) {
+  const miss = [];
+  const [m, d] = String(e.date || '').split('/');
+  if (!(+m >= 1 && +m <= 12 && +d >= 1 && +d <= 31)) miss.push('日期');
+  if (!String(e.name || '').trim()) miss.push('品項名稱');
+  if (!(Number(e.jpy) > 0)) miss.push('金額');
+  if (!e.cat) miss.push('類別');
+  if (!e.pay) miss.push('付款工具');
+  return miss;
+}
+function updateInboxBadge() {
+  const n = KakeiboInbox.load().length;
+  document.getElementById('inboxBadge').textContent = n ? n : '';
+}
+function renderInbox() {
+  updateInboxBadge();
+  const list = KakeiboInbox.load();
+  const box = document.getElementById('inboxList');
+  if (!list.length) {
+    box.innerHTML = '<div class="card"><div class="loading-msg">暫存是空的</div></div>';
+    return;
+  }
+  box.innerHTML = list.map(e => {
+    const [m, d] = String(e.date || '').split('/');
+    const srcLabel = e.src === 'cart' ? '🛒 日幣換算' : '🧾 發票';
+    const t = new Date(e.createdAt).toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+    const lines = (e.lines || []).length ? `
+      <details class="detail-box">
+        <summary>明細 ${e.lines.length} 項（取消勾選會從金額扣掉）</summary>
+        ${e.lines.map((l, i) => `
+          <label class="detail-line${l.on === false ? ' off' : ''}">
+            <input type="checkbox" ${l.on === false ? '' : 'checked'} onchange="inboxToggleLine('${e.id}', ${i}, this.checked)">
+            <span class="dl-name">${inboxEsc(l.name)}${l.sub ? `<small>${inboxEsc(l.sub)}</small>` : ''}</span>
+            <span class="dl-jpy">¥${(Number(l.jpy) || 0).toLocaleString()}</span>
+          </label>`).join('')}
+      </details>` : '';
+    const cats = CATEGORIES.map(c => `<button class="cat-btn${e.cat === c.key ? ' active' : ''}" data-key="${c.key}" onclick="inboxPick('${e.id}', 'cat', '${c.key}', this)"><span class="btn-icon">${c.icon}</span><span class="btn-label">${c.key}</span></button>`).join('');
+    const pays = PAYMENTS.map(p => `<button class="pay-btn${e.pay === p.key ? ' active' : ''}" data-key="${p.key}" onclick="inboxPick('${e.id}', 'pay', '${p.key}', this)"><span class="btn-icon">${p.icon}</span><span class="btn-label">${p.key}</span></button>`).join('');
+    const miss = inboxMissing(e);
+    const busy = inboxSubmitting.has(e.id);
+    return `
+    <div class="card inbox-card" id="${e.id}">
+      <div class="inbox-head">
+        <span class="src-tag ${e.src === 'cart' ? 'cart' : ''}">${srcLabel}</span>
+        <span class="inbox-time">${t} 送入</span>
+        <button class="del-btn" onclick="inboxDiscard('${e.id}')" title="捨棄">✕</button>
+      </div>
+      <label>日期 / 金額（¥）</label>
+      <div class="inbox-row date">
+        <input type="number" min="1" max="12" placeholder="月" value="${inboxEsc(m || '')}" oninput="inboxDate('${e.id}')" data-f="m">
+        <div class="date-sep">/</div>
+        <input type="number" min="1" max="31" placeholder="日" value="${inboxEsc(d || '')}" oninput="inboxDate('${e.id}')" data-f="d">
+        <input type="number" inputmode="numeric" placeholder="金額" value="${inboxEsc(e.jpy || '')}" oninput="inboxField('${e.id}', 'jpy', this.value)" data-f="jpy">
+      </div>
+      <label>品項名稱</label>
+      <input type="text" style="margin-bottom:10px" value="${inboxEsc(e.name)}" placeholder="例：藥妝店、便利商店…" oninput="inboxField('${e.id}', 'name', this.value)">
+      ${lines}
+      <label>類別</label>
+      <div class="cat-grid">${cats}</div>
+      <label>付款工具</label>
+      <div class="pay-grid">${pays}</div>
+      <div class="extra-grid" style="margin-bottom:10px">
+        <div><label>HAO支出</label><input type="number" inputmode="numeric" value="${Number(e.kid) || 0}" oninput="inboxField('${e.id}', 'kid', this.value)"></div>
+        <div><label>它人支出</label><input type="number" inputmode="numeric" value="${Number(e.en) || 0}" oninput="inboxField('${e.id}', 'en', this.value)"></div>
+      </div>
+      <div class="inbox-missing">${miss.length ? '還缺：' + miss.join('、') : ''}</div>
+      <button class="submit-btn" onclick="inboxSubmit('${e.id}')" ${!unlocked || busy ? 'disabled' : ''}>${busy ? '送出中…' : (unlocked ? '入檔 ✓' : '🔒 解鎖後才能入檔')}</button>
+    </div>`;
+  }).join('');
+}
+function inboxRefreshMissing(id) {
+  const e = inboxGet(id);
+  const card = document.getElementById(id);
+  if (!e || !card) return;
+  const miss = inboxMissing(e);
+  card.querySelector('.inbox-missing').textContent = miss.length ? '還缺：' + miss.join('、') : '';
+}
+function inboxField(id, field, value) {
+  const num = ['jpy', 'kid', 'en'].includes(field);
+  inboxUpdate(id, { [field]: num ? (parseInt(value) || 0) : value });
+  inboxRefreshMissing(id);
+}
+function inboxDate(id) {
+  const card = document.getElementById(id);
+  const m = card.querySelector('[data-f=m]').value;
+  const d = card.querySelector('[data-f=d]').value;
+  inboxUpdate(id, { date: `${m}/${d}` });
+  inboxRefreshMissing(id);
+}
+function inboxPick(id, field, key, btn) {
+  inboxUpdate(id, { [field]: key });
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.key === key));
+  inboxRefreshMissing(id);
+}
+function inboxToggleLine(id, idx, on) {
+  const e = inboxUpdate(id, x => {
+    const lines = x.lines.slice();
+    const line = Object.assign({}, lines[idx]);
+    if ((line.on !== false) === on) return {};
+    line.on = on;
+    lines[idx] = line;
+    const delta = (Number(line.jpy) || 0) * (on ? 1 : -1);
+    return { lines, jpy: Math.max(0, (Number(x.jpy) || 0) + delta) };
+  });
+  if (!e) return;
+  const card = document.getElementById(id);
+  card.querySelector('[data-f=jpy]').value = e.jpy;
+  card.querySelectorAll('.detail-line')[idx].classList.toggle('off', !on);
+  inboxRefreshMissing(id);
+}
+function inboxDiscard(id) {
+  if (!confirm('捨棄這筆暫存？（不會入檔）')) return;
+  KakeiboInbox.save(KakeiboInbox.load().filter(e => e.id !== id));
+  renderInbox();
+}
+async function inboxSubmit(id) {
+  if (!unlocked) return showToast('🔒 請先輸入密碼解鎖');
+  if (inboxSubmitting.has(id)) return;
+  const e = inboxGet(id);
+  if (!e) return renderInbox();
+  const miss = inboxMissing(e);
+  if (miss.length) return showToast('還缺：' + miss.join('、'));
+  // 固定 requestId：失敗重送時，後端可以用它擋掉重複
+  const requestId = e.requestId || makeRequestId();
+  inboxUpdate(id, { requestId });
+  inboxSubmitting.add(id);
+  renderInbox();
+  try {
+    const [m, d] = e.date.split('/');
+    await gasWrite({
+      date: `${+m}/${+d}`,
+      chinese: e.name.trim(),
+      jpy: e.jpy,
+      category: e.cat,
+      payment: e.pay,
+      kid: Number(e.kid) || 0,
+      en: Number(e.en) || 0,
+    }, requestId);
+    KakeiboInbox.save(KakeiboInbox.load().filter(x => x.id !== id));
+    showToast('✓ 已入檔');
+  } catch (err) {
+    showToast('❌ 入檔失敗，請到紀錄頁確認是否已有這筆再重送');
+  }
+  inboxSubmitting.delete(id);
+  renderInbox();
+}
+// 其他頁籤（iframe）送進暫存時即時更新
+window.addEventListener('storage', ev => {
+  if (ev.key !== KakeiboInbox.KEY) return;
+  if (document.getElementById('page-inbox').classList.contains('active')) {
+    // 正在輸入時不重畫，避免游標跳掉
+    const focused = document.activeElement && document.activeElement.closest && document.activeElement.closest('.inbox-card');
+    if (!focused) renderInbox(); else updateInboxBadge();
+  } else {
+    updateInboxBadge();
+  }
+});
 // ── Toast ──
 function showToast(msg) {
   const t = document.getElementById('toast');

@@ -292,6 +292,12 @@
   .buy-check:disabled { opacity: .5; }
   .cart-item-tax { font-size: 11px; color: var(--mint-dark); margin-top: 3px; }
   .cart-item-lock { font-size: 10.5px; color: var(--mint-dark); font-weight: 700; margin-top: 3px; }
+  .send-kakeibo {
+    margin-top: 6px; padding: 4px 10px; border-radius: 8px;
+    border: 1.5px solid var(--mint-dark); background: white; color: var(--mint-dark);
+    font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+  .send-kakeibo:disabled { opacity: 0.5; cursor: default; }
 
   .tax-hint { font-size: 11.5px; color: var(--muted); margin: -4px 0 10px; line-height: 1.5; }
   .tax-hint b { color: var(--mint-dark); }
@@ -335,6 +341,7 @@
 </head>
 <body>
 <script src="doodle-icons.js"></script>
+<script src="kakeibo-inbox.js"></script>
 <div class="container">
 
   <div class="header">
@@ -599,7 +606,8 @@
       const tax10 = Math.round(item.totalJpy * 10 / 110);
       const tax8  = Math.round(item.totalJpy * 8 / 108);
       const lock = item.bought
-        ? `<div class="cart-item-lock">已購買・${item.boughtAt}・匯率 ${item.lockRate.toFixed(4)} 已鎖定</div>` : '';
+        ? `<div class="cart-item-lock">已購買・${item.boughtAt}・匯率 ${item.lockRate.toFixed(4)} 已鎖定</div>
+           <button class="send-kakeibo" onclick="sendToKakeibo(${i})" ${item.sentToKakeibo ? 'disabled' : ''}>${item.sentToKakeibo ? '✓ 已送記帳暫存' : '📥 送記帳暫存'}</button>` : '';
       return `
       <div class="cart-item${item.bought ? ' bought' : ''}">
         <input type="checkbox" class="buy-check" ${item.bought ? 'checked' : ''} onchange="toggleBought(${i}, this)" title="已購買" aria-label="已購買">
@@ -637,13 +645,40 @@
       item.bought = true;
       item.lockRate = currentRate;
       item.lockTwd = Math.round(item.totalJpy * currentRate);
+      item.boughtTs = Date.now();
       item.boughtAt = new Date().toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
     } else {
       item.bought = false;
-      delete item.lockRate; delete item.lockTwd; delete item.boughtAt;
+      delete item.lockRate; delete item.lockTwd; delete item.boughtAt; delete item.boughtTs;
     }
     localStorage.setItem(CART_KEY, JSON.stringify(cart));
     renderCart();
+  }
+
+  // 已購買的商品送到家計簿「暫存」頁籤，補完類別、付款工具再入檔
+  function sendToKakeibo(index) {
+    const item = cart[index];
+    if (!item || !item.bought || item.sentToKakeibo) return;
+    let date = '';
+    if (item.boughtTs) {
+      const d = new Date(item.boughtTs);
+      date = `${d.getMonth() + 1}/${d.getDate()}`;
+    } else {
+      const m = String(item.boughtAt || '').match(/(\d{1,2})\/(\d{1,2})/);
+      const d = new Date();
+      date = m ? `${+m[1]}/${+m[2]}` : `${d.getMonth() + 1}/${d.getDate()}`;
+    }
+    const ok = KakeiboInbox.push({
+      src: 'cart',
+      srcId: 'cart-' + item.id,
+      date,
+      name: item.qty > 1 ? `${item.name} ×${item.qty}` : item.name,
+      jpy: item.totalJpy,
+    });
+    item.sentToKakeibo = true;
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    renderCart();
+    alert(ok ? '已送到家計簿「暫存」頁籤，補完類別和付款工具再入檔' : '這筆已經在暫存裡了');
   }
 
   function esc(s) {
