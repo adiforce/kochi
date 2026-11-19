@@ -607,7 +607,7 @@
       const tax8  = Math.round(item.totalJpy * 8 / 108);
       const lock = item.bought
         ? `<div class="cart-item-lock">已購買・${item.boughtAt}・匯率 ${item.lockRate.toFixed(4)} 已鎖定</div>
-           <button class="send-kakeibo" onclick="sendToKakeibo(${i})">${item.sentToKakeibo ? '✓ 已送暫存・再送' : '📥 送記帳暫存'}</button>` : '';
+           <button class="send-kakeibo" onclick="sendToKakeibo(${i})">${item.sentToKakeibo ? '✅ 已送暫存・再送' : '📥 送記帳暫存'}</button>` : '';
       return `
       <div class="cart-item${item.bought ? ' bought' : ''}">
         <input type="checkbox" class="buy-check" ${item.bought ? 'checked' : ''} onchange="toggleBought(${i}, this)" title="已購買" aria-label="已購買">

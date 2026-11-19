@@ -1040,7 +1040,7 @@ function renderInbox() {
         <span class="ii-date">${inboxEsc(e.date || '')}</span>
         <span class="ii-main">
           <span class="ii-name">${inboxEsc(e.name || '（未命名）')}</span>
-          <span class="ii-miss${miss.length ? '' : ' ok'}">${miss.length ? '還缺：' + miss.join('、') : '✓ 可以入檔'}</span>
+          <span class="ii-miss${miss.length ? '' : ' ok'}">${miss.length ? '還缺：' + miss.join('、') : '✅ 可以入檔'}</span>
         </span>
         <span class="ii-jpy">¥${(Number(e.jpy) || 0).toLocaleString()}</span>
         <span class="ii-arrow">›</span>

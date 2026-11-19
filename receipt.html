@@ -593,7 +593,7 @@ function renderHistory() {
             </div>
             <div class="action-grid">
                 <button class="act-btn copy" onclick="copyText(${idx})">📋 複製 Excel</button>
-                <button class="act-btn send" onclick="sendToKakeibo(${idx})">${rec.sentToKakeibo ? '✓ 已送・再送' : '📥 送記帳暫存'}</button>
+                <button class="act-btn send" onclick="sendToKakeibo(${idx})">${rec.sentToKakeibo ? '✅ 已送・再送' : '📥 送記帳暫存'}</button>
                 <button class="act-btn del" onclick="deleteRec(${idx})">🗑 刪除</button>
             </div>
         </div>
