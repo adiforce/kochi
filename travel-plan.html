@@ -441,6 +441,18 @@
   .vs-label{font-size:.76rem;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;color:var(--pink-dark);margin:12px 0 3px;}
   .vs-rec{margin:2px 0 6px;padding-left:18px;font-size:.86rem;line-height:1.55;}
   .vs-notes{font-size:.85rem;line-height:1.65;opacity:.85;}
+  .vs-near-list{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
+  .vs-near{
+    display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+    padding:8px 10px;border:1.5px solid var(--border);border-radius:12px;
+    background:var(--cream);color:var(--brown);font:inherit;cursor:pointer;
+  }
+  .vs-near:active{transform:scale(.98);}
+  .vs-near-ic{font-size:1.15rem;line-height:1;}
+  .vs-near-name{flex:1;min-width:0;font-size:.86rem;font-weight:700;line-height:1.35;}
+  .vs-near-name small,.vs-near-dist small{display:block;font-size:.7rem;font-weight:400;opacity:.6;}
+  .vs-near-dist{font-size:.8rem;font-weight:700;color:var(--pink-dark);text-align:right;white-space:nowrap;}
+  .vs-near-none{font-size:.82rem;opacity:.6;}
   .vs-map{
     display:block;margin-top:14px;padding:10px;text-align:center;
     font-weight:700;font-size:.9rem;text-decoration:none;
@@ -660,6 +672,7 @@
 <meta name="theme-color" content="#2f6fb3">
 </head>
 <body>
+<script src="doodle-icons.js"></script>
 <svg class="doodle-defs" aria-hidden="true" focusable="false"><defs><filter id="crayon" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
 
 <div class="sticky-top">
@@ -1679,7 +1692,32 @@ function venueSheetHTML(d){
     ${d.access ? `<div class="vs-line">🚶 ${escapeHTML(d.access)}</div>` : ''}
     ${(d.rec && d.rec.length) ? `<div class="vs-label">推薦品項／亮點</div><ul class="vs-rec">${d.rec.map(r => `<li>${escapeHTML(r)}</li>`).join('')}</ul>` : ''}
     ${d.notes ? `<div class="vs-label">評論觀察／備註</div><div class="vs-notes">${escapeHTML(d.notes)}</div>` : ''}
+    ${vsNearbyHTML(d)}
     <a class="vs-map" href="${vsMapUrl(d)}" target="_blank" rel="noopener">📍 在 Google Map 開啟</a>`;
+}
+
+function vsDistance(a, b){
+  const R = 6371000, r = x => x * Math.PI / 180;
+  const dLat = r(b.lat - a.lat), dLng = r(b.lng - a.lng);
+  const s = Math.sin(dLat / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
+}
+function vsNearbyHTML(d){
+  if(d.lat == null || d.lng == null) return '';
+  const near = DATA
+    .filter(x => x !== d && x.lat != null && x.lng != null)
+    .map(x => ({ x, m: vsDistance(d, x) }))
+    .filter(o => o.m <= 1000)
+    .sort((a, b) => a.m - b.m)
+    .slice(0, 8);
+  const items = near.length
+    ? near.map(o => `<button type="button" class="vs-near" data-vi="${DATA.indexOf(o.x)}">
+        <span class="vs-near-ic">${vsIcon(o.x)}</span>
+        <span class="vs-near-name">${escapeHTML(o.x.jp || o.x.name)}<small>${escapeHTML(o.x.cat || '')}</small></span>
+        <span class="vs-near-dist">${o.m < 100 ? '<100' : Math.round(o.m / 10) * 10} m<small>步行約 ${Math.max(1, Math.round(o.m / 80))} 分</small></span>
+      </button>`).join('')
+    : '<div class="vs-near-none">1 公里內沒有清單上的其他地點</div>';
+  return `<div class="vs-label">📍 附近 1 公里內</div><div class="vs-near-list">${items}</div>`;
 }
 
 let vsOverlay = null, vsBody = null, vsHistory = false;
@@ -1698,6 +1736,8 @@ function ensureVenueSheet(){
     if(e.target === vsOverlay || e.target.closest('.vsheet-close')) closeVenueSheet();
     const c = e.target.closest('.vs-copy');
     if(c) vsCopy(c.dataset.copy);
+    const n = e.target.closest('.vs-near');
+    if(n && DATA[+n.dataset.vi]) openVenueSheet(DATA[+n.dataset.vi]);
   });
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && vsOverlay.classList.contains('open')) closeVenueSheet(); });
   // 手機按返回鍵＝關閉卡片
