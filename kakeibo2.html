@@ -503,6 +503,7 @@
 <meta name="theme-color" content="#2f6fb3">
 </head>
 <body>
+<script src="doodle-icons.js"></script>
 <header>
   <div class="logo">🇯🇵 家計簿<span>Japan Trip</span></div>
   <button class="lock-icon-btn" id="lockIconBtn" onclick="openLockOverlay()" title="輸入密碼解鎖">🔒</button>
@@ -847,7 +848,7 @@ function renderRecords(data) {
     item.className = 'record-item';
     item.innerHTML = `
       <div class="rec-date">${dateStr}</div>
-      <div class="rec-cat">${r.category || ''}</div>
+      <div class="rec-cat">${(CATEGORIES.find(c => c.key === r.category) || {}).icon || ''} ${r.category || ''}</div>
       <div class="rec-main">
         <div class="rec-name">${r.chinese || ''}</div>
         ${extraStr}

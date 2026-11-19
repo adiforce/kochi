@@ -82,6 +82,23 @@
     thermo: '<path d="M10 4.5a2 2 0 0 1 4 0v9.2a4 4 0 1 1-4 0z" fill="#fff"/><path d="M12 8v8" stroke="#e06a4e" stroke-width="2"/><circle cx="12" cy="17" r="2.2" fill="#e06a4e" stroke="none"/>',
     umbrella: '<path d="M12 2.5v1M12 11.5v7a2 2 0 0 1-4 0"/><path d="M3 11.5a9 9 0 0 1 18 0c-1.2-1.2-3-1.2-4.5 0-1.2-1.2-3.3-1.2-4.5 0-1.2-1.2-3.3-1.2-4.5 0-1.5-1.2-3.3-1.2-4.5 0z" fill="#f6b8c4"/>',
     jpflag: '<rect x="2.5" y="5.5" width="19" height="13" rx="1.5" fill="#fff"/><circle cx="12" cy="12" r="3.6" fill="#e06a4e"/>',
+    // 家計簿
+    ferris: '<path d="M8.5 21L12 11.5 15.5 21M7 21h10"/><circle cx="12" cy="10" r="7" fill="#fff6e0"/><path d="M12 3v14M5 10h14M7 5l10 10M17 5L7 15" stroke-width="1"/><circle cx="12" cy="10" r="1.6" fill="#f6b8c4"/><circle cx="12" cy="3" r="1.4" fill="#e06a4e"/><circle cx="19" cy="10" r="1.4" fill="#ffd977"/><circle cx="5" cy="10" r="1.4" fill="#9cc7ea"/><circle cx="12" cy="17" r="1.4" fill="#7bbf6a"/>',
+    gift: '<rect x="4" y="10" width="16" height="11" rx="1.5" fill="#f6b8c4"/><rect x="3" y="7" width="18" height="4" rx="1" fill="#f6b8c4"/><path d="M12 7v14" stroke="#e06a4e" stroke-width="2.2"/><path d="M12 7c-1.5-3-5-4-5-1.5S10 7 12 7zM12 7c1.5-3 5-4 5-1.5S14 7 12 7z" fill="#ffd977"/>',
+    lock: '<path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="#ffd977"/><circle cx="12" cy="14.8" r="1.4" fill="#3b4a63"/><path d="M12 15.5v2"/>',
+    unlock: '<path d="M8 10.5V8a4 4 0 0 1 7.6-1.7"/><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="#a8d59a"/><circle cx="12" cy="14.8" r="1.4" fill="#3b4a63"/><path d="M12 15.5v2"/>',
+    cross: '<rect x="3.5" y="3.5" width="17" height="17" rx="4" fill="#e06a4e"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4"/>',
+    pencil: '<path d="M4 20l1-4.5L15.5 5a2.1 2.1 0 0 1 3 0l.5.5a2.1 2.1 0 0 1 0 3L8.5 19z" fill="#ffd977"/><path d="M14 6.5l3.5 3.5"/><path d="M4 20l1-4.5 3.5 3.5z" fill="#f3e6c8"/>',
+    clipboard: '<rect x="5" y="4.5" width="14" height="17" rx="2" fill="#f3e6c8"/><rect x="9" y="3" width="6" height="3.5" rx="1" fill="#9cc7ea"/><path d="M8 11h8M8 14.5h8M8 18h5" stroke-width="1.2"/>',
+    penguin: '<path d="M8.5 21h2.5M13 21h2.5" stroke="#f2a65a" stroke-width="1.8"/><ellipse cx="12" cy="12.5" rx="6.5" ry="8" fill="#3b4a63"/><ellipse cx="12" cy="14.3" rx="4.3" ry="5.6" fill="#fff" stroke="none"/><circle cx="10" cy="8.6" r="1" fill="#fff" stroke="none"/><circle cx="14" cy="8.6" r="1" fill="#fff" stroke="none"/><path d="M10.8 10.4h2.4L12 12z" fill="#f2a65a" stroke-width="1"/>',
+    card: '<rect x="3" y="5.5" width="18" height="13" rx="2.2" fill="#9cc7ea"/><path d="M3 9.5h18" stroke-width="2.6"/><rect x="6" y="13" width="5" height="2.5" rx=".6" fill="#ffd977" stroke-width="1"/>',
+    greenheart: '<path d="M12 20s-8-4.8-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.2 12 20 12 20z" fill="#7bbf6a"/>',
+    yen: '<rect x="2.5" y="6" width="19" height="12" rx="1.8" fill="#f3e6c8"/><path d="M5 9v6M19 9v6" stroke-width="1"/><circle cx="12" cy="12" r="3.6" fill="#fff" stroke-width="1.2"/><path d="M10.5 10.3l1.5 2 1.5-2M12 12.3v2.5M10.6 12.9h2.8" stroke-width="1.1"/>',
+    bear: '<circle cx="6.5" cy="6.5" r="2.6" fill="#c0704f"/><circle cx="17.5" cy="6.5" r="2.6" fill="#c0704f"/><circle cx="12" cy="13" r="7.5" fill="#c0704f"/><ellipse cx="12" cy="15.5" rx="3" ry="2.3" fill="#f3e6c8" stroke-width="1.1"/><circle cx="9.3" cy="11.5" r=".85" fill="#3b4a63" stroke="none"/><circle cx="14.7" cy="11.5" r=".85" fill="#3b4a63" stroke="none"/><circle cx="12" cy="14.7" r=".8" fill="#3b4a63" stroke="none"/>',
+    reddot: '<circle cx="12" cy="12" r="7.5" fill="#e06a4e"/>',
+    yellowdot: '<circle cx="12" cy="12" r="7.5" fill="#ffd977"/>',
+    bluesq: '<rect x="4.5" y="4.5" width="15" height="15" rx="3" fill="#5b9bd5"/>',
+    plus: '<path d="M12 5v14M5 12h14" stroke-width="2.6"/>',
     // 天氣
     sun: SUN,
     suncloud: `<g transform="translate(-3 -3) scale(.78)">${SUN}</g><path transform="translate(4.5 4) scale(.8)" d="${CLOUD}" fill="#fff"/>`,
@@ -106,6 +123,8 @@
     '⚠':'warn','💡':'bulb','💎':'gem','🍁':'maple','⏰':'alarm','🕐':'clock','⏭':'next','🏁':'finish','🔎':'search','🔍':'search',
     '✅':'check','📄':'doc','📞':'phone','✨':'sparkle','💰':'money','ℹ':'info','🗓':'calendar','📅':'calendar','🌡':'thermo','☔':'umbrella',
     '🇯🇵':'jpflag',
+    '🎡':'ferris','🎁':'gift','🔒':'lock','🔓':'unlock','❌':'cross','✏':'pencil','📋':'clipboard','🐧':'penguin','💳':'card',
+    '💚':'greenheart','💴':'yen','🐻':'bear','🔴':'reddot','🟡':'yellowdot','🟦':'bluesq','➕':'plus',
     '☀':'sun','🌤':'suncloud','⛅':'partcloud','☁':'cloud','🌫':'fog','🌦':'sunrain','🌧':'rain','🌨':'snow','❄':'snowflake','⛈':'storm'
   };
 
