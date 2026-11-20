@@ -106,30 +106,35 @@
     + '<symbol id="rm-wave" viewBox="0 0 40 56" overflow="visible"><g stroke-width="3">' + BODY + ARM_WAVE + '<use href="#rm-headg"/></g></symbol>'
     + '<symbol id="rm-point" viewBox="0 0 40 56" overflow="visible"><g stroke-width="3">' + BODY + ARM_POINT + '<use href="#rm-headg"/></g></symbol>'
     + '<symbol id="rm-yuzu" viewBox="0 0 40 56" overflow="visible"><g stroke-width="3">' + BODY + ARM_YUZU + '<use href="#rm-headg"/></g></symbol>'
+    + '<symbol id="rm-yuzu-bust" viewBox="0 0 40 56" overflow="visible"><g stroke-width="3"><path d="M9.2 54c.2-9 .9-16.4 3.5-20.6 2-1.4 4.6-1.9 7.3-1.9s5.3.5 7.3 1.9c2.6 4.2 3.3 11.6 3.5 20.6z" fill="#4a5a7a"/><path d="M16.8 34.2l3.2 5.6 3.2-5.6" fill="none" stroke-width="2.2"/>' + ARM_YUZU + '<use href="#rm-headg"/></g></symbol>'
     + '<symbol id="rm-head" viewBox="0 0 40 40" overflow="visible"><g stroke-width="3"><use href="#rm-headg"/></g></symbol>'
     + '</defs></svg>';
 
   // 右下角導覽：龍馬從一本攤開的大書裡冒出來（書固定，龍馬上下飄）
-  const BOOK_FAB = '<svg class="rg-body" viewBox="0 0 66 72" aria-hidden="true" focusable="false"><g filter="url(#rg-crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
-    + '<path d="M8 13l1.6-3.4L11.2 13l-1.6 3.4zM55 9l1.3-2.8L57.6 9l-1.3 2.8zM58 26l1-2.2 1 2.2-1 2.2z" fill="#ffd977" stroke-width="1.4"/>'
-    + '<path d="M5 50c9-5 19-5 28 0 9-5 19-5 28 0" fill="#e8ecf2"/>'
-    + '<g class="rg-rise"><use href="#rm-yuzu" x="15" y="5" width="34" height="47.6"/></g>'
-    + '<path d="M2 55c10-6 21-6 31 0 10-6 21-6 31 0v14c-10-6-21-6-31 0-10-6-21-6-31 0z" fill="#2f6fb3"/>'
-    + '<path d="M5 53c9-5 19-5 28 1v12c-9-5.5-19-5.5-28-.5z" fill="#fffdf6"/><path d="M61 53c-9-5-19-5-28 1v12c9-5.5 19-5.5 28-.5z" fill="#fffdf6"/>'
-    + '<path d="M10 58c6-2.5 12-2.5 18 0M10 62c6-2.5 12-2.5 18 0M38 58c6-2.5 12-2.5 18 0M38 62c6-2.5 12-2.5 18 0" fill="none" stroke="#b9c2cf" stroke-width="1.3"/>'
+  const BOOK_FAB = '<svg class="rg-body" viewBox="4 24 58 48" aria-hidden="true" focusable="false"><g filter="url(#rg-crayon)" stroke="#3b4a63" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
+    + '<path d="M9 34l1.3-2.8 1.3 2.8-1.3 2.8zM55 30l1.1-2.4 1.1 2.4-1.1 2.4zM57 44l.9-1.9.9 1.9-.9 1.9z" fill="#ffd977" stroke-width="1.2"/>'
+    + '<g class="rg-rise"><use href="#rm-yuzu-bust" x="17" y="24" width="31" height="43.4"/></g>'
+    // 封面（左右露出一點邊）
+    + '<path d="M10.5 59.5c7.5-3 15-3 22.5 1.2 7.5-4.2 15-4.2 22.5-1.2v8.3c-7.5-2.8-15-2.8-22.5 1.4-7.5-4.2-15-4.2-22.5-1.4z" fill="#2f6fb3"/>'
+    // 書頁厚度
+    + '<path d="M12.5 58.2c6.8-2.6 13.6-2.4 20.5 1.4v7.2c-6.9-3.6-13.7-3.8-20.5-1.4zM53.5 58.2c-6.8-2.6-13.6-2.4-20.5 1.4v7.2c6.9-3.6 13.7-3.8 20.5-1.4z" fill="#f3ead6" stroke-width="1.4"/>'
+    // 最上面那頁，從外側往書脊彎下去
+    + '<path d="M12.5 57.4c4-3.6 13-4.4 20.5.2v6c-6.9-3.4-14-3.4-20.5-.6zM53.5 57.4c-4-3.6-13-4.4-20.5.2v6c6.9-3.4 14-3.4 20.5-.6z" fill="#fffdf6" stroke-width="1.5"/>'
+    + '<path d="M16 58.6c4-1.4 8.5-1.4 13 .4M16 61c4-1.4 8.5-1.4 13 .4M37 59c4.5-1.8 9-1.8 13-.4M37 61.4c4.5-1.8 9-1.8 13-.4" fill="none" stroke="#b9c2cf" stroke-width="1"/>'
+    + '<path d="M33 57.6v11.2" fill="none" stroke-width="1.5"/>'
     + '</g></svg>';
   function art(sym, cls) {
     return '<svg class="' + cls + '" viewBox="0 0 40 56" aria-hidden="true" focusable="false"><g filter="url(#rg-crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#' + sym + '"/></g></svg>';
   }
 
   const CSS = `
-  .rg-fab{position:fixed;right:8px;bottom:calc(var(--rg-bottom,14px) + env(safe-area-inset-bottom));z-index:60;width:62px;height:68px;padding:0;border:none;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-  .rg-fab .rg-body{width:62px;height:68px;overflow:visible;filter:drop-shadow(0 3px 3px rgba(59,74,99,.18));}
+  .rg-fab{position:fixed;right:8px;bottom:calc(var(--rg-bottom,14px) + env(safe-area-inset-bottom));z-index:60;width:58px;height:48px;padding:0;border:none;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .rg-fab .rg-body{width:58px;height:48px;overflow:visible;filter:drop-shadow(0 3px 3px rgba(59,74,99,.18));}
   .rg-fab .rg-rise{animation:rg-rise 2.8s ease-in-out infinite;}
   @keyframes rg-rise{0%,100%{transform:translateY(1px);}50%{transform:translateY(-5px);}}
-  .rg-pop{position:fixed;right:12px;bottom:calc(var(--rg-bottom,14px) + 76px + env(safe-area-inset-bottom));z-index:61;width:min(260px,calc(100vw - 24px));padding:10px 12px 8px;border:2px solid #3b4a63;border-radius:14px 14px 4px 14px;background:#fff6e0;color:#3b4a63;font-size:13px;line-height:1.65;box-shadow:0 6px 18px rgba(59,74,99,.18);opacity:0;transform:translateY(6px) scale(.97);transform-origin:100% 100%;pointer-events:none;transition:opacity .18s,transform .18s;}
+  .rg-pop{position:fixed;right:12px;bottom:calc(var(--rg-bottom,14px) + 58px + env(safe-area-inset-bottom));z-index:61;width:min(260px,calc(100vw - 24px));padding:10px 12px 8px;border:2px solid #3b4a63;border-radius:14px 14px 4px 14px;background:#fff6e0;color:#3b4a63;font-size:13px;line-height:1.65;box-shadow:0 6px 18px rgba(59,74,99,.18);opacity:0;transform:translateY(6px) scale(.97);transform-origin:100% 100%;pointer-events:none;transition:opacity .18s,transform .18s;}
   .rg-pop.show{opacity:1;transform:none;pointer-events:auto;}
-  .rg-pop::after{content:'';position:absolute;right:26px;bottom:-9px;width:14px;height:14px;background:#fff6e0;border-right:2px solid #3b4a63;border-bottom:2px solid #3b4a63;transform:rotate(45deg);}
+  .rg-pop::after{content:'';position:absolute;right:22px;bottom:-9px;width:14px;height:14px;background:#fff6e0;border-right:2px solid #3b4a63;border-bottom:2px solid #3b4a63;transform:rotate(45deg);}
   .rg-who{font-size:11px;font-weight:700;opacity:.55;margin-bottom:2px;}
   .rg-foot{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:11.5px;}
   .rg-count{flex:1;opacity:.5;}
