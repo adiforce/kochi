@@ -52,8 +52,10 @@
             display: block;
             height: 3px;
             background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            position: relative;
-            z-index: 1;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 150;
+            pointer-events: none;
         }
 
         .container {

@@ -176,6 +176,8 @@
   .tag-x { background: #fdeeee; color: #a04040; }
   .scene-note { font-size: 10.5px; color: var(--muted); margin-top: 5px; line-height: 1.5; }
   .section-title { font-family: 'Zen Maru Gothic', sans-serif; font-size: 15px; font-weight: 900; color: var(--brown); margin: 18px 0 8px; }
+  /* 頂部裝飾線（與發票頁一致） */
+  .top-accent{position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#2f6fb3,transparent);z-index:150;pointer-events:none;}
 </style>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -184,6 +186,7 @@
 <meta name="theme-color" content="#2f6fb3">
 </head>
 <body>
+<div class="top-accent" aria-hidden="true"></div>
 <script src="doodle-icons.js"></script>
 <script src="ryoma-guide.js"></script>
 <div class="container">
