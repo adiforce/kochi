@@ -897,5 +897,26 @@
     ],
     "notes": "創業約50年的老字號洋食店，食べログ百名店（洋食WEST 2025）選出店；沙發座位舒適，適合想換口味不吃海鮮的時候",
     "wasFilled": true
+  },
+  {
+    "name": "Toyo Denka Central Park",
+    "jp": "東洋電化中央公園",
+    "type": "spot",
+    "cat": "公園／活動廣場",
+    "img": "",
+    "gRating": null,
+    "gReviews": null,
+    "tRating": null,
+    "tReviews": null,
+    "lat": 33.5605,
+    "lng": 133.5404,
+    "price": "免費",
+    "hours": "全天開放",
+    "addr": "高知県高知市帯屋町1丁目11-27",
+    "mapAddr": "高知県高知市帯屋町1丁目11-27",
+    "access": "路面電車「堀詰」電停步行約4分；東橫INN高知旁",
+    "rec": [],
+    "notes": "高知市中央公園（東洋電化為冠名）；11/28-29 よさこい高知文化祭「心踊る、文化咲く」フェスティバル會場。地下有收費停車場。座標由國土地理院門牌定位",
+    "wasFilled": false
   }
 ]

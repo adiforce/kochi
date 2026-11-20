@@ -691,6 +691,21 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#2f6fb3">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  /* ===== 📍 小地圖 ===== */
+  .mm-title{font-weight:700;font-size:1.02rem;padding-right:40px;}
+  .mm-sub{font-size:.8rem;opacity:.65;margin-top:2px;padding-right:40px;}
+  #miniMap{height:min(46vh,340px);border-radius:14px;border:1.5px solid var(--border);margin-top:10px;z-index:0;}
+  .mm-actions{display:flex;gap:8px;margin-top:12px;}
+  .mm-actions a{flex:1;text-align:center;padding:10px 4px;border-radius:12px;font-weight:700;font-size:.84rem;text-decoration:none;
+    border:1.5px solid var(--pink-dark);color:var(--pink-dark);background:#fff;}
+  .mm-actions a.primary{background:var(--pink-dark);color:#fff;}
+  .mm-pin{width:40px;height:40px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;
+    justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);}
+  .mm-pin i{transform:rotate(45deg);font-style:normal;font-size:20px;line-height:1;}
+</style>
 </head>
 <body>
 <div class="top-accent" aria-hidden="true"></div>
@@ -1818,6 +1833,15 @@ function initDetailToggles(){
 
     if(venue.lat && venue.lng){
       a.href = `https://www.google.com/maps/search/?api=1&query=${venue.lat},${venue.lng}`;
+      // 有座標：先開小地圖；Leaflet 沒載入（離線且沒快取）就照舊開 Google Maps
+      if(!a.dataset.mm){
+        a.dataset.mm = '1';
+        a.addEventListener('click', e => {
+          if(typeof L === 'undefined') return;
+          e.preventDefault();
+          openMiniMap(venue);
+        });
+      }
     }
 
     const stopMain = a.closest('.stop-top')?.querySelector('.stop-main');
@@ -1830,6 +1854,85 @@ function initDetailToggles(){
     btn.addEventListener('click', () => openVenueSheet(venue));
     stopMain.appendChild(btn);
   });
+}
+
+
+// ===== 📍 小地圖（Leaflet + OpenStreetMap） =====
+const MM_STYLE = {
+  food:{color:'#e8833a',icon:'🍜'}, teacake:{color:'#e46a9a',icon:'🍡'}, shop:{color:'#8a5cc7',icon:'🛍️'},
+  sight:{color:'#3a9a5b',icon:'⛰️'}, spot:{color:'#1f9aa8',icon:'⛩️'}, hotel:{color:'#2f6fb3',icon:'🏨'},
+  rentacar:{color:'#6b7785',icon:'🚗'}
+};
+let mmOverlay = null, mmMap = null, mmMain = null, mmDots = null, mmHistory = false;
+
+function ensureMiniMap(){
+  if(mmOverlay) return;
+  mmOverlay = document.createElement('div');
+  mmOverlay.className = 'vsheet-overlay';
+  mmOverlay.innerHTML = `<div class="vsheet" role="dialog" aria-modal="true" aria-label="地圖">
+      <div class="vsheet-grip"></div>
+      <button class="vsheet-close" type="button" aria-label="關閉">✕</button>
+      <div class="mm-title"></div><div class="mm-sub"></div>
+      <div id="miniMap"></div>
+      <div class="mm-actions"></div>
+    </div>`;
+  document.body.appendChild(mmOverlay);
+  mmOverlay.addEventListener('click', e => {
+    if(e.target === mmOverlay || e.target.closest('.vsheet-close')) closeMiniMap();
+  });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && mmOverlay.classList.contains('open')) closeMiniMap(); });
+  window.addEventListener('popstate', () => {
+    if(mmHistory){ mmHistory = false; hideMiniMap(); }
+  });
+}
+
+function openMiniMap(d){
+  ensureMiniMap();
+  mmOverlay.querySelector('.mm-title').textContent = d.jp || d.name;
+  mmOverlay.querySelector('.mm-sub').textContent = [d.cat, d.hours].filter(Boolean).join('・');
+  const nav = `https://www.google.com/maps/dir/?api=1&destination=${d.lat},${d.lng}`;
+  const gm = `https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}`;
+  const list = `travel-list.html?focus=${encodeURIComponent(d.jp || d.name)}`;
+  mmOverlay.querySelector('.mm-actions').innerHTML =
+    `<a class="primary" href="${nav}" target="_blank" rel="noopener">🧭 導航</a>` +
+    `<a href="${gm}" target="_blank" rel="noopener">🗺️ Google Maps</a>` +
+    `<a href="${list}">📋 看附近</a>`;
+  mmOverlay.classList.add('open');
+  document.body.classList.add('vsheet-lock');
+  if(!mmHistory){
+    try { history.pushState({ minimap: 1 }, '', location.href); mmHistory = true; } catch(e) {}
+  }
+  const ll = [d.lat, d.lng];
+  if(!mmMap){
+    mmMap = L.map('miniMap', {zoomControl:true, attributionControl:true}).setView(ll, 16);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+    }).addTo(mmMap);
+    mmDots = L.layerGroup().addTo(mmMap);
+    DATA.forEach(v => {
+      if(v.lat == null || v.lng == null) return;
+      const st = MM_STYLE[v.type] || {color:'#888'};
+      L.circleMarker([v.lat, v.lng], {radius:6, color:'#fff', weight:2, fillColor:st.color, fillOpacity:.9})
+        .bindTooltip(v.jp || v.name, {direction:'top'}).addTo(mmDots);
+    });
+  }
+  const st = MM_STYLE[d.type] || {color:'#888', icon:'📍'};
+  const icon = L.divIcon({className:'', html:`<div class="mm-pin" style="background:${st.color}"><i>${st.icon}</i></div>`,
+    iconSize:[40,40], iconAnchor:[20,48]});
+  if(mmMain) mmMain.setLatLng(ll).setIcon(icon);
+  else mmMain = L.marker(ll, {icon, zIndexOffset:1000}).addTo(mmMap);
+  // 等滑出動畫結束再算尺寸，不然地圖會缺一塊
+  setTimeout(() => { mmMap.invalidateSize(); mmMap.setView(ll, 16); }, 280);
+}
+function hideMiniMap(){
+  if(!mmOverlay) return;
+  mmOverlay.classList.remove('open');
+  document.body.classList.remove('vsheet-lock');
+}
+function closeMiniMap(){
+  if(mmHistory){ history.back(); }
+  else hideMiniMap();
 }
 
 function initScheduleLabels(){

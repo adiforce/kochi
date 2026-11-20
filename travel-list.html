@@ -498,6 +498,21 @@
   .pin.big i{font-size:21px;}
   .legend-dot{width:12px;height:12px;border-radius:50%;display:inline-block;}
   .me-dot{width:16px;height:16px;border-radius:50%;background:#1a73e8;border:3px solid #fff;box-shadow:0 0 0 6px rgba(26,115,232,.25);}
+  .map-nearby{margin-top:10px;background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:10px 12px;}
+  .mn-head{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.88rem;}
+  .mn-head .mn-title{flex:1;}
+  .mn-close{cursor:pointer;opacity:.6;padding:2px 6px;}
+  .mn-list{list-style:none;margin:8px 0 0;padding:0;}
+  .mn-list li{display:flex;align-items:center;gap:8px;padding:8px 4px;border-top:1px dashed var(--border);cursor:pointer;font-size:.84rem;}
+  .mn-list li:active{background:var(--cream);}
+  .mn-dist{min-width:52px;font-weight:700;color:var(--pink-dark);font-size:.78rem;}
+  .mn-name{flex:1;}
+  .mn-cat{font-size:.72rem;opacity:.6;}
+  .mn-empty{font-size:.8rem;opacity:.6;margin-top:6px;}
+  .back-map-fab{position:fixed;left:16px;bottom:calc(20px + env(safe-area-inset-bottom));z-index:900;background:var(--pink-dark);color:#fff;border:none;
+    border-radius:999px;padding:11px 16px;font-weight:700;font-size:.88rem;box-shadow:0 4px 14px rgba(0,0,0,.25);
+    font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;display:none;}
+  .back-map-fab.show{display:block;}
   .leaflet-popup-content{font-family:'Noto Sans TC',sans-serif;margin:10px 12px;min-width:180px;}
   .pop-title{font-weight:700;font-size:.95rem;color:var(--brown);}
   .pop-sub{font-size:.78rem;opacity:.7;margin-top:2px;}
@@ -558,7 +573,9 @@
     <button class="map-tool" onclick="showMe()">📍 我的位置</button>
   </div>
   <div class="map-legend" id="mapLegend"></div>
+  <div class="map-nearby" id="mapNearby" style="display:none;"></div>
 </div>
+<button class="back-map-fab" id="backMapFab" onclick="backToMap()">🗺️ 回地圖</button>
 <div class="empty" id="empty" style="display:none;">沒有符合的結果</div>
 
 <footer>資料整理自 Google Maps 清單備註 + 食べログ / 官方網站公開資訊，僅供旅遊參考，實際營業時間請以現場公告為準。</footer>
@@ -874,7 +891,16 @@ async function loadData(){
   render();
   let savedView = 'list';
   try { savedView = localStorage.getItem('kochiListView') || 'list'; } catch(e) {}
-  if(savedView === 'map' && !q) setView('map');
+  const focus = params.get('focus');
+  const fIdx = focus ? DATA.findIndex(d => d.jp === focus || d.name === focus) : -1;
+  if(fIdx >= 0){
+    // 從行程表「在地點清單看附近」過來：直接開地圖定位到那個點
+    setView('map');
+    focusPoint(fIdx);
+    const backWrap = document.getElementById('backToPlan');
+    backWrap.style.display = 'block';
+    backWrap.innerHTML = `<a class="back-to-plan" href="travel-plan.html">← 返回行程表</a>`;
+  } else if(savedView === 'map' && !q) setView('map');
 }
 // ===== 地圖模式（Leaflet + OpenStreetMap） =====
 const PIN_STYLE = {
@@ -888,6 +914,8 @@ const PIN_STYLE = {
 };
 const KOCHI_CITY = [33.5610, 133.5370];
 let map = null, markerLayer = null, meMarker = null, currentView = 'list', lastFiltered = [];
+let markerByIdx = {}, nearCircle = null, nearFocusIdx = null, lastMapFocus = null;
+const NEAR_RADIUS = 2000;
 
 function pinIcon(type){
   const st = PIN_STYLE[type] || {color:'#888', icon:'📍'};
@@ -933,6 +961,7 @@ function updateMap(filtered){
   lastFiltered = filtered;
   if(!map || currentView !== 'map') return;
   markerLayer.clearLayers();
+  markerByIdx = {};
   const seen = {};
   filtered.forEach(item => {
     if(item.lat == null || item.lng == null) return;
@@ -941,10 +970,17 @@ function updateMap(filtered){
     const key = item.lat.toFixed(4) + ',' + item.lng.toFixed(4);
     const n = seen[key] = (seen[key] || 0) + 1;
     const off = (n - 1) * 0.0005;
-    L.marker([item.lat + off, item.lng + off], {icon: pinIcon(item.type), zIndexOffset: item.type==='hotel'?1000:0})
+    const mk = L.marker([item.lat + off, item.lng + off], {icon: pinIcon(item.type), zIndexOffset: item.type==='hotel'?1000:0})
       .bindPopup(popupHTML(item, idx), {autoPanPaddingTopLeft:[50,20], autoPanPaddingBottomRight:[20,20]})
+      .on('click', () => showNearby(idx))
       .addTo(markerLayer);
+    markerByIdx[idx] = mk;
   });
+  // 篩選改變後，附近清單跟著重算；焦點點被篩掉就收起
+  if(nearFocusIdx != null){
+    if(markerByIdx[nearFocusIdx]) showNearby(nearFocusIdx);
+    else closeNearby();
+  }
 }
 
 function fitAll(){
@@ -967,15 +1003,66 @@ function showMe(){
   }, () => showCopyToast('無法取得位置，請確認定位權限'), { enableHighAccuracy: true, timeout: 10000 });
 }
 
+function showNearby(idx){
+  const item = DATA[idx];
+  if(!item || item.lat == null) return;
+  nearFocusIdx = idx;
+  const results = lastFiltered
+    .filter(d => d !== item && d.lat != null && d.lng != null)
+    .map(d => ({ d, idx: DATA.indexOf(d), dist: haversine(item.lat, item.lng, d.lat, d.lng) }))
+    .filter(x => x.dist <= NEAR_RADIUS)
+    .sort((a, b) => a.dist - b.dist);
+  if(nearCircle) nearCircle.setLatLng([item.lat, item.lng]);
+  else nearCircle = L.circle([item.lat, item.lng], {radius: NEAR_RADIUS, color:'#2f6fb3', weight:1.5, fillOpacity:.06, interactive:false}).addTo(map);
+  const fmt = m => m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
+  const panel = document.getElementById('mapNearby');
+  panel.style.display = 'block';
+  panel.innerHTML = `<div class="mn-head"><span class="mn-title">📍 ${escapeHTML(item.jp || item.name)} 附近 2km（${results.length}）</span><span class="mn-close" onclick="closeNearby()">✕</span></div>` +
+    (results.length
+      ? `<ul class="mn-list">${results.map(r => `<li onclick="focusPoint(${r.idx})"><span class="mn-dist">${fmt(r.dist)}</span><span>${(PIN_STYLE[r.d.type]||{}).icon||'📍'}</span><span class="mn-name">${escapeHTML(r.d.jp || r.d.name)}</span><span class="mn-cat">${escapeHTML(r.d.cat||'')}</span></li>`).join('')}</ul>`
+      : `<div class="mn-empty">2km 內沒有其他${document.querySelector('.filter-btn.active')?.dataset.type==='all'?'':'同分類的'}地點</div>`);
+}
+
+function closeNearby(){
+  nearFocusIdx = null;
+  if(nearCircle){ map.removeLayer(nearCircle); nearCircle = null; }
+  const panel = document.getElementById('mapNearby');
+  panel.style.display = 'none';
+  panel.innerHTML = '';
+}
+
+// 移到某個點：打開小卡＋附近清單（被篩選擋掉就先切回「全部」）
+function focusPoint(idx){
+  if(!markerByIdx[idx]){
+    document.getElementById('search').value = '';
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.type === 'all'));
+    render();
+  }
+  const mk = markerByIdx[idx];
+  if(!mk) return;
+  map.setView(mk.getLatLng(), Math.max(map.getZoom(), 15));
+  mk.openPopup();
+  showNearby(idx);
+  document.getElementById('map').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
 function openCardFromMap(idx){
+  lastMapFocus = idx;
   setView('list');
   scrollToCard(idx);
+  document.getElementById('backMapFab').classList.add('show');
+}
+
+function backToMap(){
+  setView('map');
+  if(lastMapFocus != null) focusPoint(lastMapFocus);
 }
 
 function setView(v){
   currentView = v;
   document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === v));
   const isMap = v === 'map';
+  if(isMap) document.getElementById('backMapFab').classList.remove('show');
   document.getElementById('grid').style.display = isMap ? 'none' : '';
   document.getElementById('mapWrap').style.display = isMap ? 'block' : 'none';
   if(isMap) document.getElementById('empty').style.display = 'none';
