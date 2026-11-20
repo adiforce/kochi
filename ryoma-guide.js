@@ -109,16 +109,27 @@
     + '<symbol id="rm-head" viewBox="0 0 40 40" overflow="visible"><g stroke-width="3"><use href="#rm-headg"/></g></symbol>'
     + '</defs></svg>';
 
+  // 右下角導覽：龍馬從一本攤開的大書裡冒出來（書固定，龍馬上下飄）
+  const BOOK_FAB = '<svg class="rg-body" viewBox="0 0 66 72" aria-hidden="true" focusable="false"><g filter="url(#rg-crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+    + '<path d="M8 13l1.6-3.4L11.2 13l-1.6 3.4zM55 9l1.3-2.8L57.6 9l-1.3 2.8zM58 26l1-2.2 1 2.2-1 2.2z" fill="#ffd977" stroke-width="1.4"/>'
+    + '<path d="M5 50c9-5 19-5 28 0 9-5 19-5 28 0" fill="#e8ecf2"/>'
+    + '<g class="rg-rise"><use href="#rm-yuzu" x="15" y="5" width="34" height="47.6"/></g>'
+    + '<path d="M2 55c10-6 21-6 31 0 10-6 21-6 31 0v14c-10-6-21-6-31 0-10-6-21-6-31 0z" fill="#2f6fb3"/>'
+    + '<path d="M5 53c9-5 19-5 28 1v12c-9-5.5-19-5.5-28-.5z" fill="#fffdf6"/><path d="M61 53c-9-5-19-5-28 1v12c9-5.5 19-5.5 28-.5z" fill="#fffdf6"/>'
+    + '<path d="M10 58c6-2.5 12-2.5 18 0M10 62c6-2.5 12-2.5 18 0M38 58c6-2.5 12-2.5 18 0M38 62c6-2.5 12-2.5 18 0" fill="none" stroke="#b9c2cf" stroke-width="1.3"/>'
+    + '</g></svg>';
   function art(sym, cls) {
     return '<svg class="' + cls + '" viewBox="0 0 40 56" aria-hidden="true" focusable="false"><g filter="url(#rg-crayon)" stroke="#3b4a63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#' + sym + '"/></g></svg>';
   }
 
   const CSS = `
-  .rg-fab{position:fixed;right:10px;bottom:calc(var(--rg-bottom,14px) + env(safe-area-inset-bottom));z-index:60;width:46px;height:64px;padding:0;border:none;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-  .rg-fab .rg-body{width:46px;height:64px;overflow:visible;animation:rg-float 2.8s ease-in-out infinite;filter:drop-shadow(0 3px 3px rgba(59,74,99,.18));}
-  .rg-pop{position:fixed;right:12px;bottom:calc(var(--rg-bottom,14px) + 72px + env(safe-area-inset-bottom));z-index:61;width:min(260px,calc(100vw - 24px));padding:10px 12px 8px;border:2px solid #3b4a63;border-radius:14px 14px 4px 14px;background:#fff6e0;color:#3b4a63;font-size:13px;line-height:1.65;box-shadow:0 6px 18px rgba(59,74,99,.18);opacity:0;transform:translateY(6px) scale(.97);transform-origin:100% 100%;pointer-events:none;transition:opacity .18s,transform .18s;}
+  .rg-fab{position:fixed;right:8px;bottom:calc(var(--rg-bottom,14px) + env(safe-area-inset-bottom));z-index:60;width:62px;height:68px;padding:0;border:none;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .rg-fab .rg-body{width:62px;height:68px;overflow:visible;filter:drop-shadow(0 3px 3px rgba(59,74,99,.18));}
+  .rg-fab .rg-rise{animation:rg-rise 2.8s ease-in-out infinite;}
+  @keyframes rg-rise{0%,100%{transform:translateY(1px);}50%{transform:translateY(-5px);}}
+  .rg-pop{position:fixed;right:12px;bottom:calc(var(--rg-bottom,14px) + 76px + env(safe-area-inset-bottom));z-index:61;width:min(260px,calc(100vw - 24px));padding:10px 12px 8px;border:2px solid #3b4a63;border-radius:14px 14px 4px 14px;background:#fff6e0;color:#3b4a63;font-size:13px;line-height:1.65;box-shadow:0 6px 18px rgba(59,74,99,.18);opacity:0;transform:translateY(6px) scale(.97);transform-origin:100% 100%;pointer-events:none;transition:opacity .18s,transform .18s;}
   .rg-pop.show{opacity:1;transform:none;pointer-events:auto;}
-  .rg-pop::after{content:'';position:absolute;right:18px;bottom:-9px;width:14px;height:14px;background:#fff6e0;border-right:2px solid #3b4a63;border-bottom:2px solid #3b4a63;transform:rotate(45deg);}
+  .rg-pop::after{content:'';position:absolute;right:26px;bottom:-9px;width:14px;height:14px;background:#fff6e0;border-right:2px solid #3b4a63;border-bottom:2px solid #3b4a63;transform:rotate(45deg);}
   .rg-who{font-size:11px;font-weight:700;opacity:.55;margin-bottom:2px;}
   .rg-foot{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:11.5px;}
   .rg-count{flex:1;opacity:.5;}
@@ -129,7 +140,7 @@
   .rg-hint .rg-mini{width:30px;height:42px;flex-shrink:0;overflow:visible;animation:rg-float 2.8s ease-in-out infinite;}
   .rg-hint .rg-say{position:relative;flex:1;margin-bottom:14px;padding:6px 10px;border:1.5px solid #3b4a63;border-radius:12px 12px 12px 3px;background:#fff6e0;color:#3b4a63;font-size:12px;line-height:1.6;}
   @keyframes rg-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
-  @media (prefers-reduced-motion:reduce){.rg-fab .rg-body,.rg-hint .rg-mini{animation:none;}}
+  @media (prefers-reduced-motion:reduce){.rg-fab .rg-rise,.rg-hint .rg-mini{animation:none;}}
   @media print{.rg-fab,.rg-pop{display:none;}}
   `;
 
@@ -168,7 +179,7 @@
     fab.type = 'button';
     fab.className = 'rg-fab';
     fab.setAttribute('aria-label', '小龍馬說明這頁怎麼用');
-    fab.innerHTML = art('rm-yuzu', 'rg-body');
+    fab.innerHTML = BOOK_FAB;
     const pop = document.createElement('div');
     pop.className = 'rg-pop';
     pop.setAttribute('role', 'dialog');
