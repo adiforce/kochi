@@ -1,10 +1,12 @@
 /* 日本工具箱 Service Worker — 離線可用
  * 改了任何頁面後，把 VERSION 數字 +1，手機下次開啟就會抓新版。
  */
-const VERSION = 'v18';
+const VERSION = 'v19';
 const CORE_CACHE = `core-${VERSION}`;
 const RUNTIME_CACHE = 'runtime';        // 字型、圖片（跨版本保留）
 const RUNTIME_MAX = 200;                // 最多存幾個字型/圖片檔
+const TILE_CACHE = 'osm-tiles';     // 地圖圖磚（跨版本保留）
+const TILE_MAX = 600;                   // 最多存幾張圖磚
 const NET_TIMEOUT = 4000;               // 網路超過 4 秒沒回應就先用快取
 
 // 安裝時先整包存起來，沒逛過的頁面離線也能開
@@ -83,6 +85,18 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // 地圖元件（Leaflet）：存起來，離線也能開地圖
+  if (url.hostname === 'unpkg.com' && url.pathname.includes('/leaflet@')) {
+    event.respondWith(staleWhileRevalidate(req));
+    return;
+  }
+
+  // OSM 地圖圖磚：看過的區域存起來（另開快取，不擠掉字型）
+  if (url.hostname === 'tile.openstreetmap.org') {
+    event.respondWith(staleWhileRevalidate(req, TILE_CACHE, TILE_MAX));
+    return;
+  }
+
   // Google Fonts、外部圖片：有快取就直接用，順便背景更新
   if (/fonts\.(googleapis|gstatic)\.com$/.test(url.hostname) || req.destination === 'image') {
     event.respondWith(staleWhileRevalidate(req));
@@ -113,21 +127,21 @@ async function cacheFirst(req, cacheName) {
   return res;
 }
 
-async function staleWhileRevalidate(req) {
-  const cache = await caches.open(RUNTIME_CACHE);
+async function staleWhileRevalidate(req, cacheName = RUNTIME_CACHE, max = RUNTIME_MAX) {
+  const cache = await caches.open(cacheName);
   const cached = await cache.match(req);
   const network = fetch(req).then(res => {
     if (res && (res.ok || res.type === 'opaque')) {
-      cache.put(req, res.clone()).then(() => trimCache(cache));
+      cache.put(req, res.clone()).then(() => trimCache(cache, max));
     }
     return res;
   }).catch(() => null);
   return cached || (await network) || Response.error();
 }
 
-async function trimCache(cache) {
+async function trimCache(cache, max = RUNTIME_MAX) {
   const keys = await cache.keys();
-  for (let i = 0; i < keys.length - RUNTIME_MAX; i++) await cache.delete(keys[i]);
+  for (let i = 0; i < keys.length - max; i++) await cache.delete(keys[i]);
 }
 
 function stripSearch(req) {

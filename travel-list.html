@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root{
     --cream:#f3f5f8;
@@ -473,6 +475,37 @@
   }
   /* 頂部裝飾線（與發票頁一致） */
   .top-accent{position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#2f6fb3,transparent);z-index:150;pointer-events:none;}
+
+  /* ===== 列表／地圖切換 ===== */
+  .view-switch{max-width:960px;margin:12px auto 0;padding:0 18px;display:flex;gap:0;}
+  .view-btn{flex:1;border:1.5px solid var(--pink-dark);background:var(--white);color:var(--pink-dark);
+    font-family:'Zen Maru Gothic',sans-serif;font-weight:700;font-size:.88rem;padding:8px 0;cursor:pointer;}
+  .view-btn:first-child{border-radius:999px 0 0 999px;}
+  .view-btn:last-child{border-radius:0 999px 999px 0;border-left:none;}
+  .view-btn.active{background:var(--pink-dark);color:#fff;}
+  .map-wrap{max-width:960px;margin:12px auto 0;padding:0 18px;}
+  #map{height:calc(100vh - 290px);min-height:380px;border-radius:16px;border:1.5px solid var(--border);
+    box-shadow:0 4px 14px var(--shadow);z-index:0;}
+  .map-tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+  .map-tool{border:1.5px solid var(--border);background:var(--white);color:var(--brown);border-radius:999px;
+    font-size:.78rem;font-weight:700;padding:5px 12px;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;}
+  .map-legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:.76rem;opacity:.85;}
+  .map-legend span{display:inline-flex;align-items:center;gap:4px;}
+  .pin{width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;
+    justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);}
+  .pin i{transform:rotate(45deg);font-style:normal;font-size:17px;line-height:1;}
+  .pin.big{width:42px;height:42px;}
+  .pin.big i{font-size:21px;}
+  .legend-dot{width:12px;height:12px;border-radius:50%;display:inline-block;}
+  .me-dot{width:16px;height:16px;border-radius:50%;background:#1a73e8;border:3px solid #fff;box-shadow:0 0 0 6px rgba(26,115,232,.25);}
+  .leaflet-popup-content{font-family:'Noto Sans TC',sans-serif;margin:10px 12px;min-width:180px;}
+  .pop-title{font-weight:700;font-size:.95rem;color:var(--brown);}
+  .pop-sub{font-size:.78rem;opacity:.7;margin-top:2px;}
+  .pop-line{font-size:.78rem;margin-top:6px;color:var(--brown);}
+  .pop-actions{display:flex;gap:6px;margin-top:8px;}
+  .pop-actions a,.pop-actions button{flex:1;text-align:center;font-size:.76rem;font-weight:700;padding:6px 4px;border-radius:8px;
+    border:1.5px solid var(--pink-dark);background:#fff;color:var(--pink-dark);text-decoration:none;cursor:pointer;font-family:inherit;}
+  .pop-actions a.primary{background:var(--pink-dark);color:#fff;}
 </style>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -508,10 +541,24 @@
     <div id="nearMeList"></div>
   </div>
 </div>
+<div class="view-switch">
+  <button class="view-btn active" data-view="list" onclick="setView('list')">📋 列表</button>
+  <button class="view-btn" data-view="map" onclick="setView('map')">🗺️ 地圖</button>
+</div>
 <div class="filters" id="filters"></div>
 
 <div class="count" id="count"></div>
 <div class="grid" id="grid"></div>
+<div class="map-wrap" id="mapWrap" style="display:none;">
+  <div id="map"></div>
+  <div class="map-tools">
+    <button class="map-tool" onclick="fitAll()">🔭 顯示全部</button>
+    <button class="map-tool" onclick="zoomCity()">🏙️ 高知市區</button>
+    <button class="map-tool" onclick="zoomHotel()">🏨 回飯店</button>
+    <button class="map-tool" onclick="showMe()">📍 我的位置</button>
+  </div>
+  <div class="map-legend" id="mapLegend"></div>
+</div>
 <div class="empty" id="empty" style="display:none;">沒有符合的結果</div>
 
 <footer>資料整理自 Google Maps 清單備註 + 食べログ / 官方網站公開資訊，僅供旅遊參考，實際營業時間請以現場公告為準。</footer>
@@ -519,7 +566,7 @@
 <script>
 let DATA = [];
 
-const TYPE_LABELS = {food:"美食",teacake:"點心",shop:"購物",sight:"景點",hotel:"住宿"};
+const TYPE_LABELS = {food:"美食",teacake:"點心",shop:"購物",sight:"景點",spot:"地標",hotel:"住宿",rentacar:"租車"};
 
 // 沒有照片時，依類別給個 fallback emoji（讓卡片不要空一塊）
 const CAT_ICONS = {
@@ -769,13 +816,14 @@ function render(){
     return matchesType && matchesQ;
   });
   grid.innerHTML = filtered.map(cardHTML).join('');
+  updateMap(filtered);
   document.getElementById('count').textContent = `顯示 ${filtered.length} / ${DATA.length} 個地點`;
   document.getElementById('empty').style.display = filtered.length? 'none':'block';
 }
 
 function buildFilters(){
-  const types = ['all','food','teacake','shop','sight','hotel'];
-  const labels = {all:'全部',food:'美食',teacake:'點心',shop:'購物',sight:'景點',hotel:'住宿'};
+  const types = ['all','food','teacake','shop','sight','spot','hotel','rentacar'];
+  const labels = {all:'全部',food:'美食',teacake:'點心',shop:'購物',sight:'景點',spot:'地標',hotel:'住宿',rentacar:'租車'};
   const wrap = document.getElementById('filters');
   wrap.innerHTML = types.map(t=>`<button class="filter-btn ${t==='all'?'active':''}" data-type="${t}">${labels[t]}</button>`).join('');
   wrap.querySelectorAll('.filter-btn').forEach(btn=>{
@@ -824,7 +872,127 @@ async function loadData(){
     backWrap.innerHTML = `<a class="back-to-plan" href="travel-plan.html">← 返回行程表</a>`;
   }
   render();
+  let savedView = 'list';
+  try { savedView = localStorage.getItem('kochiListView') || 'list'; } catch(e) {}
+  if(savedView === 'map' && !q) setView('map');
 }
+// ===== 地圖模式（Leaflet + OpenStreetMap） =====
+const PIN_STYLE = {
+  food:    {color:'#e8833a', icon:'🍜', label:'美食'},
+  teacake: {color:'#e46a9a', icon:'🍡', label:'點心'},
+  shop:    {color:'#8a5cc7', icon:'🛍️', label:'購物'},
+  sight:   {color:'#3a9a5b', icon:'⛰️', label:'景點'},
+  spot:    {color:'#1f9aa8', icon:'⛩️', label:'地標'},
+  hotel:   {color:'#2f6fb3', icon:'🏨', label:'住宿'},
+  rentacar:{color:'#6b7785', icon:'🚗', label:'租車'}
+};
+const KOCHI_CITY = [33.5610, 133.5370];
+let map = null, markerLayer = null, meMarker = null, currentView = 'list', lastFiltered = [];
+
+function pinIcon(type){
+  const st = PIN_STYLE[type] || {color:'#888', icon:'📍'};
+  const big = type === 'hotel';
+  const size = big ? 42 : 34;
+  return L.divIcon({
+    className: '',
+    html: `<div class="pin${big?' big':''}" style="background:${st.color}"><i>${st.icon}</i></div>`,
+    iconSize: [size, size],
+    iconAnchor: [size/2, size*1.2],
+    popupAnchor: [0, -size]
+  });
+}
+
+function popupHTML(item, idx){
+  const title = item.jp || item.name;
+  const sub = item.jp ? item.name : '';
+  const navUrl = `https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}`;
+  return `<div class="pop-title">${escapeHTML(title)}</div>
+    ${sub?`<div class="pop-sub">${escapeHTML(sub)}</div>`:''}
+    <div class="pop-line">🏷️ ${escapeHTML(TYPE_LABELS[item.type]||'')}・${escapeHTML(item.cat||'')}</div>
+    ${item.hours?`<div class="pop-line">🕒 ${escapeHTML(item.hours)}</div>`:''}
+    ${item.access?`<div class="pop-line">🚶 ${escapeHTML(item.access)}</div>`:''}
+    <div class="pop-actions">
+      <button onclick="openCardFromMap(${idx})">📋 看卡片</button>
+      <a class="primary" href="${navUrl}" target="_blank" rel="noopener">🧭 導航</a>
+    </div>`;
+}
+
+function initMap(){
+  if(map || typeof L === 'undefined') return;
+  map = L.map('map', {zoomControl:true}).setView(KOCHI_CITY, 14);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  markerLayer = L.featureGroup().addTo(map);
+  document.getElementById('mapLegend').innerHTML = Object.values(PIN_STYLE)
+    .map(st => `<span><span class="legend-dot" style="background:${st.color}"></span>${st.icon} ${st.label}</span>`).join('');
+}
+
+function updateMap(filtered){
+  lastFiltered = filtered;
+  if(!map || currentView !== 'map') return;
+  markerLayer.clearLayers();
+  const seen = {};
+  filtered.forEach(item => {
+    if(item.lat == null || item.lng == null) return;
+    const idx = DATA.indexOf(item);
+    // 座標完全重疊的點稍微錯開，才點得到
+    const key = item.lat.toFixed(4) + ',' + item.lng.toFixed(4);
+    const n = seen[key] = (seen[key] || 0) + 1;
+    const off = (n - 1) * 0.0005;
+    L.marker([item.lat + off, item.lng + off], {icon: pinIcon(item.type), zIndexOffset: item.type==='hotel'?1000:0})
+      .bindPopup(popupHTML(item, idx), {autoPanPaddingTopLeft:[50,20], autoPanPaddingBottomRight:[20,20]})
+      .addTo(markerLayer);
+  });
+}
+
+function fitAll(){
+  if(map && markerLayer.getLayers().length) map.fitBounds(markerLayer.getBounds(), {padding:[30,30]});
+}
+function zoomCity(){ if(map) map.setView(KOCHI_CITY, 15); }
+function zoomHotel(){
+  const h = DATA.find(d => d.type === 'hotel' && d.lat != null);
+  if(map && h) map.setView([h.lat, h.lng], 16);
+}
+function showMe(){
+  if(!navigator.geolocation){ showCopyToast('此瀏覽器不支援定位'); return; }
+  showCopyToast('定位中...');
+  navigator.geolocation.getCurrentPosition(pos => {
+    userCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+    const ll = [userCoords.lat, userCoords.lng];
+    if(meMarker) meMarker.setLatLng(ll);
+    else meMarker = L.marker(ll, {icon: L.divIcon({className:'', html:'<div class="me-dot"></div>', iconSize:[16,16], iconAnchor:[8,8]}), zIndexOffset:2000}).addTo(map).bindPopup('你在這裡');
+    map.setView(ll, 16);
+  }, () => showCopyToast('無法取得位置，請確認定位權限'), { enableHighAccuracy: true, timeout: 10000 });
+}
+
+function openCardFromMap(idx){
+  setView('list');
+  scrollToCard(idx);
+}
+
+function setView(v){
+  currentView = v;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+  const isMap = v === 'map';
+  document.getElementById('grid').style.display = isMap ? 'none' : '';
+  document.getElementById('mapWrap').style.display = isMap ? 'block' : 'none';
+  if(isMap) document.getElementById('empty').style.display = 'none';
+  try { localStorage.setItem('kochiListView', v); } catch(e) {}
+  if(isMap){
+    if(typeof L === 'undefined'){
+      document.getElementById('map').innerHTML = '<div class="empty">地圖元件載入失敗（可能是離線且尚未快取），請連網後再試。</div>';
+      return;
+    }
+    const first = !map;
+    initMap();
+    map.invalidateSize();
+    updateMap(lastFiltered);
+    if(first) fitAll();
+  }
+}
+
 loadData();
 </script>
 </body>
