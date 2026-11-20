@@ -91,14 +91,21 @@
   const NS = 'http://www.w3.org/2000/svg';
   const HEAD = '<g id="rm-headg"><path d="M24 8.5c3-4.5 7.5-4.5 8.5-1.2-2 1-4 1.2-6 2.2" fill="#3b4a63"/><circle cx="20" cy="22" r="13" fill="#ffe3c8"/><path d="M7.2 23c-1.4-9.5 4.6-16 12.8-16s14.2 6.5 12.8 16c-1.8-1.8-3-4.6-3.2-7.4-2.2 2-5 2.8-8 2.2 1-1.8 1.2-3.4.4-5.2-3 3.4-7.6 4.6-12 3.8.2 2.2-.6 4.4-2.8 6.6z" fill="#3b4a63"/><circle cx="16" cy="24.5" r="1.5" fill="#3b4a63" stroke="none"/><circle cx="24" cy="24.5" r="1.5" fill="#3b4a63" stroke="none"/><path d="M17.6 28.6q2.4 2 4.8 0" fill="none"/><ellipse cx="12.6" cy="27.8" rx="2.2" ry="1.3" fill="#f6b8c4" stroke="none"/><ellipse cx="27.4" cy="27.8" rx="2.2" ry="1.3" fill="#f6b8c4" stroke="none"/></g>';
   // 身體從頭的後面長出來（先畫身體再畫頭），避免頭身分離
-  const BODY = '<path d="M6.5 55.5c.4-13 5.6-23 13.5-23s13.1 10 13.5 23z" fill="#4a5a7a"/><path d="M15.5 34.5l4.5 7.5 4.5-7.5" fill="#fff"/>';
+  // 上半身和服＋腰帶＋下半身袴（中間一道褶），避免看起來像攤開的書
+  const BODY = '<path d="M9.5 46c.4-6 1-10.5 3.2-12.6 2-1.4 4.6-1.9 7.3-1.9s5.3.5 7.3 1.9c2.2 2.1 2.8 6.6 3.2 12.6z" fill="#4a5a7a"/>'
+    + '<path d="M9.3 45.5l-1.6 10h24.6l-1.6-10z" fill="#8f9bb0"/><path d="M20 47.5v8" fill="none" stroke-width="2"/>'
+    + '<path d="M9.4 43.2h21.2v3.4H9.4z" fill="#d9b26a" stroke-width="2.2"/>'
+    + '<path d="M16.8 34.2l3.2 5.6 3.2-5.6" fill="none" stroke-width="2.2"/>';
   const ARM_WAVE = '<path d="M29.5 42l6-10" fill="none"/><circle cx="36" cy="31" r="2.8" fill="#ffe3c8" stroke-width="2"/>';
+  // 浮動導覽用：舉著一顆柚子
+  const ARM_YUZU = '<path d="M29.5 41l6-8" fill="none"/><circle cx="40.5" cy="26.5" r="6.4" fill="#ffd23f" stroke-width="2.2"/><path d="M40.5 20.4c1.4-2.6 3.8-3.4 6-2.8-1 2.4-3.4 3.4-6 2.8z" fill="#8cc63f" stroke-width="1.6"/><circle cx="38.3" cy="24.8" r="1.1" fill="#fff6c2" stroke="none"/><circle cx="36.4" cy="32" r="2.8" fill="#ffe3c8" stroke-width="2"/>';
   const ARM_POINT = '<path d="M10.5 42l-6-11" fill="none"/><circle cx="4.2" cy="30" r="2.8" fill="#ffe3c8" stroke-width="2"/>';
   const SPRITE = '<svg xmlns="' + NS + '" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs>'
     + '<filter id="rg-crayon" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2" xChannelSelector="R" yChannelSelector="G"/></filter>'
     + HEAD
     + '<symbol id="rm-wave" viewBox="0 0 40 56" overflow="visible"><g stroke-width="3">' + BODY + ARM_WAVE + '<use href="#rm-headg"/></g></symbol>'
     + '<symbol id="rm-point" viewBox="0 0 40 56" overflow="visible"><g stroke-width="3">' + BODY + ARM_POINT + '<use href="#rm-headg"/></g></symbol>'
+    + '<symbol id="rm-yuzu" viewBox="0 0 40 56" overflow="visible"><g stroke-width="3">' + BODY + ARM_YUZU + '<use href="#rm-headg"/></g></symbol>'
     + '<symbol id="rm-head" viewBox="0 0 40 40" overflow="visible"><g stroke-width="3"><use href="#rm-headg"/></g></symbol>'
     + '</defs></svg>';
 
@@ -161,7 +168,7 @@
     fab.type = 'button';
     fab.className = 'rg-fab';
     fab.setAttribute('aria-label', '小龍馬說明這頁怎麼用');
-    fab.innerHTML = art('rm-wave', 'rg-body');
+    fab.innerHTML = art('rm-yuzu', 'rg-body');
     const pop = document.createElement('div');
     pop.className = 'rg-pop';
     pop.setAttribute('role', 'dialog');
