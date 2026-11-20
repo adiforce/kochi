@@ -1880,6 +1880,12 @@ function updateNowStatus(){
     currentEl.innerHTML = `<span class="status-dot"></span>${escapeHTML(label)}`;
     currentEl.classList.toggle('is-live', !!current);
   }
+  // 給外框（index.html）頂端的「進行中」列使用
+  window.kochiNow = {
+    current: current ? { name: current.name, time: current.timeLabel } : null,
+    next: next ? { name: next.name, time: next.timeLabel, date: next.dateLabel } : null,
+  };
+  try { if(window.parent !== window) window.parent.postMessage({ type: 'kochi-now', data: window.kochiNow }, location.origin); } catch(e){}
   if(nextEl){
     nextEl.textContent = next
       ? `⏭️ 下一站：${next.dateLabel}　${next.timeLabel}　${next.name}`

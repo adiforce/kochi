@@ -13,6 +13,7 @@
     --brown: #1f3350;
     --tab-h: 62px;
     --header-h: 52px;
+    --now-h: 36px;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body {
@@ -40,6 +41,48 @@
     color: white;
     letter-spacing: 1px;
   }
+  /* ── 進行中行程列（點了跳到行程表該站） ── */
+  .now-bar {
+    position: fixed;
+    top: var(--header-h); left: 0; right: 0;
+    height: var(--now-h);
+    z-index: 190;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    border: none;
+    border-bottom: 1.5px solid var(--pink);
+    background: #fff;
+    color: var(--brown);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body.has-now .now-bar { display: flex; }
+  body.has-now .iframe-wrap { top: calc(var(--header-h) + var(--now-h)); }
+  .now-bar:active { background: var(--cream); }
+  .now-tag {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #e3f1dc;
+    color: #3f7d31;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .now-tag.next { background: var(--pink); color: var(--pink-dark); }
+  .now-dot { width: 7px; height: 7px; border-radius: 50%; background: #5aa84a; animation: nowPulse 1.4s ease-in-out infinite; }
+  .now-tag.next .now-dot { display: none; }
+  @keyframes nowPulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+  .now-name { flex: 1; min-width: 0; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .now-time { flex-shrink: 0; font-size: 11.5px; opacity: .6; }
+  .now-go { flex-shrink: 0; font-size: 18px; color: var(--pink-dark); opacity: .7; }
   /* ── iframe ── */
   .iframe-wrap {
     position: fixed;
@@ -201,6 +244,13 @@
 <header class="app-header">
   <div class="app-title">🐾 日本工具箱</div>
 </header>
+<!-- 進行中行程 -->
+<button class="now-bar" id="nowBar" type="button" onclick="goToNowStop()" aria-label="跳到行程表目前的行程">
+  <span class="now-tag" id="nowTag"><span class="now-dot"></span><span id="nowTagText">進行中</span></span>
+  <span class="now-name" id="nowName"></span>
+  <span class="now-time" id="nowTime"></span>
+  <span class="now-go">›</span>
+</button>
 <!-- iframes -->
 <div class="iframe-wrap">
   <iframe id="frame-0" src="coupon.html"></iframe>
@@ -279,6 +329,8 @@
 </div>
 <script>
   const LAST_TAB_KEY = 'japan-toolbox-tab';
+  const PLAN_IDX = 10;   // 行程表 frame
+  let nowData = null;    // 行程表推來的進行中／下一站
   let current = parseInt(localStorage.getItem(LAST_TAB_KEY) || '0');
   const frames = document.querySelectorAll('.iframe-wrap iframe');
   const tabBtns = document.querySelectorAll('.tab-bar .tab-btn');
@@ -302,6 +354,7 @@
     });
     current = idx;
     localStorage.setItem(LAST_TAB_KEY, idx);
+    renderNowBar();
   }
   function switchTabFromMore(idx) {
     closeMore();
@@ -345,6 +398,41 @@
     const t = getHashTab();
     if (t !== null) activateTab(t);
   });
+  // ── 進行中行程列：資料由行程表（frame-10）推過來 ──
+  function renderNowBar() {
+    const bar = document.getElementById('nowBar');
+    if (!bar) return;
+    const item = nowData && (nowData.current || nowData.next);
+    // 行程表自己就有目前狀態，在那頁不重複顯示；行程全部結束也不顯示
+    const show = !!item && current !== PLAN_IDX;
+    document.body.classList.toggle('has-now', show);
+    if (!item) return;
+    const live = !!nowData.current;
+    document.getElementById('nowTag').classList.toggle('next', !live);
+    document.getElementById('nowTagText').textContent = live ? '進行中' : '下一站';
+    document.getElementById('nowName').textContent = item.name;
+    const t = String(item.time || '').replace(/^[^\d]*/, '');
+    document.getElementById('nowTime').textContent = live ? t : [String(item.date || '').replace(/^\d{4}\//, ''), t].filter(Boolean).join(' ');
+  }
+  function goToNowStop() {
+    activateTab(PLAN_IDX);
+    const w = frames[PLAN_IDX].contentWindow;
+    // 等 iframe 顯示出來、版面算好再定位
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const btn = w && w.document.getElementById('locateNow');
+      if (btn) btn.click();
+    }));
+  }
+  window.addEventListener('message', ev => {
+    if (ev.origin !== location.origin || !ev.data || ev.data.type !== 'kochi-now') return;
+    nowData = ev.data.data;
+    renderNowBar();
+  });
+  frames[PLAN_IDX].addEventListener('load', () => {
+    try { nowData = frames[PLAN_IDX].contentWindow.kochiNow || nowData; } catch (e) {}
+    renderNowBar();
+  });
+
   // ── iOS「加入主畫面」提示 ──
   (function () {
     const A2HS_KEY = 'japan-toolbox-a2hs-dismissed';
