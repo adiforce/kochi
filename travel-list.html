@@ -576,6 +576,7 @@
   <div class="map-nearby" id="mapNearby" style="display:none;"></div>
 </div>
 <button class="back-map-fab" id="backMapFab" onclick="backToMap()">🗺️ 回地圖</button>
+<button class="back-map-fab" id="backListFab" onclick="backToList()">📋 回列表</button>
 <div class="empty" id="empty" style="display:none;">沒有符合的結果</div>
 
 <footer>資料整理自 Google Maps 清單備註 + 食べログ / 官方網站公開資訊，僅供旅遊參考，實際營業時間請以現場公告為準。</footer>
@@ -806,7 +807,7 @@ function cardHTML(item){
           ${subTitle? `<div class="meta-line"><span class="copyable" data-copy="${escapeHTML(subTitle)}" onclick="copyText(this)">${escapeHTML(subTitle)}</span></div>`:''}
         </div>
       </div>
-      <a class="map-link" href="${mapUrl(item)}" target="_blank" rel="noopener">📍</a>
+      <a class="map-link" href="${mapUrl(item)}" target="_blank" rel="noopener"${item.lat != null ? ` onclick="return openMapFromCard(event, ${origIdx})"` : ''}>📍</a>
     </div>
     <div class="tags"><span class="tag">${TYPE_LABELS[item.type]||''}</span><span class="tag">${item.cat||''}</span></div>
     ${scores.length? `<div class="scores">${scores.join('')}</div>` : ''}
@@ -971,7 +972,7 @@ function updateMap(filtered){
     const n = seen[key] = (seen[key] || 0) + 1;
     const off = (n - 1) * 0.0005;
     const mk = L.marker([item.lat + off, item.lng + off], {icon: pinIcon(item.type), zIndexOffset: item.type==='hotel'?1000:0})
-      .bindPopup(popupHTML(item, idx), {autoPanPaddingTopLeft:[50,20], autoPanPaddingBottomRight:[20,20]})
+      .bindPopup(popupHTML(item, idx), {maxWidth:240, minWidth:200, autoPanPaddingTopLeft:[50,20], autoPanPaddingBottomRight:[20,20]})
       .on('click', () => showNearby(idx))
       .addTo(markerLayer);
     markerByIdx[idx] = mk;
@@ -984,7 +985,7 @@ function updateMap(filtered){
 }
 
 function fitAll(){
-  if(map && markerLayer.getLayers().length) map.fitBounds(markerLayer.getBounds(), {padding:[30,30]});
+  if(map && markerLayer.getLayers().length) map.fitBounds(markerLayer.getBounds(), {padding:[30,30], animate:false});
 }
 function zoomCity(){ if(map) map.setView(KOCHI_CITY, 15); }
 function zoomHotel(){
@@ -1040,10 +1041,16 @@ function focusPoint(idx){
   }
   const mk = markerByIdx[idx];
   if(!mk) return;
-  map.setView(mk.getLatLng(), Math.max(map.getZoom(), 15));
+  // 先捲到地圖（扣掉上方固定的標題列），再定位開小卡，避免小卡被切掉
+  const header = document.querySelector('header');
+  const hh = header && getComputedStyle(header).position.match(/sticky|fixed/) ? header.offsetHeight : 0;
+  const top = document.getElementById('mapWrap').getBoundingClientRect().top + window.scrollY - hh - 8;
+  window.scrollTo({top, behavior:'auto'});
+  map.stop();
+  map.invalidateSize();
+  map.setView(mk.getLatLng(), Math.max(map.getZoom(), 15), {animate:false});
   mk.openPopup();
   showNearby(idx);
-  document.getElementById('map').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function openCardFromMap(idx){
@@ -1051,6 +1058,23 @@ function openCardFromMap(idx){
   setView('list');
   scrollToCard(idx);
   document.getElementById('backMapFab').classList.add('show');
+}
+
+// 卡片上的 📍：切到地圖模式定位到該點（地圖元件沒載入就照舊開 Google Maps）
+let lastListCard = null;
+function openMapFromCard(e, idx){
+  if(typeof L === 'undefined') return true;
+  e.preventDefault();
+  lastListCard = idx;
+  setView('map');
+  focusPoint(idx);
+  document.getElementById('backListFab').classList.add('show');
+  return false;
+}
+
+function backToList(){
+  setView('list');
+  if(lastListCard != null) scrollToCard(lastListCard);
 }
 
 function backToMap(){
@@ -1063,6 +1087,7 @@ function setView(v){
   document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === v));
   const isMap = v === 'map';
   if(isMap) document.getElementById('backMapFab').classList.remove('show');
+  else document.getElementById('backListFab').classList.remove('show');
   document.getElementById('grid').style.display = isMap ? 'none' : '';
   document.getElementById('mapWrap').style.display = isMap ? 'block' : 'none';
   if(isMap) document.getElementById('empty').style.display = 'none';
