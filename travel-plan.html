@@ -356,34 +356,24 @@
     50%{box-shadow:0 0 0 2px var(--white),0 0 0 9px rgba(123,191,106,.12);}
     100%{box-shadow:0 0 0 2px var(--white),0 0 0 5px rgba(123,191,106,.35);}
   }
-  .stop.active .stop-name{color:var(--green);padding-right:34px;}
-  .ryoma-guide{
+  .stop.active .stop-name{color:var(--green);}
+  .timeline{position:relative;}
+  .ryoma-walker{
     position:absolute;
-    right:0;
-    top:26px;
+    left:-19px;
+    width:16px;
+    height:25px;
     z-index:2;
-    display:flex;
-    align-items:flex-start;
-    gap:2px;
     pointer-events:none;
-    animation:rg-bob 2.6s ease-in-out infinite;
+    transition:top .8s ease;
   }
-  .ryoma-guide .rg-art{width:28px;height:39px;overflow:visible;}
-  .rg-bubble{
-    position:relative;
-    margin-top:2px;
-    padding:1px 7px;
-    border:1.5px solid #3b4a63;
-    border-radius:10px 2px 10px 10px;
-    background:#fff6e0;
-    color:#3b4a63;
-    font-size:.68rem;
-    font-weight:700;
-    line-height:1.5;
-    white-space:nowrap;
-  }
-  @keyframes rg-bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
-  @media (prefers-reduced-motion:reduce){ .ryoma-guide{animation:none;} }
+  .ryoma-walker svg{width:100%;height:100%;overflow:visible;animation:rw-bob .5s ease-in-out infinite alternate;}
+  .rw-leg{transform-box:fill-box;transform-origin:50% 0;}
+  .rw-l{animation:rw-step .5s ease-in-out infinite alternate;}
+  .rw-r{animation:rw-step .5s ease-in-out infinite alternate-reverse;}
+  @keyframes rw-bob{from{transform:translateY(0);}to{transform:translateY(-1.5px);}}
+  @keyframes rw-step{from{transform:rotate(-22deg);}to{transform:rotate(22deg);}}
+  @media (prefers-reduced-motion:reduce){ .ryoma-walker svg,.rw-leg{animation:none;} }
   .live-badge{
     display:inline-flex;
     align-items:center;
@@ -1920,19 +1910,54 @@ function updateActiveStops(){
     } else if(!isActive && badge){
       badge.remove();
     }
-    // 進行中的行程：小龍馬指著說「ここで～！」
-    let guide = stop.querySelector('.ryoma-guide');
-    if(isActive && !guide && nameEl){
-      guide = document.createElement('span');
-      guide.className = 'ryoma-guide';
-      guide.setAttribute('aria-hidden', 'true');
-      guide.innerHTML = '<span class="rg-bubble">ここで～！</span>' + (window.RyomaGuide ? RyomaGuide.art('rm-point', 'rg-art') : '');
-      stop.appendChild(guide);
-    } else if(!isActive && guide){
-      guide.remove();
-    }
   });
+  updateRyomaWalker(now);
   updateNowStatus();
+}
+
+// 小龍馬沿著時間軸走：依「這站開始 → 下一站開始」的時間進度，走在兩個點之間（同一天內）
+function stopStartAt(el){
+  const { date, start, idx } = el.dataset;
+  const off = idx !== undefined ? cumulativeDelayMinutes(date, idx) : 0;
+  return new Date(`${date}T${start}:00`).getTime() + off * 60000;
+}
+function updateRyomaWalker(now){
+  now = (now || new Date()).getTime();
+  let placed = false;
+  document.querySelectorAll('.timeline').forEach(tl => {
+    let walker = tl.querySelector(':scope > .ryoma-walker');
+    const stops = Array.from(tl.querySelectorAll(':scope > .stop[data-date][data-start]'))
+      .map(el => ({ el, t: stopStartAt(el) }))
+      .sort((a, b) => a.t - b.t);
+    let seg = null;
+    for(let i = 0; i < stops.length - 1; i++){
+      if(now >= stops[i].t && now < stops[i + 1].t){ seg = [stops[i], stops[i + 1]]; break; }
+    }
+    if(!seg || placed){
+      if(walker) walker.remove();
+      return;
+    }
+    placed = true;
+    if(!walker){
+      walker = document.createElement('div');
+      walker.className = 'ryoma-walker';
+      walker.setAttribute('aria-hidden', 'true');
+      walker.innerHTML = '<svg viewBox="0 0 40 62"><g filter="url(#crayon)" stroke="#3b4a63" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="rw-leg rw-l" d="M15 52v8" fill="none"/><path class="rw-leg rw-r" d="M25 52v8" fill="none"/><use href="#rm-wave" width="40" height="56"/></g></svg>';
+      tl.prepend(walker);
+    }
+    const [a, b] = seg;
+    const p = Math.min(1, Math.max(0, (now - a.t) / (b.t - a.t)));
+    const ya = a.el.offsetTop + 9.5, yb = b.el.offsetTop + 9.5;
+    // 停在點上會擋到圓點，所以從點的下方出發、在下一個點上方停下
+    const y = ya + 14 + (yb - ya - 28) * p;
+    walker.style.top = Math.round(y - 11) + 'px';
+    walker.title = '';
+  });
+}
+window.addEventListener('resize', () => updateRyomaWalker());
+if('ResizeObserver' in window){
+  const rwObs = new ResizeObserver(() => updateRyomaWalker());
+  document.querySelectorAll('.timeline').forEach(t => rwObs.observe(t));
 }
 
 
