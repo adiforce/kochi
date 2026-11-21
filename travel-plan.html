@@ -63,6 +63,20 @@
     margin-top:6px;
   }
   header .flight-info b{color:var(--brown);opacity:1;}
+  /* 往下捲時縮小頂部標題 */
+  header{transition:padding .25s ease;}
+  header .logo{transition:font-size .25s ease,margin .25s ease;}
+  header .logo span,header .flight-info{
+    display:block;overflow:hidden;max-height:60px;
+    transition:max-height .25s ease,opacity .2s ease,margin .25s ease;
+  }
+  header .logo span{display:inline-block;max-width:400px;vertical-align:baseline;white-space:nowrap;transition:max-width .25s ease,opacity .2s ease;}
+  .sticky-top.is-compact header{padding:8px 18px 7px;}
+  .sticky-top.is-compact header .logo{font-size:16px;margin-bottom:0;}
+  .sticky-top.is-compact header .logo span{max-width:0;opacity:0;margin-left:0 !important;}
+  .sticky-top.is-compact header .flight-info{max-height:0;opacity:0;margin-top:0;}
+  .sticky-top.is-compact .head-tram{display:none;}
+  @media (prefers-reduced-motion:reduce){ header,header .logo,header .logo span,header .flight-info{transition:none;} }
   .companions{
     display:flex;
     gap:6px;
@@ -2175,6 +2189,21 @@ function initDaySlider(){
 }
 
 initDaySlider();
+
+// 往下捲時縮小頂部標題（上下門檻不同，避免在邊界抖動）
+(function(){
+  const st = document.querySelector('.sticky-top');
+  if(!st) return;
+  let compact = false, ticking = false;
+  const update = () => {
+    ticking = false;
+    const y = window.scrollY;
+    if(!compact && y > 80){ compact = true; st.classList.add('is-compact'); }
+    else if(compact && y < 10){ compact = false; st.classList.remove('is-compact'); }
+  };
+  window.addEventListener('scroll', () => { if(!ticking){ ticking = true; requestAnimationFrame(update); } }, { passive:true });
+  update();
+})();
 
 function initLocateNow(){
   const btn = document.getElementById('locateNow');
