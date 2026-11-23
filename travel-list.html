@@ -1117,7 +1117,7 @@ function setView(v){
     initMap();
     map.invalidateSize();
     updateMap(lastFiltered);
-    if(first) fitAll();
+    if(first){ if(DATA.some(d => d.type === 'hotel' && d.lat != null)) zoomHotel(); else fitAll(); } // 第一次開地圖：以飯店為中心（原本 fitAll 會被遠處景點拉到山上）
   }
 }
 
