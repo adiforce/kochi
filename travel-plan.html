@@ -699,6 +699,7 @@
   @keyframes wx-spin{to{transform:rotate(360deg);}}
   /* 頂部裝飾線（與發票頁一致） */
   .top-accent{position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#2f6fb3,transparent);z-index:150;pointer-events:none;}
+.card-tip{margin-top:4px}.card-tip summary{cursor:pointer;color:#2f6fb3;font-size:.92em;list-style:revert}.card-tip[open] summary{margin-bottom:2px}
 </style>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -854,7 +855,7 @@
             <div class="stop-time"><span class="stop-time-orig">🏨 13:00</span><span class="delay-adjusted"></span></div>
             <div class="delay-ctrl" data-date="2026-11-28" data-idx="8"><button class="delay-btn" data-delta="-30">－30</button><span class="delay-count"></span><button class="delay-btn" data-delta="30">＋30</button></div>
             <div class="stop-name">東橫INN高知 寄放行李</div>
-            <div class="stop-note">⚠️ Check-in 15:00起，現在先寄行李；晚上回來再辦入住（直接櫃檯辦理，不要用自助機）<br>💳 房費刷 <b>CUBE</b>（秋日遊3.5%，先在App切換方案），次 台新Richart 3.3%</div>
+            <div class="stop-note">⚠️ Check-in 15:00起，現在先寄行李；晚上回來再辦入住（直接櫃檯辦理，不要用自助機）<details class="card-tip"><summary>💳 刷卡提示</summary>房費刷 <b>CUBE</b>（秋日遊3.5%，先在App切換方案），次 台新Richart 3.3%</details></div>
           </div>
           <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=東横INN高知" target="_blank" rel="noopener">📍</a>
         </div>
