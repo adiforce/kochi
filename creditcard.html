@@ -78,6 +78,8 @@
     box-shadow: 0 2px 8px rgba(20,35,58,0.06);
     cursor: pointer; transition: all 0.15s;
   }
+  .owned-tag { display:inline-block; margin-left:6px; padding:1px 7px; border-radius:10px; font-size:11px; font-weight:700; background:#e6f4e1; color:#3f8a2e; vertical-align:middle; }
+  .card-item.owned { border-left:4px solid #5aa84a; }
   .card-item:hover { border-color: var(--pink-dark); transform: translateY(-2px); }
 
   .card-header {
@@ -402,6 +404,16 @@
     }
   ];
 
+  // 我有的卡／支付（先列），其餘在後；各自依顯示的最高回饋%由高到低，同分維持原順序
+  const ownedNames = ['聯邦吉鶴卡','星展 eco 永續卡','台新Richart卡（原FlyGo）','國泰世華CUBE卡','全支付（掃PayPay）','台新Pay+（掃PayPay）','玉山Wallet（掃PayPay）'];
+  cardsData.forEach(c => { c.owned = ownedNames.includes(c.name); });
+  cardsData.sort((a, b) =>
+    (b.owned - a.owned) ||
+    (parseFloat(b.baseReward) - parseFloat(a.baseReward)) ||
+    (a.rank - b.rank)
+  );
+  cardsData.forEach((c, i) => { c.rank = i + 1; });
+
   let currentFilter = 'all';
 
   function filterCards(tag) {
@@ -427,11 +439,11 @@
     }
 
     container.innerHTML = filtered.map(card => `
-      <div class="card-item">
+      <div class="card-item${card.owned ? ' owned' : ''}">
         <div class="card-header">
           <div class="card-rank">#${card.rank}</div>
           <div>
-            <div class="card-name">${card.name}</div>
+            <div class="card-name">${card.name}${card.owned ? '<span class="owned-tag">已持有</span>' : ''}</div>
             <div class="card-issuer">${card.issuer}</div>
           </div>
           <div class="card-badge">${card.baseReward}回饋</div>
