@@ -910,7 +910,7 @@ async function loadData(){
     backWrap.innerHTML = `<a class="back-to-plan" href="travel-plan.html">← 返回行程表</a>`;
   } else if(savedView === 'map' && !q) setView('map');
 }
-// ===== 地圖模式（Leaflet + 國土地理院地圖） =====
+// ===== 地圖模式（Leaflet + OSM Japan） =====
 const PIN_STYLE = {
   food:    {color:'#e8833a', icon:'🍜', label:'美食'},
   teacake: {color:'#e46a9a', icon:'🍡', label:'點心'},
@@ -956,9 +956,9 @@ function popupHTML(item, idx){
 function initMap(){
   if(map || typeof L === 'undefined') return;
   map = L.map('map', {zoomControl:true}).setView(KOCHI_CITY, 14);
-  L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
-    maxZoom: 19, maxNativeZoom: 18,
-    attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">地理院タイル</a>'
+  L.tileLayer('https://tile.openstreetmap.jp/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors, <a href="https://openstreetmap.jp/" target="_blank">OSM Japan</a>'
   }).addTo(map);
   markerLayer = L.featureGroup().addTo(map);
   document.getElementById('mapLegend').innerHTML = Object.values(PIN_STYLE)

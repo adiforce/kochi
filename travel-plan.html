@@ -1919,9 +1919,9 @@ function openMiniMap(d){
   const ll = [d.lat, d.lng];
   if(!mmMap){
     mmMap = L.map('miniMap', {zoomControl:true, attributionControl:true}).setView(ll, 16);
-    L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
-      maxZoom: 19, maxNativeZoom: 18,
-      attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">地理院タイル</a>'
+    L.tileLayer('https://tile.openstreetmap.jp/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors, <a href="https://openstreetmap.jp/" target="_blank">OSM Japan</a>'
     }).addTo(mmMap);
     mmDots = L.layerGroup().addTo(mmMap);
     DATA.forEach(v => {
