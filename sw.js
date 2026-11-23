@@ -1,7 +1,7 @@
 /* 日本工具箱 Service Worker — 離線可用
  * 改了任何頁面後，把 VERSION 數字 +1，手機下次開啟就會抓新版。
  */
-const VERSION = 'v31';
+const VERSION = 'v32';
 const CORE_CACHE = `core-${VERSION}`;
 const RUNTIME_CACHE = 'runtime';        // 字型、圖片（跨版本保留）
 const RUNTIME_MAX = 200;                // 最多存幾個字型/圖片檔
@@ -91,8 +91,8 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // OSM 地圖圖磚：看過的區域存起來（另開快取，不擠掉字型）
-  if (url.hostname === 'tile.openstreetmap.org') {
+  // 地圖圖磚（地理院／OSM）：看過的區域存起來（另開快取，不擠掉字型）
+  if (url.hostname === 'tile.openstreetmap.org' || url.hostname === 'cyberjapandata.gsi.go.jp') {
     event.respondWith(staleWhileRevalidate(req, TILE_CACHE, TILE_MAX));
     return;
   }
