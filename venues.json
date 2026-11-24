@@ -1,5 +1,26 @@
 [
   {
+  "name": "McDonald's Obiyamachi",
+  "jp": "マクドナルド 帯屋町店",
+  "type": "shop",
+  "cat": "速食",
+  "img": "https://lh3.googleusercontent.com/grass-cs/AABkmLdIdHAEFu9UptVyCmgFV9wxk0Ly2FffR2xi5t9O-CAWGQq5wqy4s2hgoyfE3G0Qk6fK_2Xq9itq4bw2eO4iNYoB3CA_gLGgSHNMrwl4Fj5fV3vX-dVe_ff29DMWFGSAqeO30rJ_Jw=w426-h240-k-no",
+  "gRating": null,
+  "gReviews": null,
+  "tRating": null,
+  "tReviews": null,
+  "lat": null,
+  "lng": null,
+  "price": "約 ~¥999（依食べログ口碑統計）",
+  "hours": "06:30–22:00",
+  "addr": "高知県高知市帯屋町1-13-23",
+  "mapAddr": "高知県高知市帯屋町1-13-23",
+  "access": "とさでん伊野線 堀詰駅 約113m（食べログ標示）",
+  "rec": [],
+  "notes": "座位約90席，禁菸，不可訂位，可外帶；不接受停車；刷卡與電子錢包可用。電話 088-825-2660。食べログ店舖頁：https://ssl.tabelog.com/en/kochi/A3901/A390101/39004346/ 。經緯度與營業時間未能從搜尋結果確認，故留空；圖片網址為你提供，未驗證內容。",
+  "wasFilled": false
+},
+  {
     "name": "HMV AEON MALL Kochi",
     "jp": "HMVイオンモール高知",
     "type": "shop",
