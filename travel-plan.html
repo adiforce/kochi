@@ -720,6 +720,9 @@
   .mm-pin{width:40px;height:40px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;
     justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);}
   .mm-pin i{transform:rotate(45deg);font-style:normal;font-size:20px;line-height:1;}
+  .mm-legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px;font-size:.78rem;}
+  .mm-legend span{display:inline-flex;align-items:center;gap:4px;}
+  .mm-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;}
 </style>
 </head>
 <body>
@@ -1703,14 +1706,14 @@ function escapeHTML(s){
     .replace(/"/g,'&quot;');
 }
 
-const VS_TYPE_LABELS = {food:'美食',teacake:'點心',shop:'購物',sight:'景點',hotel:'住宿'};
+const VS_TYPE_LABELS = {food:'美食',teacake:'點心',shop:'購物',sight:'景點',hotel:'住宿',bike:'自行車',rail:'鐵路',bus:'巴士',tram:'路面電車',rentacar:'租車'};
 const VS_CAT_ICONS = {
   '咖啡廳':'☕','甜點':'🍰','豬排':'🍱','拉麵':'🍜','交通':'🚉','市場':'🏮','商店街':'🏮',
   '藥妝／生活雜貨':'💊','景點／絕景':'🏞️','神社':'⛩️','公園':'🌳','購物中心':'🛍️',
   '二手書／二手商品':'📚','住宿':'🏨','寺廟':'🛕','歷史地標':'🏯'
 };
 function vsIcon(d){
-  return VS_CAT_ICONS[d.cat] || (d.type==='food'?'🍽️':d.type==='shop'?'🛍️':d.type==='hotel'?'🏨':'📍');
+  return VS_CAT_ICONS[d.cat] || (d.type==='food'?'🍽️':d.type==='shop'?'🛍️':d.type==='hotel'?'🏨':d.type==='bike'?'🚲':d.type==='rail'?'🚆':'📍');
 }
 function vsMapUrl(d){
   if(d.lat && d.lng) return `https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}`;
@@ -1876,8 +1879,12 @@ function initDetailToggles(){
 const MM_STYLE = {
   food:{color:'#e8833a',icon:'🍜'}, teacake:{color:'#e46a9a',icon:'🍡'}, shop:{color:'#8a5cc7',icon:'🛍️'},
   sight:{color:'#3a9a5b',icon:'⛰️'}, spot:{color:'#1f9aa8',icon:'⛩️'}, hotel:{color:'#2f6fb3',icon:'🏨'},
-  rentacar:{color:'#6b7785',icon:'🚗'}
+  rentacar:{color:'#6b7785',icon:'🚗'},
+  bike:{color:'#7cb518',icon:'🚲'}, rail:{color:'#1d3557',icon:'🚆'},
+  bus:{color:'#f4a300',icon:'🚌'}, tram:{color:'#c2185b',icon:'🚋'}
 };
+const MM_LABELS = {food:'美食',teacake:'甜點',shop:'購物',sight:'景點',spot:'寺社公園',hotel:'住宿',
+  rentacar:'租車',bike:'自行車',rail:'鐵路',bus:'巴士',tram:'路面電車'};
 let mmOverlay = null, mmMap = null, mmMain = null, mmDots = null, mmHistory = false;
 
 function ensureMiniMap(){
@@ -1889,6 +1896,7 @@ function ensureMiniMap(){
       <button class="vsheet-close" type="button" aria-label="關閉">✕</button>
       <div class="mm-title"></div><div class="mm-sub"></div>
       <div id="miniMap"></div>
+      <div class="mm-legend">${Object.keys(MM_STYLE).map(k=>`<span><i style="background:${MM_STYLE[k].color}"></i>${MM_STYLE[k].icon} ${MM_LABELS[k]||k}</span>`).join('')}</div>
       <div class="mm-actions"></div>
     </div>`;
   document.body.appendChild(mmOverlay);

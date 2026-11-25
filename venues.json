@@ -85,8 +85,8 @@
   {
     "name": "JR Kochi Station",
     "jp": "高知駅",
-    "type": "spot",
-    "cat": "車站・交通樞紐",
+    "type": "rail",
+    "cat": "JR 車站",
     "img": "https://lh3.googleusercontent.com/gps-cs-s/ANWiy9SwMFJvC_JXXb5HEveVFzgOs7t90L_RUd771XouagHVOQBMO8Hc8Nbt5KI5KNVONwp_l0gXEnOQJ2s38ooTnJsiO_dZNI61hm-Ac3qfxk-5-uZ1vfS49DDwqduBR9i134xP_5o=s680-w680-h510-rw",
     "gRating": null,
     "gReviews": null,
@@ -939,7 +939,7 @@
   {
     "name": "COGICOGI Kochi Ekimae Port",
     "jp": "COGICOGI 高知駅前ポート",
-    "type": "rentacar",
+    "type": "bike",
     "cat": "共享單車站（COGICOGI）",
     "img": "",
     "gRating": null,
@@ -960,7 +960,7 @@
   {
     "name": "COGICOGI Oterpia Promenade Port",
     "jp": "COGICOGI オーテピア遊歩道ポート",
-    "type": "rentacar",
+    "type": "bike",
     "cat": "共享單車站（COGICOGI）",
     "img": "",
     "gRating": null,
@@ -981,7 +981,7 @@
   {
     "name": "COGICOGI Toyo Denka Central Park Port",
     "jp": "COGICOGI 東洋電化中央公園ポート",
-    "type": "rentacar",
+    "type": "bike",
     "cat": "共享單車站（COGICOGI）",
     "img": "",
     "gRating": null,
@@ -1002,7 +1002,7 @@
   {
     "name": "COGICOGI Nishitetsu Inn Port",
     "jp": "COGICOGI 西鉄インポート",
-    "type": "rentacar",
+    "type": "bike",
     "cat": "共享單車站（COGICOGI）",
     "img": "",
     "gRating": null,
@@ -1023,7 +1023,7 @@
   {
     "name": "COGICOGI Harimayabashi Bus Terminal Port",
     "jp": "COGICOGI はりまや橋観光バスターミナルポート",
-    "type": "rentacar",
+    "type": "bike",
     "cat": "共享單車站（COGICOGI）",
     "img": "",
     "gRating": null,
