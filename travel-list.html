@@ -591,7 +591,7 @@
 <script>
 let DATA = [];
 
-const TYPE_LABELS = {food:"美食",teacake:"點心",shop:"購物",sight:"景點",spot:"地標",hotel:"住宿",rentacar:"租車"};
+const TYPE_LABELS = {food:"美食",teacake:"點心",shop:"購物",sight:"景點",spot:"地標",hotel:"住宿",rentacar:"租車",bike:"自行車",rail:"鐵路",bus:"巴士",tram:"路面電車"};
 
 // 沒有照片時，依類別給個 fallback emoji（讓卡片不要空一塊）
 const CAT_ICONS = {
@@ -602,7 +602,7 @@ const CAT_ICONS = {
   "二手書／二手商品":"📚","住宿":"🏨","寺廟":"🛕","歷史地標":"🏯"
 };
 function fallbackIcon(item){
-  return CAT_ICONS[item.cat] || (item.type==='food'?'🍽️':item.type==='shop'?'🛍️':item.type==='hotel'?'🏨':'📍');
+  return CAT_ICONS[item.cat] || (item.type==='food'?'🍽️':item.type==='shop'?'🛍️':item.type==='hotel'?'🏨':item.type==='bike'?'🚲':item.type==='rail'?'🚆':item.type==='bus'?'🚌':item.type==='tram'?'🚋':'📍');
 }
 
 function escapeHTML(s){
@@ -847,8 +847,8 @@ function render(){
 }
 
 function buildFilters(){
-  const types = ['all','food','teacake','shop','sight','spot','hotel','rentacar'];
-  const labels = {all:'全部',food:'美食',teacake:'點心',shop:'購物',sight:'景點',spot:'地標',hotel:'住宿',rentacar:'租車'};
+  const types = ['all','food','teacake','shop','sight','spot','hotel','rentacar','bike','rail','bus','tram'];
+  const labels = {all:'全部',food:'美食',teacake:'點心',shop:'購物',sight:'景點',spot:'地標',hotel:'住宿',rentacar:'租車',bike:'自行車',rail:'鐵路',bus:'巴士',tram:'路面電車'};
   const wrap = document.getElementById('filters');
   wrap.innerHTML = types.map(t=>`<button class="filter-btn ${t==='all'?'active':''}" data-type="${t}">${labels[t]}</button>`).join('');
   wrap.querySelectorAll('.filter-btn').forEach(btn=>{
@@ -918,7 +918,11 @@ const PIN_STYLE = {
   sight:   {color:'#3a9a5b', icon:'⛰️', label:'景點'},
   spot:    {color:'#1f9aa8', icon:'⛩️', label:'地標'},
   hotel:   {color:'#2f6fb3', icon:'🏨', label:'住宿'},
-  rentacar:{color:'#6b7785', icon:'🚗', label:'租車'}
+  rentacar:{color:'#6b7785', icon:'🚗', label:'租車'},
+  bike:    {color:'#7cb518', icon:'🚲', label:'自行車'},
+  rail:    {color:'#1d3557', icon:'🚆', label:'鐵路'},
+  bus:     {color:'#f4a300', icon:'🚌', label:'巴士'},
+  tram:    {color:'#c2185b', icon:'🚋', label:'路面電車'}
 };
 const KOCHI_CITY = [33.5610, 133.5370];
 let map = null, markerLayer = null, meMarker = null, currentView = 'list', lastFiltered = [];
