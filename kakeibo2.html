@@ -933,12 +933,12 @@ function renderRecords(data) {
   // 反轉（最新在上）
   const reversed = [...data].reverse();
   const totalJpy = data.reduce((s, r) => s + (Number(r.jpy) || 0), 0);
-  const totalTwd = Math.round(totalJpy * 0.2);
+  const totalTwd = Math.round(totalJpy * 0.21);
   totalEl.innerHTML = `<small>合計</small>¥${totalJpy.toLocaleString()} <small style="font-size:10px;opacity:.5">≈ NT$${totalTwd.toLocaleString()}</small>`;
   list.innerHTML = '';
   reversed.forEach(r => {
     const jpy = Number(r.jpy) || 0;
-    const twd = Math.round(jpy * 0.2);
+    const twd = Math.round(jpy * 0.21);
     const kid = Number(r.kid) || 0;
     const en = Number(r.en) || 0;
     // 日期格式化

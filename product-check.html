@@ -527,7 +527,7 @@
 
       // 計算日幣轉台幣
       const jpAmount = parseInt(parsedData.jp_price.replace(/¥|,/g, '')) || 0;
-      const jpEquiv = `≈ NT$${Math.round(jpAmount * 0.2)}`;
+      const jpEquiv = `≈ NT$${Math.round(jpAmount * 0.21)}`;
 
       const record = {
         timestamp: Date.now(),
